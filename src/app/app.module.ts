@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CreacionPreguntasComponentComponent } from './components/creacion-preguntas-component/creacion-preguntas-component.component';
 import { HeaderComponentComponent } from './components/header-component/header-component.component';
+import { FooterComponentComponent } from './components/footer-component/footer-component.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CreacionPreguntasComponentComponent,
-    HeaderComponentComponent
+    HeaderComponentComponent,
+    FooterComponentComponent
   ],
   imports: [
     BrowserModule,
