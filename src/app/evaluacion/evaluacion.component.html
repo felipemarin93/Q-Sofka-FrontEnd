@@ -9,21 +9,36 @@
 
 <div class="container">
 
-    <form (ngSubmit)="enviarEvaluacion()">
+    <form [formGroup]="forma" (ngSubmit)="enviarEvaluacion()">
 
-        <div class="">
+        <div class="form-group row">
+            <h2>
+                Pregunta
+            </h2>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName = "preguntaX" value="verdadero" id="">
+                <label>Verdadero</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" formControlName = "preguntaX" value="falso" id="">
+                <label>Falso</label>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
             <h2>Titulo pregunta</h2>
     
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                <input class="form-check-input" type="radio" formControlName = "flexRadioDefault" value="1" id="flexRadioDefault1">
                 <label class="form-check-label" for="flexRadioDefault1">
-                  Default radio
+                  Default radio1
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2">
+                <input class="form-check-input" type="radio" formControlName = "flexRadioDefault" value="2" id="flexRadioDefault2">
                 <label class="form-check-label" for="flexRadioDefault2">
-                  Default radio
+                  Default radio2
                 </label>
               </div>
         </div>
@@ -34,25 +49,26 @@
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                 <label class="form-check-label" for="flexCheckDefault">
-                  Checkbox
+                  Checkbox1
                 </label>
               </div>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked"  >
                 <label class="form-check-label" for="flexCheckChecked">
-                  Checkbox
+                  Checkbox2
                 </label>
               </div>
         </div>
 
+        <br>
+        <div class="col-md-8">
+            <button class="btn btn-primary" type="button" (click)="siguientePregunta()" [disabled]="preguntaNoValida">
+              <span *ngIf="preguntaNoValida" > Seleccione una opción</span>
+              <span *ngIf="!preguntaNoValida" > Continuar</span>
+            </button>
+        </div>
+        
         <div class="form-group">
-            <br>
-            <div class="input-group col-md-8">
-                <button class="btn btn-primary btn-block">
-                    Continuar
-                </button>
-            </div>
-
             <label class="col-2 col-form-label">&nbsp;</label>
             <div class="input-group col-md-8">
               <button type="submit" class="btn btn-primary btn-block">
