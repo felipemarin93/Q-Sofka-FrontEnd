@@ -15,14 +15,16 @@
         <td>{{pregunta.areaConocimiento}}</td>
         <td>{{pregunta.ultimaEdicion}}</td>
         <td>
-          <button></button>
-          <button></button>
-          <button></button>
+          <button class="tablero-coach-btn"><img src="../../assets/icons8-edit-64.png" alt=""></button>
+          <button class="tablero-coach-btn"><img src="../../assets/icons8-borrar-para-siempre-64.png" alt=""></button>
+          <button class="tablero-coach-btn"><img src="../../assets/icons8-busca-mas-80.png" alt=""></button>
         </td>
       </tr>
       <pagination-controls
           id="pagination1"
           (pageChange)="pagina = $event"
+          [previousLabel]="'Atrás'"
+          [nextLabel]="'Siguiente'"
       ></pagination-controls>
     </table>
 
