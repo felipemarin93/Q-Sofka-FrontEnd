@@ -6,46 +6,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   templateUrl: './evaluacion.component.html',
   styleUrls: ['./evaluacion.component.css']
 })
+
 export class EvaluacionComponent implements OnInit {
 
   forma: FormGroup | any;
   
-  //preguntas = [];
-
-  constructor( private fb: FormBuilder ) { 
-
-    this.crearFormulario();
-
-  }
-
-  ngOnInit(): void {
-  }
-
-  get preguntaNoValida(){
-    
-    return this.forma.get('preguntaX').invalid;
-  }
-
-  crearFormulario(){
-
-    // configurcion del objeto (formulario)
-    this.forma = this.fb.group({
-      preguntaX: ['', Validators.required],
-      flexRadioDefault: ['', Validators.required]
-    });
-
-  }
-
-  siguientePregunta(){
-    console.log("siguiente");
-  }
-
-  enviarEvaluacion(){
-    console.log(this.forma);
-    
-  }
-
-  preguntas = [
+  
+  preguntas: Pregunta[] = [
     {
       tipoPregutna: "verdadero o falso",
       pregunta: "¿Pregunta V o F?",
@@ -75,4 +42,57 @@ export class EvaluacionComponent implements OnInit {
       }
     }
   ]
+
+  indexPregunta = 0; 
+  preguntaMostrada: Pregunta = this.preguntas[this.indexPregunta];
+
+  constructor( private fb: FormBuilder ) { 
+
+    this.crearFormulario();
+
+  }
+
+  ngOnInit(): void {
+  }
+
+  get preguntaNoValida(){
+    
+    return this.forma.get('preguntaX').invalid;
+  }
+
+  crearFormulario(){
+
+    // configurcion del objeto (formulario)
+    this.forma = this.fb.group({
+      preguntaX: ['', Validators.required],
+      flexRadioDefault: ['', Validators.required]
+    });
+
+  }
+
+  siguientePregunta(){
+    this.indexPregunta++;
+    this.preguntaMostrada = this.preguntas[this.indexPregunta];
+    
+
+    console.log(this.preguntaMostrada);
+  }
+
+  enviarEvaluacion(){
+    console.log(this.forma);
+    
+  }
+
+  
 }
+
+interface Pregunta {
+  tipoPregutna: string;
+  pregunta: string;
+  opciones: {
+    opcion1: string;
+    opcion2: string;
+    opcion3?: string;
+    opcion4?: string;
+  }
+} 
