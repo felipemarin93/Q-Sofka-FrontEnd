@@ -14,17 +14,22 @@ import { CreacionPreguntasComponentComponent } from './components/creacion-pregu
 import { HeaderComponentComponent } from './components/header-component/header-component.component';
 import { FooterComponentComponent } from './components/footer-component/footer-component.component';
 import { CookieService } from 'ngx-cookie-service';
+import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
+    EvaluacionComponent,
     InicioComponent,
     TableroCoachComponent,
     CreacionPreguntasComponentComponent,
     HeaderComponentComponent,
     FooterComponentComponent
   ],
+
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     NgxPaginationModule,
