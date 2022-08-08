@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PreguntasService } from '../preguntas.service';
-import { Pregunta } from './Pregunta';
+import { PreguntasService } from '../../services/preguntas.service';
+import { Pregunta } from '../../models/pregunta';
 
 @Component({
   selector: 'app-tablero-coach',
