@@ -6,16 +6,18 @@
                 <p></p>
 			      	<form action="#" class="signin-form">
 			      		<div class="form-group">
-				  			<input type="text" class="form-control" placeholder="Usuario" #userName required>
+				  			<input type="text" class="form-control" placeholder="Usuario" required>
 						</div>
                         <p></p>
 					    <div class="form-group">
-							<input id="password-field" type="password" class="form-control" placeholder="Contraseña" #userPassword required>
-							<span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+							<input id="password-field" type="password" class="form-control" placeholder="Contraseña" required>
+							<span toggle="password-field" class="fa fa-fw field-icon toggle-password fa-eye"></span>
 						</div>
                         <p></p>
-						<div class="form-group ">
-							<button type="button" class="btn btn-primary">Iniciar sesión</button>
+						<div class="form-group formGroup">
+							<button type="submit" class="form-control btn btn-primary " 
+							value="Log in"
+							>Iniciar sesión</button>
 						</div>
 						<div class="text-center">
                             <a href="" class="">
