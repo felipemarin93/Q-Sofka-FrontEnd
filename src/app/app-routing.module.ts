@@ -3,13 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { InicioComponent } from "./components/inicio/inicio.component";
 import { TableroCoachComponent } from './components/tablero-coach/tablero-coach.component';
 import { CreacionPreguntasComponentComponent } from './components/creacion-preguntas-component/creacion-preguntas-component.component';
+import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 
 const routes: Routes = [
-  { path: "", redirectTo: "/creacionpreguntas", pathMatch: "full" },
   { path: "creacionpreguntas", component: CreacionPreguntasComponentComponent },
   { path: 'coach-dashboard', component: TableroCoachComponent },
-  { path: "", redirectTo: "/inicio", pathMatch: "full" },
   { path: "inicio", component: InicioComponent },
+  { path: "evaluacion", component: EvaluacionComponent },
+  { path: "", redirectTo: "/inicio", pathMatch: "full" },
 ];
 
 @NgModule({

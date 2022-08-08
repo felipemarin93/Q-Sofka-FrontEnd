@@ -5,9 +5,6 @@ import { NgxPaginationModule } from 'ngx-pagination';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-<<<<<<< HEAD
-import { ModuloAspiranteComponent } from './modulo-aspirante/modulo-aspirante.component';
-=======
 import { InicioComponent } from './components/inicio/inicio.component';
 
 
@@ -17,22 +14,22 @@ import { CreacionPreguntasComponentComponent } from './components/creacion-pregu
 import { HeaderComponentComponent } from './components/header-component/header-component.component';
 import { FooterComponentComponent } from './components/footer-component/footer-component.component';
 import { CookieService } from 'ngx-cookie-service';
->>>>>>> origin/dev
+import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-<<<<<<< HEAD
-    ModuloAspiranteComponent
-=======
+    EvaluacionComponent,
     InicioComponent,
     TableroCoachComponent,
     CreacionPreguntasComponentComponent,
     HeaderComponentComponent,
     FooterComponentComponent
->>>>>>> origin/dev
   ],
+
   imports: [
+    FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     NgxPaginationModule,

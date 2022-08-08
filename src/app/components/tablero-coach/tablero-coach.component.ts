@@ -9,14 +9,14 @@ import { Pregunta } from '../../models/pregunta';
 })
 export class TableroCoachComponent implements OnInit {
 
-  preguntas: Pregunta[] = [];
+  preguntas: any[] = [];
   pagina: number = 1
   constructor(private preguntasService: PreguntasService) { }
 
   ngOnInit(): void {
       this.preguntas = this.getPreguntas();
   }
-  getPreguntas(): Pregunta[] {
+  getPreguntas(): any[] {
     return this.preguntasService.getPreguntas();
   }
 
