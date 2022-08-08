@@ -31,4 +31,8 @@ export class TableroCoachComponent implements OnInit {
       this.router.navigate(['inicio']);
     }
   }
+
+  nuevaPregunta(){
+    this.router.navigate(['creacionpreguntas']);
+  }
 }
