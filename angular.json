@@ -110,5 +110,8 @@
       }
     }
   },
-  "defaultProject": "Q-Sofka-FrontEnd"
+  "defaultProject": "Q-Sofka-FrontEnd",
+  "cli": {
+    "analytics": false
+  }
 }
