@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Pregunta } from './tablero-coach/Pregunta';
+import { Pregunta } from './components/tablero-coach/pregunta';
 
 @Injectable({
   providedIn: 'root'
