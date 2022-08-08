@@ -28,7 +28,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   areaConocimiento: string = 'Seleccione una opcion';
   descriptor: string = 'Seleccione una opcion';
   pregunta?: string;
-  opcion?: string;
+  opcion: string = '';
 
   constructor(private cookieService: CookieService) {}
 
@@ -60,10 +60,19 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     return new Date(Date.parse(fecha.toString()) + 1200000);
   }
 
-  agregarOpcion() {
-    this.opciones.push(this.opcion!);
-    localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    this.opcion = '';
+  agregarEditarOpcion() {
+    let indice = this.cookieService.get('opcionEditar');
+    console.log(' cookie', this.cookieService.get('opcionEditar'));
+    if (indice) {
+      this.opciones[parseInt(indice!)] = this.opcion;
+      localStorage.setItem('opciones', JSON.stringify(this.opciones));
+      this.opcion = '';
+    } else {
+      this.opciones.push(this.opcion!);
+      localStorage.setItem('opciones', JSON.stringify(this.opciones));
+      this.opcion = '';
+    }
+    this.cookieService.delete('opcionEditar');
   }
 
   eliminarOpcion(opcion: string) {
@@ -75,7 +84,11 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   editarOpcion(indice: number) {
     this.opcion = this.opciones[indice];
-    console.log(this.opciones[indice]);
+    this.cookieService.set(
+      'opcionEditar',
+      indice.toString(),
+      this.obtenerLimiteCookie(new Date())
+    );
   }
 
   guardarPregunta() {
