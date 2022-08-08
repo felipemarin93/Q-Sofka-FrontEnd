@@ -15,6 +15,7 @@ import { HeaderComponentComponent } from './components/header-component/header-c
 import { FooterComponentComponent } from './components/footer-component/footer-component.component';
 import { CookieService } from 'ngx-cookie-service';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { EvaluacionComponent } from './components/evaluacion/evaluacion.componen
     AppRoutingModule,
     NgxPaginationModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [PreguntasService,CookieService],
   bootstrap: [AppComponent]
