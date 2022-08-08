@@ -13,6 +13,8 @@ body{
     width: 50%;
     display: flex;
     align-items: center;
+    
+    
 }
 .imagen {
     width: 50%;
@@ -22,8 +24,17 @@ body{
 }
 .login{
     align-items: center;
+    text-align: center;
 }
 a{
     color: black;
     font-size: medium;
+}
+.form-group{
+    text-align: center;
+}
+
+.form-control{
+    text-align: center;
+
 }
