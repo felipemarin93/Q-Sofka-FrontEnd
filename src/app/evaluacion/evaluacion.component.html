@@ -1,88 +1,184 @@
-<nav class="navbar navbar-light" style="background-color: #9DC3E6;">
-<div class="container-fluid">
-    <span class="navbar-brand" href="#">Pregunta X</span>
-    <span class="navbar-text">
-        Timer
-      </span>
-</div>
+<nav class="navbar navbar-light" style="background-color: #9dc3e6">
+  <div class="container-fluid">
+    <span class="navbar-brand" href="#">Pregunta {{ indexPregunta + 1 }}</span>
+    <span class="navbar-text"> Timer </span>
+  </div>
 </nav>
 
-<div class="container">
-
-    <form [formGroup]="forma" (ngSubmit)="enviarEvaluacion()">
-
-      <div [ngSwitch]="preguntaMostrada.tipoPregutna">
-          
-        <div *ngSwitchCase="'verdadero o falso'" class="form-group row">
-            <h2>
-                Pregunta
-            </h2>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName = "preguntaX" value="verdadero" id="">
-                <label>Verdadero</label>
-            </div>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" formControlName = "preguntaX" value="falso" id="">
-                <label>Falso</label>
-            </div>
-
-        </div>
-
-        <div *ngSwitchCase="'seleccion unica'" class="form-group row">
-            <h2>Titulo pregunta</h2>
+<div class="container mt-3">
+  
+  <form [formGroup]="forma" (ngSubmit)="enviarEvaluacion()">
     
-            <div class="form-check">
-                <input class="form-check-input" type="radio" formControlName = "flexRadioDefault" value="1" id="flexRadioDefault1">
-                <label class="form-check-label" for="flexRadioDefault1">
-                  Default radio1
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" formControlName = "flexRadioDefault" value="2" id="flexRadioDefault2">
-                <label class="form-check-label" for="flexRadioDefault2">
-                  Default radio2
-                </label>
-              </div>
+    <!-- <div *ngFor="let pregunta of preguntas"> -->
+
+    <div [ngSwitch]="preguntaMostrada.tipoPregutna">
+
+      <div *ngSwitchCase="'verdadero o falso'" class="form-group row">
+        <h2 class="mb-3">
+          {{ preguntaMostrada.pregunta }}
+        </h2>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="pregunta"
+            value="verdadero"
+            id=""
+          />
+          <label>{{ preguntaMostrada.opciones.opcion1 }}"</label>
         </div>
-    
-        <div *ngSwitchDefault class="form-group row">
-            <h2>Titulo pregunta</h2>
-    
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="1" formControlName = "flexCheckDefault" id = "flexCheckDefault1">
-                <label class="form-check-label" for="flexCheckDefault1">
-                  Checkbox1
-                </label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="2" formControlName = "flexCheckDefault" id = "flexCheckDefault2"  >
-                <label class="form-check-label" for="flexCheckDefault2">
-                  Checkbox2
-                </label>
-              </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="pregunta"
+            value="falso"
+            id=""
+          />
+          <label>{{ preguntaMostrada.opciones.opcion2 }}"</label>
         </div>
-        
-      </div> 
-        
-        <br>
-        <div class="col-md-8">
-            <button class="btn btn-primary" type="button" (click)="siguientePregunta()" [disabled]="preguntaNoValida">
-              <span *ngIf="preguntaNoValida" > Seleccione una opción</span>
-              <span *ngIf="!preguntaNoValida" > Continuar</span>
-            </button>
+      </div>
+
+      <div *ngSwitchCase="'seleccion unica'" class="form-group row">
+        <h2 class="mb-3">{{ preguntaMostrada.pregunta }}</h2>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="pregunta"
+            value="1"
+            id="flexRadioDefault1"
+          />
+          <label class="form-check-label" for="flexRadioDefault1">
+            {{ preguntaMostrada.opciones.opcion1 }}"
+          </label>
         </div>
-        
-        <div class="form-group">
-            <label class="col-2 col-form-label">&nbsp;</label>
-            <div class="input-group col-md-8">
-              <button type="submit" class="btn btn-primary btn-block">
-                Finalizar
-              </button>
-            </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="pregunta"
+            value="2"
+            id="flexRadioDefault2"
+          />
+          <label class="form-check-label" for="flexRadioDefault2">
+            {{ preguntaMostrada.opciones.opcion2 }}"
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="pregunta"
+            value="3"
+            id="flexRadioDefault2"
+          />
+          <label class="form-check-label" for="flexRadioDefault2">
+            {{ preguntaMostrada.opciones.opcion3 }}"
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            formControlName="pregunta"
+            value="4"
+            id="flexRadioDefault2"
+          />
+          <label class="form-check-label" for="flexRadioDefault2">
+            {{ preguntaMostrada.opciones.opcion4 }}"
+          </label>
+        </div>
+      </div>
+
+      <div *ngSwitchCase="'seleccion multiple'" class="form-group row">
+        <h2 class="mb-3">{{ preguntaMostrada.pregunta }}</h2>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="1"
+            formControlName="multiple"
+            id="flexCheckDefault1"
+          />
+          <label class="form-check-label" for="flexCheckDefault1">
+            {{ preguntaMostrada.opciones.opcion1 }}"
+          </label>
         </div>
 
-    </form>
-    
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="2"
+            formControlName="multiple"
+            id="flexCheckDefault2"
+          />
+          <label class="form-check-label" for="flexCheckDefault2">
+            {{ preguntaMostrada.opciones.opcion2 }}"
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="1"
+            formControlName="multiple"
+            id="flexCheckDefault3"
+          />
+          <label class="form-check-label" for="flexCheckDefault3">
+            {{ preguntaMostrada.opciones.opcion3 }}"
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value="2"
+            formControlName="multiple"
+            id="flexCheckDefault4"
+          />
+          <label class="form-check-label" for="flexCheckDefault4">
+            {{ preguntaMostrada.opciones.opcion4 }}"
+          </label>
+        </div>
+
+      </div>
+
+      <div *ngSwitchDefault class="form-group row">
+        <h2>Fin del examen</h2>
+      </div>
+    <!-- </div> -->
+
+    <!-- <br />
+    <div class="col-md-8">
+      <button
+        class="btn btn-primary"
+        type="submit"
+        (click)="siguientePregunta()"
+        [disabled]="preguntaNoValida"
+      >
+        <span *ngIf="preguntaNoValida"> Seleccione una opción</span>
+        <span *ngIf="!preguntaNoValida"> Continuar</span>
+      </button>
+    </div> -->
+
+  </div>
+
+    <div class="form-group">
+      <label class="col-2 col-form-label">&nbsp;</label>
+      <div class="input-group col-md-8">
+        <button type="submit" 
+        class="btn btn-primary btn-block"
+        [disabled]="preguntaNoValida">
+          <span *ngIf="preguntaNoValida"> Seleccione una opción</span>
+          <span *ngIf="!preguntaNoValida"> Continuar</span>
+        </button>
+      </div>
+    </div>
+  </form>
 </div>
-
-
