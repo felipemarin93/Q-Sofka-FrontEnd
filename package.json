@@ -20,10 +20,11 @@
     "@angular/router": "~13.3.0",
     "@popperjs/core": "^2.11.5",
     "bootstrap": "^5.2.0",
-    "jquery": "^3.6.0",
-    "ngx-pagination": "^6.0.2",
     "bootstrap-icons": "^1.9.1",
+    "i": "^0.3.7",
+    "jquery": "^3.6.0",
     "ngx-cookie-service": "^14.0.1",
+    "ngx-pagination": "^6.0.2",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
