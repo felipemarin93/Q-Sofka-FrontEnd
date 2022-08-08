@@ -109,7 +109,7 @@
             />
           </div>
           <div style="margin-inline: 10px">
-            <a routerLink="" (click)="agregarEditarOpcion()">
+            <a (click)="agregarEditarOpcion()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="35"
@@ -145,12 +145,13 @@
           </div>
         </div>
       </div>
-      <div style="width: 250px">
+      <div class="opciones" >
         <ul *ngFor="let opcion of opciones; let i = index">
           <li class="list-group-item item-form fw-bold">
             {{ opcion }}
-            <a routerLink="" class="icon-form" (click)="editarOpcion(i)">
-              <svg
+            <div class="iconos">
+            <a class="icon-form" (click)="editarOpcion(i)">
+              <svg id="icon1"
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -162,8 +163,8 @@
                 />
               </svg>
             </a>
-            <a routerLink="" (click)="eliminarOpcion(opcion)">
-              <svg
+            <a (click)="eliminarOpcion(opcion)">
+              <svg id="icon2"
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
@@ -181,6 +182,7 @@
                 />
               </svg>
             </a>
+          </div>
           </li>
         </ul>
         <div class="d-flex buton-form justify-content-center">
@@ -193,7 +195,7 @@
           </button>
         </div>
         <div class="d-flex buton-form justify-content-center">
-          <button class="btn btn-primary" style="width: 100%" routerLink="">
+          <button class="btn btn-primary" style="width: 100%" >
             Regresar
           </button>
         </div>

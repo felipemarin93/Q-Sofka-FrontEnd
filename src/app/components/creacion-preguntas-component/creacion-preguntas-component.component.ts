@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
+import { AreaConocimiento } from 'src/app/models/areaConocimiento';
+import { HttpServiceAreaConocimientoService } from 'src/app/services/http-service-area-conocimiento.service';
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -16,12 +18,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     'Única opción',
     'Verdadero o falso',
   ];
-  opcionesAreaConocimiento: string[] = [
-    'Client-side',
-    'Server-side',
-    'Buenas prácticas',
-    'Metodología',
-  ];
+  opcionesAreaConocimiento?: AreaConocimiento[];
   opcionesDescriptores: string[] = ['Programación reactiva'];
   opciones: string[] = [];
   tipoPregunta: string = 'Seleccione una opcion';
@@ -30,9 +27,14 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   pregunta?: string;
   opcion: string = '';
 
-  constructor(private cookieService: CookieService) {}
+  constructor(
+    private cookieService: CookieService,
+    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService
+    ) { }
 
   ngOnInit(): void {
+    this.obtenerAreasConocimiento();
+
     if (this.cookieService.get('tipoPregunta') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPregunta');
     }
@@ -46,6 +48,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.opciones = JSON.parse(localStorage.getItem('opciones')!);
     }
     this.pregunta = this.cookieService.get('pregunta');
+  }
+
+  obtenerAreasConocimiento(): void {
+    this.servicioHttpAreaConocimiento.listarAreaConocimiento()
+    .subscribe(areas => {
+      this.opcionesAreaConocimiento = areas
+    })
   }
 
   persistirOpcion(namekey: string, value: string) {
