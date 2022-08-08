@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PreguntasService } from '../../services/preguntas.service';
 import { Pregunta } from '../../models/pregunta';
 
+
 @Component({
   selector: 'app-tablero-coach',
   templateUrl: './tablero-coach.component.html',
@@ -11,6 +12,7 @@ export class TableroCoachComponent implements OnInit {
 
   preguntas: Pregunta[] = [];
   pagina: number = 1
+  title:string = "Bienvenido/a Coach"
   constructor(private preguntasService: PreguntasService) { }
 
   ngOnInit(): void {

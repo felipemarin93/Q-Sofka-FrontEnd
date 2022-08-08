@@ -3,6 +3,6 @@ export interface Pregunta{
     id?: string;
     pregunta: string;
     areaConocimiento: string;
-    ultimaEdicion: number;
+    ultimaEdicion: Date;
     opciones:string[];
 }
