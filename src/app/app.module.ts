@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { InicioComponent } from './components/inicio/inicio.component';
 
 
-import { PreguntasService } from './preguntas.service';
+import { PreguntasService } from './services/preguntas.service';
 import { TableroCoachComponent } from './components/tablero-coach/tablero-coach.component';
 import { CreacionPreguntasComponentComponent } from './components/creacion-preguntas-component/creacion-preguntas-component.component';
 import { HeaderComponentComponent } from './components/header-component/header-component.component';
