@@ -11,8 +11,9 @@ import { Pregunta } from '../../models/pregunta';
 export class TableroCoachComponent implements OnInit {
 
   preguntas: any[] = [];
-  pagina: number = 1
-  title:string = "Bienvenido/a Coach"
+  pagina: number = 1;
+  title:string = "Bienvenido/a Coach";
+  preguntaDetalle?:Pregunta;
   constructor(private preguntasService: PreguntasService) { }
 
   ngOnInit(): void {
@@ -20,6 +21,10 @@ export class TableroCoachComponent implements OnInit {
   }
   getPreguntas(): any[] {
     return this.preguntasService.getPreguntas();
+  }
+
+  mostrarDetalle(preguntaActual:Pregunta){
+    alert(preguntaActual.pregunta);
   }
 
 }
