@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Pregunta } from './components/tablero-coach/Pregunta';
+import { Pregunta } from '../models/pregunta';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +9,9 @@ export class PreguntasService {
 
   constructor() { }
 
-  getPreguntas(): Pregunta[]{
-    const preguntas: Pregunta[] = [
-      {id:"a1",pregunta:"test1",areaConocimiento:"area1",ultimaEdicion:Date.now(), opciones: []},
+  getPreguntas(): any[]{
+    const preguntas: any[] = [
+      {id:"a1", pregunta:"test1",areaConocimiento:"area1",ultimaEdicion:Date.now(), opciones: []},
       {id:"a2",pregunta:"test2",areaConocimiento:"area2",ultimaEdicion:Date.now(), opciones: []},
       {id:"a3",pregunta:"test",areaConocimiento:"area1",ultimaEdicion:Date.now(), opciones: []},
       {id:"a4",pregunta:"test",areaConocimiento:"area2",ultimaEdicion:Date.now(), opciones: []},
@@ -28,6 +28,8 @@ export class PreguntasService {
       {id:"a15",pregunta:"tes1",areaConocimiento:"area1",ultimaEdicion:Date.now(), opciones: []},
       {id:"a16",pregunta:"test",areaConocimiento:"area2",ultimaEdicion:Date.now(), opciones: []},
     ];
+
+    
     return preguntas;
   }
 

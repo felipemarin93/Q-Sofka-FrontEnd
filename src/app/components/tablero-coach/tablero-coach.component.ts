@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { PreguntasService } from 'src/app/preguntas.service';
-import { Pregunta } from './Pregunta';
+import { PreguntasService } from '../../services/preguntas.service';
+import { Pregunta } from '../../models/pregunta';
 
 @Component({
   selector: 'app-tablero-coach',
@@ -16,7 +16,7 @@ export class TableroCoachComponent implements OnInit {
   ngOnInit(): void {
       this.preguntas = this.getPreguntas();
   }
-  getPreguntas(): Pregunta[] {
+  getPreguntas(): any[] {
     return this.preguntasService.getPreguntas();
   }
 
