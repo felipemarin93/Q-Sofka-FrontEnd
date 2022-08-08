@@ -55,9 +55,11 @@ export class EvaluacionComponent implements OnInit {
   }
 
   get preguntaNoValida(){
+    
     if(this.preguntaMostrada.tipoPregutna == "seleccion multiple"){
       return this.forma.get('multiple').invalid
     }
+
     return this.forma.get('pregunta').invalid;
   }
 
