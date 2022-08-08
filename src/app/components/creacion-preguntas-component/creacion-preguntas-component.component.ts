@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { AreaConocimiento } from 'src/app/models/areaConocimiento';
 import { HttpServiceAreaConocimientoService } from 'src/app/services/http-service-area-conocimiento.service';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -27,10 +34,21 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   pregunta?: string;
   opcion: string = '';
 
+  preguntaForm: FormGroup;
+
   constructor(
+    private fb: FormBuilder,
     private cookieService: CookieService,
     private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService
-    ) { }
+  ) {
+    this.preguntaForm = this.fb.group({
+      tipoPreguntaForm: ['', Validators.required],
+      areaConocimientoForm: ['', Validators.required],
+      descriptorForm: ['', Validators.required],
+      preguntaFormulario: ['', Validators.required],
+      opcionForm: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.obtenerAreasConocimiento();
@@ -51,10 +69,17 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   obtenerAreasConocimiento(): void {
-    this.servicioHttpAreaConocimiento.listarAreaConocimiento()
-    .subscribe(areas => {
-      this.opcionesAreaConocimiento = areas
-    })
+    this.servicioHttpAreaConocimiento
+      .listarAreaConocimiento()
+      .subscribe((areas) => {
+        this.opcionesAreaConocimiento = areas;
+      });
+  }
+
+  obtenerDescriptor(id: string): void {
+    this.servicioHttpAreaConocimiento
+      .listarDescriptor(id)
+      .subscribe((descriptor) => {});
   }
 
   persistirOpcion(namekey: string, value: string) {
@@ -103,5 +128,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   guardarPregunta() {
     this.cookieService.deleteAll('/');
     localStorage.removeItem('opciones');
+    console.log('entra');
   }
 }
