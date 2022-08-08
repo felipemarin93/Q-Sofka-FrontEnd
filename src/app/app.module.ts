@@ -6,7 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
-import { Aspirante } from './aspirante.component/aspirante.component.component';
+
 
 import { PreguntasService } from './preguntas.service';
 import { TableroCoachComponent } from './tablero-coach/tablero-coach.component';
@@ -19,7 +19,6 @@ import { CookieService } from 'ngx-cookie-service';
   declarations: [
     AppComponent,
     InicioComponent,
-    Aspirante,
     TableroCoachComponent,
     CreacionPreguntasComponentComponent,
     HeaderComponentComponent,
