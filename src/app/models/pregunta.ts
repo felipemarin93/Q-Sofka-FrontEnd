@@ -4,8 +4,8 @@ export interface Pregunta{
 	id?: string;
 	coachId: string;
 	fecha: Date;
-	areaConocimientoId: string;
-	descriptorId: string;
+	areaConocimiento: string;
+	descriptor: string;
 	tipoPregunta: string;
 	pregunta: string;
 	opciones: Opcion[];
