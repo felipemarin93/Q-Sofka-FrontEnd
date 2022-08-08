@@ -12,4 +12,5 @@ export class ModuloAspiranteComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  submitted: boolean = true;
 }
