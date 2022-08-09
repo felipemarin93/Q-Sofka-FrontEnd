@@ -13,14 +13,14 @@ body{
     width: 50%;
     display: flex;
     align-items: center;
-    
-    
+
+
 }
 .imagen {
     width: 50%;
     display: flex;
     align-items: center;
-    
+
 }
 .login{
     align-items: center;
@@ -37,4 +37,10 @@ a{
 .form-control{
     text-align: center;
 
+}
+
+.mensaje-error{
+  font-family: Roboto;
+  font-size: 15px;
+  color: red;
 }
