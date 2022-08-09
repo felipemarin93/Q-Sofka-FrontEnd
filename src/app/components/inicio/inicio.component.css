@@ -44,3 +44,19 @@ a{
   font-size: 15px;
   color: red;
 }
+
+#mensaje-error-usuario{
+  font-family: Roboto;
+  font-size: 15px;
+  color: red;
+}
+#mensaje-error-contiene{
+  font-family: Roboto;
+  font-size: 15px;
+  color: red;
+}
+#mensaje-error-contrasena{
+  font-family: Roboto;
+  font-size: 15px;
+  color: red;
+}

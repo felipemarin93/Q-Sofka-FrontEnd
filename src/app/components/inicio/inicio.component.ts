@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-//import { error } from 'console';
 import { Usuario } from 'src/app/models/usuario';
 import { AutenticacionInicioSesionService } from 'src/app/services/autenticacion-inicio-sesion.service';
 
@@ -35,25 +34,21 @@ export class InicioComponent implements OnInit {
   ngOnInit(): void {}
 
   verificarCredenciales(nombreUsuario: string, contrasena: string) {
-    if (nombreUsuario.includes('.')) {
+    if (nombreUsuario.includes('.') && contrasena !== "") {
       this.autenticacionInicioSesion
         .obtenerUsuarioPorNombreUsuario(nombreUsuario)
-        .subscribe(
-          (usuario1) => {
-            if (usuario1 == null) {
-              alert(
-                'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
-              );
-            }
-            if (usuario1.contrasena === contrasena) {
-              this.router.navigate(['coach-dashboard']);
-            } else {
-              alert('La contraseña es incorrecta');
-            }
+        .subscribe((usuario1) => {
+          if (usuario1 == null) {
+            alert(
+              'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
+            );
           }
-        );
-    } else {
-      alert('El nombre de usuario no es válido');
+          if (usuario1.contrasena === contrasena) {
+            this.router.navigate(['coach-dashboard']);
+          } else {
+            alert('Datos incorrectos');
+          }
+        });
     }
   }
 }
