@@ -55,6 +55,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
           Validators.required,
           this.validarPregunta,
           this.validarPreguntaCaracterFinal,
+          this.validarPreguntaVerdaderoFalso,
         ],
       ],
       opcionForm: [''],
@@ -209,6 +210,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         this.validarPreguntaVerdaderoFalso,
       ];
     }
+    // this.preguntaForm.
   }
 
   // -------------------------------------------------------------------------------
