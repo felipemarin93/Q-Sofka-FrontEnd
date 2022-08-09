@@ -11,10 +11,12 @@ import { Router, RouterLink } from '@angular/router';
 export class TableroCoachComponent implements OnInit {
   preguntas: Pregunta[] = [];
 
+  usuario?: any ={id:'', nombre:''};
   pagina: number = 1;
-  title: string = 'Bienvenido/a Coach';
-  preguntaDetalle?: Pregunta;
-  displayModal = 'none';
+  title:string = "Bienvenido/a ";
+  preguntaDetalle?:Pregunta;
+  displayModal ="none";
+
 
   constructor(
     private preguntasService: PreguntasService,
@@ -22,12 +24,22 @@ export class TableroCoachComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.getPreguntas();
+
+      this.getPreguntas();
+      this.getUsuario();
+
   }
+  getUsuario() {
+    if(localStorage.getItem('usuario')){
+      this.usuario = JSON.parse(localStorage.getItem('usuario')!);
+      this.title = this.title + this.usuario.nombre;
+    }
+  }
+
   getPreguntas(): void {
-    this.preguntasService.getPreguntas().subscribe((preguntas) => {
+    this.preguntasService.getPreguntasCoach(this.usuario.id)
+    .subscribe(preguntas => {
       this.preguntas = preguntas;
-      console.log(preguntas);
     });
   }
 
@@ -43,6 +55,7 @@ export class TableroCoachComponent implements OnInit {
   cerrarSesion() {
     let sesion = window.confirm('¿seguro que deseas salir?');
     if (sesion == true) {
+      localStorage.clear();
       this.router.navigate(['inicio']);
     }
   }

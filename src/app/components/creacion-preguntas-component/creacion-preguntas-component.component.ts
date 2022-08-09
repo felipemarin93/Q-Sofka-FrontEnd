@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { AreaConocimiento } from 'src/app/models/areaConocimiento';
 import { HttpServiceAreaConocimientoService } from 'src/app/services/http-service-area-conocimiento.service';
@@ -11,6 +11,7 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Descriptor } from 'src/app/models/descriptor';
+import Swal from 'sweetalert2';
 import { Opcion } from 'src/app/models/opcion';
 import { Pregunta } from 'src/app/models/pregunta';
 import { ActivatedRoute } from '@angular/router';
@@ -21,6 +22,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 export class CreacionPreguntasComponentComponent implements OnInit {
+  @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
   areasConocimiento: string[] = [];
@@ -32,7 +34,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   ];
   opcionesAreaConocimiento?: AreaConocimiento[];
   opcionesDescriptores?: Descriptor[];
-  opciones: string[] = [];
+  opciones: Opcion[] = [];
   opcion: string = '';
   tipoPregunta?: string;
   areaConocimientoNombre: string = '';
@@ -43,6 +45,8 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   tieneOpcionesMultiples: boolean | null = null;
   botonAgregarOpcionDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
+  opcionCorrecta: boolean = false;
+
   //id traido por la url
   id: string;
   //validar si se guarda o se actualiza
@@ -53,6 +57,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private cookieService: CookieService,
+
     private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
     private activateRoute: ActivatedRoute
   ) {
@@ -60,9 +65,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     if (this.preguntaConId) {
       this.actualizar = true;
     }
-  }
 
-  ngOnInit(): void {
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['', Validators.required],
       areaConocimientoForm: ['', Validators.required],
@@ -76,8 +79,11 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         ],
       ],
       opcionForm: [''],
+      opcionCorrectaForm: [''],
     });
+  }
 
+  ngOnInit(): void {
     if (this.cookieService.get('tipoPreguntaForm') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
@@ -234,7 +240,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------
   // Opcion
   // -------------------------------------------------------------------------------
-
   persistirOpcion(namekey: string) {
     let value = '';
     if (namekey === 'areaConocimientoForm')
@@ -264,47 +269,84 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     } else {
       this.botonAgregarOpcionDisable = true;
     }
-    if (this.opciones.length >= 4) {
-      this.botonAgregarOpcionDisable = true;
+    this.validarEsEditar();
+  }
+
+  validarEsEditar(): void {
+    console.log(this.tipoPregunta);
+    if (this.cookieService.get('opcionEditar')) {
+      this.botonAgregarOpcionDisable = false;
+    } else {
+      if (this.tipoPregunta !== 'Verdadero o falso') {
+        this.validarPreguntaOpcionMultiple();
+      } else {
+        this.validarPreguntaVF();
+      }
     }
   }
-  // Mis cambios
-  opcionesPrueba: Opcion = {
-    nombre: '',
-    esCorrecto: true,
-  };
-  pruebaOpciones: Opcion[] = [];
+
+  validarPreguntaOpcionMultiple(): void {
+    if (this.opciones.length >= 4) this.botonAgregarOpcionDisable = true;
+  }
+
+  validarPreguntaVF(): void {
+    if (this.opciones.length >= 2) this.botonAgregarOpcionDisable = true;
+  }
+
+  obtenerCheck() {
+    this.opcionCorrecta = this.preguntaForm.value.opcionCorrectaForm;
+  }
 
   agregarEditarOpcion() {
-    // let indice = this.cookieService.get('opcionEditar');
-    // if (indice) {
-    //   this.opciones[parseInt(indice!)] = this.opcion;
-    //   localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    //   this.opcion = '';
-    // } else {
-    //   this.opciones.push(this.opcion!);
-    //   localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    //   this.opcion = '';
-    // }
+    let indice = this.cookieService.get('opcionEditar');
+    if (indice) {
+      let opcionEditar = {
+        nombre: this.opcion,
+        esCorrecto: this.opcionCorrecta,
+      };
+      this.opciones[parseInt(indice!)] = opcionEditar;
+      localStorage.setItem('opciones', JSON.stringify(this.opciones));
+      this.opcion = '';
+    } else {
+      let opcionEnviar = {
+        nombre: this.opcion,
+        esCorrecto: this.opcionCorrecta,
+      };
+      this.opciones.push(opcionEnviar);
+      localStorage.setItem('opciones', JSON.stringify(this.opciones));
+      this.opcion = '';
+    }
+    this.preguntaForm.controls['opcionCorrectaForm'].setValue(false);
     this.cookieService.delete('opcionEditar');
-
-    //Mis cambios
-    this.opcionesPrueba.nombre = this.opcion;
-    this.pruebaOpciones.push(this.opcionesPrueba!);
-    localStorage.setItem('opciones', JSON.stringify(this.pruebaOpciones));
-    this.opcion = '';
+    console.log(this.opciones);
   }
 
   eliminarOpcion(opcion: string) {
-    let item = this.opciones.findIndex((element) => element == opcion);
-    this.opciones.splice(item, 1);
-    localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    console.log(item);
+    Swal.fire({
+      text: '¿Esta seguro de eliminar La Opcion ?',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonColor: '#0d6efd',
+      icon: 'question',
+      confirmButtonColor: '#dc3545',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let item = this.opciones.findIndex(
+          (element) => element.nombre == opcion
+        );
+        this.opciones.splice(item, 1);
+        localStorage.setItem('opciones', JSON.stringify(this.opciones));
+        console.log(item);
+      }
+    });
   }
 
   editarOpcion(indice: number) {
-    this.botonAgregarOpcionDisable = false;
-    this.opcion = this.opciones[indice];
+    this.opcion = this.opciones[indice].nombre;
+    this.opcionCorrecta = this.opciones[indice].esCorrecto;
+    this.preguntaForm.controls['opcionCorrectaForm'].setValue(
+      this.opcionCorrecta
+    );
     this.cookieService.set(
       'opcionEditar',
       indice.toString(),
@@ -325,7 +367,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         : false;
     mensajeVerdaderoFalso =
       tipoPregunta == 'Verdadero o falso' && opciones == 2 ? true : false;
-    return tipoPregunta == 'Verdadero o falso'
+    return tipoPregunta === 'Verdadero o falso'
       ? mensajeVerdaderoFalso
       : mensajeMultipleUnicaOpcion;
   }
@@ -338,9 +380,37 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let opciones = this.opciones.length;
     let mensaje = this.validarGuardarPregunta(opciones, tipoPreguntaValue);
     if (mensaje) {
-      console.log('desde guardar pregunta es valido');
+      Swal.fire({
+        text: '¿Desea Guardar la pregunta?',
+        confirmButtonText: 'Guardar Pregunta',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+      });
     } else {
-      console.log('desde guardar pregunta es invalido');
+      Swal.fire({
+        text: 'Ingrese las opciones correctamente',
+        confirmButtonText: 'Salir',
+        icon: 'error',
+        confirmButtonColor: '#dc3545',
+      });
     }
   }
 }
+
+// --------------------------------------------------------------------------------
+//   Ejemplo Alert con Sweetalert2
+// --------------------------------------------------------------------------------
+//   Swal.fire({
+//     text: 'desde guardar pregunta es valido',
+//     icon: 'success',
+//     confirmButtonColor: '#3085d6',
+//     cancelButtonColor: '#d33',
+//     allowOutsideClick: false
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       console.log("hola");
+//       Swal.fire({
+//         text: 'desde guardar pregunta es valido',
+//       })
+//     }
+//   });

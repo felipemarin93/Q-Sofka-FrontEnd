@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { subscribeOn } from 'rxjs';
 import { Usuario } from 'src/app/models/usuario';
 import { AutenticacionInicioSesionService } from 'src/app/services/autenticacion-inicio-sesion.service';
 
@@ -25,18 +24,16 @@ export class InicioComponent implements OnInit {
         this.autenticacionInicioSesion
           .obtenerUsuarioPorNombreUsuario(nombreUsuario)
           .subscribe((usuario1) => {
-            if (usuario1 != null) {
               if (usuario1.contrasena === contrasena) {
                 this.router.navigate(['coach-dashboard']);
                 localStorage.setItem("usuario",JSON.stringify({id:usuario1.id, nombre: usuario1.nombre}))
               } else {
                 alert('La contraseña es incorrecta');
               }
-            } else {
-              alert(
-                'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
-              );
-            }
+          }, error => {
+            alert(
+              'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
+            );
           });
       } else {
         alert('El nombre de usuario no es válido');
@@ -45,7 +42,7 @@ export class InicioComponent implements OnInit {
       alert('El usuario y la contraseña no pueden estar vacíos');
     }
   }
- 
+
   recuperarContrasena(nombreUsuario: string){
     if(nombreUsuario !== ''){
       this.autenticacionInicioSesion

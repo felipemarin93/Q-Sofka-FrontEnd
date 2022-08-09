@@ -8,16 +8,27 @@ import { PathRest } from '../static/hostBackend';
   providedIn: 'root',
 })
 export class PreguntasService {
+
   preguntaUrl: string = 'http://localhost:8080/api/pregunta/listar';
+
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
   constructor(private http: HttpClient) {}
 
+
   getPreguntas(): Observable<Pregunta[]> {
     return this.http
       .get<Pregunta[]>(this.preguntaUrl)
       .pipe(catchError(this.handleError<Pregunta[]>('getPreguntas', [])));
+  }
+
+
+  getPreguntasCoach(id: string) {
+    return this.http.get<Pregunta[]>(this.preguntaUrl.concat('coach/'+id))
+    .pipe(
+      catchError(this.handleError<Pregunta[]>('getPreguntasCoach', []))
+    )
   }
 
   /** DELETE: delete the question from the server */
