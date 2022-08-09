@@ -8,6 +8,10 @@ import { ModuloAspiranteComponent } from './components/modulo-aspirante/modulo-a
 
 const routes: Routes = [
   { path: 'creacionpreguntas', component: CreacionPreguntasComponentComponent },
+  {
+    path: 'creacionpreguntas/:id',
+    component: CreacionPreguntasComponentComponent,
+  },
   { path: 'coach-dashboard', component: TableroCoachComponent },
   { path: 'inicio', component: InicioComponent },
   { path: 'modulo-aspirante', component: ModuloAspiranteComponent },

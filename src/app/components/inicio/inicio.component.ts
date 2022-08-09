@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-//import { error } from 'console';
 import { Usuario } from 'src/app/models/usuario';
 import { AutenticacionInicioSesionService } from 'src/app/services/autenticacion-inicio-sesion.service';
 
@@ -10,10 +9,12 @@ import { AutenticacionInicioSesionService } from 'src/app/services/autenticacion
   styleUrls: ['./inicio.component.css'],
 })
 export class InicioComponent implements OnInit {
+  userData: any;
   constructor(
     private autenticacionInicioSesion: AutenticacionInicioSesionService,
     private router: Router
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {}
 
@@ -25,6 +26,7 @@ export class InicioComponent implements OnInit {
           .subscribe((usuario1) => {
               if (usuario1.contrasena === contrasena) {
                 this.router.navigate(['coach-dashboard']);
+                localStorage.setItem("usuario",JSON.stringify({id:usuario1.id, nombre: usuario1.nombre}))
               } else {
                 alert('La contraseña es incorrecta');
               }
