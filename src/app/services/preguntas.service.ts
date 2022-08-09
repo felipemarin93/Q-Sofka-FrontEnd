@@ -7,17 +7,18 @@ import { Pregunta } from '../models/pregunta';
   providedIn: 'root'
 })
 export class PreguntasService {
-
-  preguntaUrl:string = 'http://localhost:8080/api/pregunta/';
+  preguntaUrl:string = 'http://localhost:8080/api/pregunta/listar';
   constructor(private http: HttpClient) { }
 
 
   getPreguntas(): Observable<Pregunta[]>{
-    return this.http.get<Pregunta[]>(this.preguntaUrl.concat('listar'))
+    return this.http.get<Pregunta[]>(this.preguntaUrl)
+
     .pipe(
       catchError(this.handleError<Pregunta[]>('getPreguntas', []))
     );
   }
+
 
   getPreguntasCoach(id: string) {
     return this.http.get<Pregunta[]>(this.preguntaUrl.concat('coach/'+id))
