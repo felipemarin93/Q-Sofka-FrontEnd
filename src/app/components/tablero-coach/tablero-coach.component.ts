@@ -11,7 +11,7 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class TableroCoachComponent implements OnInit {
 
-  preguntas: any[] = [];
+  preguntas: Pregunta[] = [];
 
   pagina: number = 1;
   title:string = "Bienvenido/a Coach";
@@ -24,10 +24,14 @@ export class TableroCoachComponent implements OnInit {
 
 
   ngOnInit(): void {
-      this.preguntas = this.getPreguntas();
+      this.getPreguntas();
   }
-  getPreguntas(): any[] {
-    return this.preguntasService.getPreguntas();
+  getPreguntas(): void {
+    this.preguntasService.getPreguntas()
+    .subscribe(preguntas => {
+      this.preguntas = preguntas;
+      console.log(preguntas);
+    });
   }
 
 
