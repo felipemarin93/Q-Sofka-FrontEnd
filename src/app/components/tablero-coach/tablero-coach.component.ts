@@ -31,7 +31,6 @@ export class TableroCoachComponent implements OnInit {
   getUsuario() {
     if(localStorage.getItem('usuario')){
       this.usuario = JSON.parse(localStorage.getItem('usuario')!);
-      alert(this.usuario)
       this.title = this.title + this.usuario.nombre;
     }
   }
