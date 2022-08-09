@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PreguntasService } from '../../services/preguntas.service';
 import { Pregunta } from '../../models/pregunta';
+import { Router, RouterLink } from '@angular/router';
 
 
 @Component({
@@ -10,16 +11,55 @@ import { Pregunta } from '../../models/pregunta';
 })
 export class TableroCoachComponent implements OnInit {
 
-  preguntas: any[] = [];
-  pagina: number = 1
-  title:string = "Bienvenido/a Coach"
-  constructor(private preguntasService: PreguntasService) { }
+  preguntas: Pregunta[] = [];
+
+  pagina: number = 1;
+  title:string = "Bienvenido/a Coach";
+  preguntaDetalle?:Pregunta;
+  displayModal ="none";
+
+  constructor(
+    private preguntasService: PreguntasService,
+    private router: Router) { }
+
 
   ngOnInit(): void {
-      this.preguntas = this.getPreguntas();
+      this.getPreguntas();
   }
-  getPreguntas(): any[] {
-    return this.preguntasService.getPreguntas();
+  getPreguntas(): void {
+    this.preguntasService.getPreguntas()
+    .subscribe(preguntas => {
+      this.preguntas = preguntas;
+      console.log(preguntas);
+    });
   }
 
+
+  mostrarDetalle(preguntaActual:Pregunta){
+    this.preguntaDetalle = preguntaActual;
+    this.displayModal= "block";
+  }
+
+  cerrarDetalle(){
+    this.displayModal = "none";
+  }
+
+  cerrarSesion(){
+    let sesion= window.confirm("¿seguro que deseas salir?")
+    if(sesion==true){
+      this.router.navigate(['inicio']);
+    }
+  }
+
+  nuevaPregunta(){
+    this.router.navigate(['creacionpreguntas']);
+  }
+
+  eliminarPregunta(preguntaEliminar:Pregunta){
+      alert('DELETE: ' + preguntaEliminar.id);
+  }
+
+  editarPregunta(preguntaEditar:Pregunta){
+    alert('IR A VISTA EDITAR: : ' + preguntaEditar.id);
+  }
 }
