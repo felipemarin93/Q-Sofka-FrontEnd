@@ -46,9 +46,10 @@ export class InicioComponent implements OnInit {
       this.autenticacionInicioSesion
           .obtenerUsuarioPorNombreUsuario(nombreUsuario)
           .subscribe(usuario=>{
-            this.autenticacionInicioSesion.getSendEmail(usuario.idUsuario)
+            this.autenticacionInicioSesion.getSendEmail(usuario.id)
             .subscribe(email=>alert('Una nueva contraseña ha sido generada y enviada al correo registrado'))
           })
     }
   }
+ 
 }

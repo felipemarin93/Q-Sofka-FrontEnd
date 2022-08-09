@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Usuario } from '../models/usuario';
 import { catchError, map, tap } from 'rxjs/operators';
+import { PathRest } from '../static/hostBackend';
 
 @Injectable({
   providedIn: 'root',
@@ -18,14 +19,14 @@ export class AutenticacionInicioSesionService {
 
   obtenerUsuarioPorNombreUsuario(nombreUsuario: string): Observable<Usuario> {
     return this.httpClient.get<Usuario>(
-      `${this.usuarioUrl}/${nombreUsuario}`,
+      `${PathRest.getApiUsuario}/nombre-usuario/${nombreUsuario}`,
       this.httpOptions
     );
   }
 
   /** GET send email with password. Will 404 if id not found */
   getSendEmail(userId: string | null): Observable<Usuario> {
-    const url = `/api/usuario/contrasena/${userId}`;
+    const url = `${PathRest.getApiUsuario}/contrasena/${userId}`;
     return this.httpClient.get<Usuario>(url).pipe(
       tap(_ => console.log(`fetched user userId=${userId}`)),
       catchError(this.handleError<Usuario>(`getSendEmail userId=${userId}`))
