@@ -40,7 +40,7 @@ import { PreguntaDetalleComponent } from './components/pregunta-detalle/pregunta
     FormsModule,
     HttpClientModule
   ],
-  providers: [PreguntasService,CookieService],
+  providers: [PreguntasService, CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

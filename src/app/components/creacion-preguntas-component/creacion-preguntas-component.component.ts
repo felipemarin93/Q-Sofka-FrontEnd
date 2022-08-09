@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { AreaConocimiento } from 'src/app/models/areaConocimiento';
 import { HttpServiceAreaConocimientoService } from 'src/app/services/http-service-area-conocimiento.service';
@@ -11,6 +11,8 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Descriptor } from 'src/app/models/descriptor';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -18,6 +20,7 @@ import { Descriptor } from 'src/app/models/descriptor';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 export class CreacionPreguntasComponentComponent implements OnInit {
+  @ViewChild("exampleModal") modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
   areasConocimiento: string[] = [];
@@ -44,7 +47,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private cookieService: CookieService,
-    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService
+    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
   ) {
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['', Validators.required],
@@ -150,7 +153,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-        'validarPreguntaVerdaderoFalso'
+      'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -249,12 +252,30 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     } else {
       this.botonAgregarOpcionDisable = true;
     }
-    if (this.opciones.length >= 4) {
-      this.botonAgregarOpcionDisable = true;
+    this.validarEsEditar()
+  }
+
+  validarEsEditar(): void {
+    console.log(this.tipoPregunta);
+    if (this.cookieService.get('opcionEditar')) {
+      this.botonAgregarOpcionDisable = false;
+    }
+    if (this.tipoPregunta !== 'Verdadero o falso') {
+      this.validarPreguntaOpcionMultiple()
+    } else {
+      this.validarPreguntaVF()
     }
   }
 
-  agregarEditarOpcion() {
+  validarPreguntaOpcionMultiple(): void {
+    if (this.opciones.length >= 4) this.botonAgregarOpcionDisable = true;
+  }
+
+  validarPreguntaVF(): void {
+    if (this.opciones.length >= 2) this.botonAgregarOpcionDisable = true;
+  }
+
+  agregarEditarOpcion(): void {
     let indice = this.cookieService.get('opcionEditar');
     if (indice) {
       this.opciones[parseInt(indice!)] = this.opcion;
@@ -276,7 +297,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   editarOpcion(indice: number) {
-    this.botonAgregarOpcionDisable = false;
     this.opcion = this.opciones[indice];
     this.cookieService.set(
       'opcionEditar',
@@ -291,16 +311,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   validarGuardarPregunta(opciones: number, tipoPregunta: string) {
     let mensajeMultipleUnicaOpcion;
     let mensajeVerdaderoFalso;
-    mensajeMultipleUnicaOpcion =
-      (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-      opciones == 4
-        ? true
-        : false;
-    mensajeVerdaderoFalso =
-      tipoPregunta == 'Verdadero o falso' && opciones == 2 ? true : false;
-    return tipoPregunta == 'Verdadero o falso'
-      ? mensajeVerdaderoFalso
-      : mensajeMultipleUnicaOpcion;
+    mensajeMultipleUnicaOpcion = (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') && opciones == 4 ? true : false;
+    mensajeVerdaderoFalso = tipoPregunta == 'Verdadero o falso' && opciones == 2 ? true : false;
+    return tipoPregunta === 'Verdadero o falso' ? mensajeVerdaderoFalso : mensajeMultipleUnicaOpcion;
   }
 
   guardarPregunta() {
@@ -311,9 +324,32 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let opciones = this.opciones.length;
     let mensaje = this.validarGuardarPregunta(opciones, tipoPreguntaValue);
     if (mensaje) {
-      console.log('desde guardar pregunta es valido');
+
+
+      // --------------------------------------------------------------------------------
+      // Ejemplo Alert con Sweetalert2
+      // --------------------------------------------------------------------------------
+      // Swal.fire({
+      //   text: 'desde guardar pregunta es valido',
+      //   icon: 'success',
+      //   confirmButtonColor: '#3085d6',
+      //   cancelButtonColor: '#d33',
+      //   allowOutsideClick: false
+      // }).then((result) => {
+      //   if (result.isConfirmed) {
+      //     console.log("hola");
+      //     Swal.fire({
+      //       text: 'desde guardar pregunta es valido',
+      //     })
+      //   }
+      // });
     } else {
-      console.log('desde guardar pregunta es invalido');
+      Swal.fire({
+        text: 'Ingrese las opciones correctamente',
+        icon: 'error',
+        confirmButtonColor: '#dc3545'
+      }
+      )
     }
   }
 }
