@@ -49,7 +49,7 @@
             </div>
             <div class="flex-fill">
               <select formControlName="descriptorForm" [(ngModel)]="descriptor" class="form-select"
-                (blur)="persistirOpcion('descriptor')">
+                (blur)="persistirOpcion('descriptorForm')">
                 <option selected></option>
                 <option [value]="descriptor.nombre" *ngFor="let descriptor of opcionesDescriptores">
                   {{ descriptor.nombre }}
@@ -66,9 +66,9 @@
               <label for="pregunta" class="control-label requiredField">Pregunta:</label>
             </div>
             <div class="flex-fill">
-              <input formControlName="preguntaFormulario" [(ngModel)]="pregunta" (blur)="persistirOpcion('pregunta')"
-                class="input-md textinput textInput form-control" id="pregunta" name="pregunta"
-                placeholder="Escriba su pregunta" type="text" />
+              <input formControlName="preguntaFormulario" [(ngModel)]="pregunta"
+                (blur)="persistirOpcion('preguntaFormulario')" class="input-md textinput textInput form-control"
+                id="pregunta" name="pregunta" placeholder="Escriba su pregunta" type="text" />
               <!-- contenedor mensaje error opcion multiple y unica opcion -->
               <div *ngIf="tieneOpcionesMultiples">
                 <div *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPregunta'] &&

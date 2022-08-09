@@ -73,13 +73,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         // this.preguntaForm.controls['areaConocimientoForm'].setValue(this.cookieService.get('areaConocimientoForm'))
       }, 1000)
     }
-    if (this.cookieService.get('descriptor') !== '') {
-      this.descriptor = this.cookieService.get('descriptor');
+    if (this.cookieService.get('descriptorForm') !== '') {
+      this.descriptor = this.cookieService.get('descriptorForm');
     }
     if (JSON.parse(localStorage.getItem('opciones')!)) {
       this.opciones = JSON.parse(localStorage.getItem('opciones')!);
     }
-    this.pregunta = this.cookieService.get('pregunta');
+    this.pregunta = this.cookieService.get('preguntaFormulario');
     this.obtenerAreasConocimiento();
   }
 
@@ -226,6 +226,8 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let value = ''
     if (namekey === 'areaConocimientoForm') value = this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento
     if (namekey === 'tipoPreguntaForm') value = this.preguntaForm.value.tipoPreguntaForm
+    if (namekey === 'descriptorForm') value = this.preguntaForm.value.descriptorForm
+    if (namekey === 'preguntaFormulario') value = this.preguntaForm.value.preguntaFormulario
 
     this.cookieService.set(
       namekey,
