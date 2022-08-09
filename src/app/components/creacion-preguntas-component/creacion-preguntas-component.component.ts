@@ -38,6 +38,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
   botonAgregarOpcionDisable: boolean = false;
+  requerimientosPregunta: ValidationErrors[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -54,7 +55,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
           Validators.required,
           this.validarPregunta,
           this.validarPreguntaCaracterFinal,
-          //this.validarPreguntaVerdaderoFalso,
         ],
       ],
       opcionForm: [''],
@@ -156,6 +156,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     } else {
       this.tieneOpcionesMultiples = true;
     }
+    this.obtenerRequerimiento();
   }
 
   private validarPregunta(control: AbstractControl): ValidationErrors | null {
@@ -192,6 +193,21 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       return { validarPreguntaCaracterFinal: true };
     } else {
       return null;
+    }
+  }
+
+  obtenerRequerimiento(): void {
+    if (this.tieneOpcionesMultiples) {
+      this.requerimientosPregunta = [
+        Validators.required,
+        this.validarPregunta,
+        this.validarPreguntaCaracterFinal,
+      ];
+    } else {
+      this.requerimientosPregunta = [
+        Validators.required,
+        this.validarPreguntaVerdaderoFalso,
+      ];
     }
   }
 
