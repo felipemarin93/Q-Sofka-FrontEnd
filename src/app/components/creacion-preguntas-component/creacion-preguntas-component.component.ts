@@ -265,8 +265,12 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       localStorage.setItem('opciones', JSON.stringify(this.opciones));
       this.opcion = '';
     }
-    this.cookieService.delete('opcionEditar');
+    // let opcionesNew: [] = ['juan:', 'true'];
+    // localStorage.setItem('ffff', JSON.stringify());
+    // this.cookieService.delete('opcionEditar');
   }
+
+  esCorrectoOpcio() {}
 
   eliminarOpcion(opcion: string) {
     let item = this.opciones.findIndex((element) => element == opcion);
