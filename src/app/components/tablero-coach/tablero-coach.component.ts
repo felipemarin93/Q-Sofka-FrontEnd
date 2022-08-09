@@ -11,11 +11,12 @@ import { Router, RouterLink } from '@angular/router';
 })
 export class TableroCoachComponent implements OnInit {
 
-  preguntas: any[] = [];
+  preguntas: Pregunta[] = [];
 
   pagina: number = 1;
   title:string = "Bienvenido/a Coach";
   preguntaDetalle?:Pregunta;
+  displayModal ="none";
 
   constructor(
     private preguntasService: PreguntasService,
@@ -23,20 +24,28 @@ export class TableroCoachComponent implements OnInit {
 
 
   ngOnInit(): void {
-      this.preguntas = this.getPreguntas();
+      this.getPreguntas();
   }
-  getPreguntas(): any[] {
-    return this.preguntasService.getPreguntas();
+  getPreguntas(): void {
+    this.preguntasService.getPreguntas()
+    .subscribe(preguntas => {
+      this.preguntas = preguntas;
+      console.log(preguntas);
+    });
   }
 
 
   mostrarDetalle(preguntaActual:Pregunta){
-    alert(preguntaActual.pregunta);
+    this.preguntaDetalle = preguntaActual;
+    this.displayModal= "block";
   }
 
+  cerrarDetalle(){
+    this.displayModal = "none";
+  }
 
   cerrarSesion(){
-    var sesion= window.confirm("¿seguro que deseas salir?")
+    let sesion= window.confirm("¿seguro que deseas salir?")
     if(sesion==true){
       this.router.navigate(['inicio']);
     }
@@ -46,4 +55,11 @@ export class TableroCoachComponent implements OnInit {
     this.router.navigate(['creacionpreguntas']);
   }
 
+  eliminarPregunta(preguntaEliminar:Pregunta){
+      alert('DELETE: ' + preguntaEliminar.id);
+  }
+
+  editarPregunta(preguntaEditar:Pregunta){
+    alert('IR A VISTA EDITAR: : ' + preguntaEditar.id);
+  }
 }

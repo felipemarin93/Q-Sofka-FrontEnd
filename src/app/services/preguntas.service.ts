@@ -1,38 +1,33 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { Pregunta } from '../models/pregunta';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PreguntasService {
-
-  constructor() { }
-
-
-  getPreguntas(): Pregunta[]{
-    const preguntas: Pregunta[] = [
-      {id:"a1",pregunta:"test1",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a2",pregunta:"test2",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a3",pregunta:"test",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a4",pregunta:"test",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a5",pregunta:"test",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a6",pregunta:"test",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a7",pregunta:"test",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a8",pregunta:"test",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a9",pregunta:"test",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a10",pregunta:"test",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a11",pregunta:"test",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a12",pregunta:"test",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a13",pregunta:"test",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a14",pregunta:"test",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a15",pregunta:"tes1",areaConocimiento:"area1",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-      {id:"a16",pregunta:"test",areaConocimiento:"area2",fecha:new Date(), opciones: [],coachId:'',tipoPregunta:'',descriptor:''},
-
-    ];
+  preguntaUrl:string = 'http://localhost:8080/api/pregunta/listar';
+  constructor(private http: HttpClient) { }
 
 
-    return preguntas;
+  getPreguntas(): Observable<Pregunta[]>{
+    return this.http.get<Pregunta[]>(this.preguntaUrl)
+    .pipe(
+      catchError(this.handleError<Pregunta[]>('getPreguntas', []))
+    );
+  }
+
+  private handleError<T>(operation = 'operation', result?: T) {
+    return (error: any): Observable<T> => {
+
+      // TODO: send the error to remote logging infrastructure
+      console.error(error); // log to console instead
+
+
+      // Let the app keep running by returning an empty result.
+      return of(result as T);
+    };
   }
 
 }

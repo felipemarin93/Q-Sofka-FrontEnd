@@ -1,39 +1,39 @@
 <body>
-
-<div class="container">
-			<div class="login">
-                <img src="../../../assets/sofka.png" width="500" height="200">
-                <p></p>
-			      	<form action="#" class="signin-form">
-			      		<div class="form-group">
-				  			<input type="text" class="form-control" placeholder="Usuario" required>
-						</div>
-                        <p></p>
-					    <div class="form-group">
-							<input id="password-field" type="password" class="form-control" placeholder="Contraseña" required>
-							<span toggle="password-field" class="fa fa-fw field-icon toggle-password fa-eye"></span>
-						</div>
-                        <p></p>
-						<div class="form-group formGroup">
-							<button type="submit" class="form-control btn btn-primary " 
-							value="Log in"
-							>Iniciar sesión</button>
-						</div>
-						<div class="text-center">
-                            <a href="" class="">
-                                Olvidé mi contraseña
-                            </a>
-                            </div>
-  						<div class="text-center">
-						<a routerLink="/modulo-aspirante" class="">
-							Soy un aspirante
-						</a>
-						</div>
-					</form>
-			</div>
-	    </div>
-    <div class="imagen">
-        <img src="../../../assets/1.jpg" width="500" height="400">
+  <div class="container">
+    <div class="login">
+      <img src="../../../assets/sofka.png" width="500" height="200">
+      <p></p>
+      <form action="#" class="signin-form">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Usuario" id="nombreUsuario" #userName required>
+        </div>
+        <p></p>
+        <div class="form-group">
+          <input id="password-field" type="password" class="form-control" placeholder="Contraseña" #userPassword
+            required>
+          <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+        </div>
+        <p></p>
+        <div class="form-group ">
+          <button type="button" class="btn btn-primary"
+            (click)="verificarCredenciales(userName.value, userPassword.value)">Iniciar
+            sesión</button>
+        </div>
+        <div class="text-center">
+          <a href="" class="">
+            Olvidé mi contraseña
+          </a>
+        </div>
+        <div class="text-center">
+          <a routerLink="/modulo-aspirante" class="">
+            Soy un aspirante
+          </a>
+        </div>
+      </form>
     </div>
+  </div>
+  <div class="imagen">
+    <img src="../../../assets/1.jpg" width="500" height="400">
+  </div>
 
 </body>
