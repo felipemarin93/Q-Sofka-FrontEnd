@@ -28,13 +28,7 @@
                   {{ opcion }}
                 </option>
               </select>
-              <span
-                *ngIf="
-                  preguntaForm.get('tipoPreguntaForm')?.hasError('required') &&
-                  preguntaForm.get('tipoPreguntaForm')?.touched
-                "
-                class="text-danger errorLabel"
-              >
+              <span *ngIf="preguntaNoValida" class="text-danger errorLabel">
                 El <strong>tipo de pregunta</strong> es requerido
               </span>
             </div>
@@ -52,24 +46,17 @@
                 [(ngModel)]="areaConocimiento"
                 class="form-select"
                 (blur)="persistirOpcion('areaConocimiento', areaConocimiento)"
+                (ngModelChange)="obtenerDescriptor($event)"
               >
                 <option selected></option>
                 <option
-                  [value]="opcion"
+                  [value]="opcion.id"
                   *ngFor="let opcion of opcionesAreaConocimiento"
                 >
                   {{ opcion.nombreAreaConocimiento }}
                 </option>
               </select>
-              <span
-                *ngIf="
-                  preguntaForm
-                    .get('areaConocimientoForm')
-                    ?.hasError('required') &&
-                  preguntaForm.get('areaConocimientoForm')?.touched
-                "
-                class="text-danger errorLabel"
-              >
+              <span *ngIf="preguntaNoValida" class="text-danger errorLabel">
                 El <strong>área de conocimiento</strong> es requerido
               </span>
             </div>
@@ -89,9 +76,12 @@
                 (blur)="persistirOpcion('descriptor', descriptor)"
               >
                 <option selected></option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                <option
+                  [value]="descriptor.nombre"
+                  *ngFor="let descriptor of opcionesDescriptores"
+                >
+                  {{ descriptor.nombre }}
+                </option>
               </select>
               <span
                 *ngIf="

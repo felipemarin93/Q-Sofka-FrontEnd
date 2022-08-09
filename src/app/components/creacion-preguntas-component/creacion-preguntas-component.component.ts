@@ -9,6 +9,7 @@ import {
   Validators,
   AbstractControl,
 } from '@angular/forms';
+import { Descriptor } from 'src/app/models/descriptor';
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -26,7 +27,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     'Verdadero o falso',
   ];
   opcionesAreaConocimiento?: AreaConocimiento[];
-  opcionesDescriptores: string[] = ['Programación reactiva'];
+  opcionesDescriptores?: Descriptor[];
   opciones: string[] = [];
   tipoPregunta: string = 'Seleccione una opcion';
   areaConocimiento: string = 'Seleccione una opcion';
@@ -68,6 +69,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     this.pregunta = this.cookieService.get('pregunta');
   }
 
+  get preguntaNoValida() {
+    return (
+      this.preguntaForm.get('tipoPreguntaForm')?.hasError('required') &&
+      this.preguntaForm.get('tipoPreguntaForm')?.touched
+    );
+  }
+
   obtenerAreasConocimiento(): void {
     this.servicioHttpAreaConocimiento
       .listarAreaConocimiento()
@@ -76,10 +84,16 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       });
   }
 
+  obtenerAreaConocimientoForm(idAreaconocimiento: string) {
+    console.log(idAreaconocimiento);
+  }
+
   obtenerDescriptor(id: string): void {
     this.servicioHttpAreaConocimiento
       .listarDescriptor(id)
-      .subscribe((descriptor) => {});
+      .subscribe((descriptores) => {
+        this.opcionesDescriptores = descriptores;
+      });
   }
 
   persistirOpcion(namekey: string, value: string) {
