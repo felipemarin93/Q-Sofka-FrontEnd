@@ -51,4 +51,11 @@ export class TableroCoachComponent implements OnInit {
     this.router.navigate(['creacionpreguntas']);
   }
 
+  eliminarPregunta(preguntaEliminar:Pregunta){
+      alert('DELETE: ' + preguntaEliminar.id);
+  }
+
+  editarPregunta(preguntaEditar:Pregunta){
+    alert('IR A VISTA EDITAR: : ' + preguntaEditar.id);
+  }
 }
