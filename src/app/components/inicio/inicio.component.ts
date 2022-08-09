@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Usuario } from 'src/app/models/usuario';
 import { AutenticacionInicioSesionService } from 'src/app/services/autenticacion-inicio-sesion.service';
 
 @Component({
@@ -39,6 +38,17 @@ export class InicioComponent implements OnInit {
       }
     } else {
       alert('El usuario y la contraseña no pueden estar vacíos');
+    }
+  }
+
+  recuperarContrasena(nombreUsuario: string){
+    if(nombreUsuario !== ''){
+      this.autenticacionInicioSesion
+          .obtenerUsuarioPorNombreUsuario(nombreUsuario)
+          .subscribe(usuario=>{
+            this.autenticacionInicioSesion.getSendEmail(usuario.idUsuario)
+            .subscribe(email=>alert('Una nueva contraseña ha sido generada y enviada al correo registrado'))
+          })
     }
   }
 }
