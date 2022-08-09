@@ -55,6 +55,7 @@ export class TableroCoachComponent implements OnInit {
   cerrarSesion() {
     let sesion = window.confirm('¿seguro que deseas salir?');
     if (sesion == true) {
+      localStorage.clear();
       this.router.navigate(['inicio']);
     }
   }
