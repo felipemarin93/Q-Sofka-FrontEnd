@@ -33,7 +33,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   ];
   opcionesAreaConocimiento?: AreaConocimiento[];
   opcionesDescriptores?: Descriptor[];
-  opciones: string[] = [];
+  opciones: Opcion[] = [];
   opcion: string = '';
   tipoPregunta?: string;
   areaConocimientoNombre: string = '';
@@ -44,6 +44,8 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   tieneOpcionesMultiples: boolean | null = null;
   botonAgregarOpcionDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
+  opcionCorrecta: boolean = false;
+
   //id traido por la url
   id: string;
   //validar si se guarda o se actualiza
@@ -52,11 +54,8 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private cookieService: CookieService,
-
     private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['', Validators.required],
       areaConocimientoForm: ['', Validators.required],
@@ -70,8 +69,11 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         ],
       ],
       opcionForm: [''],
+      opcionCorrectaForm: ['']
     });
+  }
 
+  ngOnInit(): void {
     if (this.cookieService.get('tipoPreguntaForm') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
@@ -228,12 +230,10 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------
   // Opcion
   // -------------------------------------------------------------------------------
-
   persistirOpcion(namekey: string) {
     let value = '';
     if (namekey === 'areaConocimientoForm')
-      value =
-        this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+      value = this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
     if (namekey === 'tipoPreguntaForm')
       value = this.preguntaForm.value.tipoPreguntaForm;
     if (namekey === 'descriptorForm')
@@ -265,19 +265,14 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     console.log(this.tipoPregunta);
     if (this.cookieService.get('opcionEditar')) {
       this.botonAgregarOpcionDisable = false;
-    }
-    if (this.tipoPregunta !== 'Verdadero o falso') {
-      this.validarPreguntaOpcionMultiple()
     } else {
-      this.validarPreguntaVF()
+      if (this.tipoPregunta !== 'Verdadero o falso') {
+        this.validarPreguntaOpcionMultiple()
+      } else {
+        this.validarPreguntaVF()
+      }
     }
   }
-  // Mis cambios
-  opcionesPrueba: Opcion = {
-    nombre: '',
-    esCorrecto: true,
-  };
-  pruebaOpciones: Opcion[] = [];
 
   validarPreguntaOpcionMultiple(): void {
     if (this.opciones.length >= 4) this.botonAgregarOpcionDisable = true;
@@ -287,24 +282,32 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     if (this.opciones.length >= 2) this.botonAgregarOpcionDisable = true;
   }
 
-  agregarEditarOpcion() {
-    // let indice = this.cookieService.get('opcionEditar');
-    // if (indice) {
-    //   this.opciones[parseInt(indice!)] = this.opcion;
-    //   localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    //   this.opcion = '';
-    // } else {
-    //   this.opciones.push(this.opcion!);
-    //   localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    //   this.opcion = '';
-    // }
-    this.cookieService.delete('opcionEditar');
+  obtenerCheck() {
+    this.opcionCorrecta = this.preguntaForm.value.opcionCorrectaForm
+  }
 
-    //Mis cambios
-    this.opcionesPrueba.nombre = this.opcion;
-    this.pruebaOpciones.push(this.opcionesPrueba!);
-    localStorage.setItem('opciones', JSON.stringify(this.pruebaOpciones));
-    this.opcion = '';
+  agregarEditarOpcion() {
+    let indice = this.cookieService.get('opcionEditar');
+    if (indice) {
+      let opcionEditar = {
+        nombre: this.opcion,
+        esCorrecto: this.opcionCorrecta
+      }
+      this.opciones[parseInt(indice!)] = opcionEditar;
+      localStorage.setItem('opciones', JSON.stringify(this.opciones));
+      this.opcion = '';
+    } else {
+      let opcionEnviar = {
+        nombre: this.opcion,
+        esCorrecto: this.opcionCorrecta
+      }
+      this.opciones.push(opcionEnviar);
+      localStorage.setItem('opciones', JSON.stringify(this.opciones));
+      this.opcion = '';
+    }
+    this.preguntaForm.controls['opcionCorrectaForm'].setValue(false)
+    this.cookieService.delete('opcionEditar');
+    console.log(this.opciones);
   }
 
   eliminarOpcion(opcion: string) {
@@ -317,17 +320,18 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       confirmButtonColor: '#dc3545'
     }).then(result => {
       if (result.isConfirmed) {
-        let item = this.opciones.findIndex((element) => element == opcion);
+        let item = this.opciones.findIndex((element) => element.nombre == opcion);
         this.opciones.splice(item, 1);
         localStorage.setItem('opciones', JSON.stringify(this.opciones));
         console.log(item);
       }
     })
-
   }
 
   editarOpcion(indice: number) {
-    this.opcion = this.opciones[indice];
+    this.opcion = this.opciones[indice].nombre;
+    this.opcionCorrecta = this.opciones[indice].esCorrecto
+    this.preguntaForm.controls['opcionCorrectaForm'].setValue(this.opcionCorrecta)
     this.cookieService.set(
       'opcionEditar',
       indice.toString(),
