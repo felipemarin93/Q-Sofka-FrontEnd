@@ -294,10 +294,22 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   esCorrectoOpcio() { }
 
   eliminarOpcion(opcion: string) {
-    let item = this.opciones.findIndex((element) => element == opcion);
-    this.opciones.splice(item, 1);
-    localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    console.log(item);
+    Swal.fire({
+      text: '¿Esta seguro de eliminar La Opcion ?',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonColor: '#0d6efd',
+      icon: 'question',
+      confirmButtonColor: '#dc3545'
+    }).then(result => {
+      if (result.isConfirmed) {
+        let item = this.opciones.findIndex((element) => element == opcion);
+        this.opciones.splice(item, 1);
+        localStorage.setItem('opciones', JSON.stringify(this.opciones));
+        console.log(item);
+      }
+    })
+
   }
 
   editarOpcion(indice: number) {
@@ -328,30 +340,12 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let opciones = this.opciones.length;
     let mensaje = this.validarGuardarPregunta(opciones, tipoPreguntaValue);
     if (mensaje) {
-
       Swal.fire({
         text: '¿Desea Guardar la pregunta?',
         confirmButtonText: 'Guardar Pregunta',
         icon: 'success',
         confirmButtonColor: '#3085d6'
       })
-      // --------------------------------------------------------------------------------
-      // Ejemplo Alert con Sweetalert2
-      // --------------------------------------------------------------------------------
-      // Swal.fire({
-      //   text: 'desde guardar pregunta es valido',
-      //   icon: 'success',
-      //   confirmButtonColor: '#3085d6',
-      //   cancelButtonColor: '#d33',
-      //   allowOutsideClick: false
-      // }).then((result) => {
-      //   if (result.isConfirmed) {
-      //     console.log("hola");
-      //     Swal.fire({
-      //       text: 'desde guardar pregunta es valido',
-      //     })
-      //   }
-      // });
     } else {
       Swal.fire({
         text: 'Ingrese las opciones correctamente',
@@ -363,3 +357,24 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     }
   }
 }
+
+
+
+
+// --------------------------------------------------------------------------------
+//   Ejemplo Alert con Sweetalert2
+// --------------------------------------------------------------------------------
+//   Swal.fire({
+//     text: 'desde guardar pregunta es valido',
+//     icon: 'success',
+//     confirmButtonColor: '#3085d6',
+//     cancelButtonColor: '#d33',
+//     allowOutsideClick: false
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       console.log("hola");
+//       Swal.fire({
+//         text: 'desde guardar pregunta es valido',
+//       })
+//     }
+//   });
