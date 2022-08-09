@@ -146,7 +146,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-      'validarPreguntaVerdaderoFalso'
+        'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -267,7 +267,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-        opciones == 4
+      opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
@@ -282,7 +282,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     //localStorage.removeItem('opciones');
     const tipoPreguntaValue = this.preguntaForm.value.tipoPreguntaForm;
     const areaConocimientoValue = this.preguntaForm.value.areaConocimientoForm;
-
     const descriptorValue = this.preguntaForm.value.descriptorForm;
     const preguntaFormularioValue = this.preguntaForm.value.preguntaFormulario;
     let opciones = this.opciones.length;
