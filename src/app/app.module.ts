@@ -16,6 +16,7 @@ import { FooterComponentComponent } from './components/footer-component/footer-c
 import { CookieService } from 'ngx-cookie-service';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { HttpClientModule } from '@angular/common/http';
+import { PreguntaDetalleComponent } from './components/pregunta-detalle/pregunta-detalle.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { HttpClientModule } from '@angular/common/http';
     TableroCoachComponent,
     CreacionPreguntasComponentComponent,
     HeaderComponentComponent,
-    FooterComponentComponent
+    FooterComponentComponent,
+    PreguntaDetalleComponent
   ],
 
   imports: [
