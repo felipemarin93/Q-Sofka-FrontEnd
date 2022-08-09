@@ -30,13 +30,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   opcionesAreaConocimiento?: AreaConocimiento[];
   opcionesDescriptores?: Descriptor[];
   opciones: string[] = [];
-  tipoPregunta: string = 'Seleccione una opcion';
+  opcion: string = '';
+  tipoPregunta?: string;
   areaConocimiento: string = 'Seleccione una opcion';
   descriptor: string = 'Seleccione una opcion';
   pregunta?: string;
-  opcion: string = '';
-
   preguntaForm: FormGroup;
+  tieneOpcionesMultiples: boolean | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -61,7 +61,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerAreasConocimiento();
-
     if (this.cookieService.get('tipoPregunta') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPregunta');
     }
@@ -96,6 +95,15 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.preguntaForm.get('descriptorForm')?.hasError('required') &&
       this.preguntaForm.get('descriptorForm')?.touched
     );
+  }
+
+  mostrarRequerimientoPregunta(opcion: string): void {
+    if (opcion === 'Verdadero o falso') {
+      this.tieneOpcionesMultiples = false
+    }
+    else {
+      this.tieneOpcionesMultiples = true
+    }
   }
 
   private validarPregunta(control: AbstractControl): ValidationErrors | null {
