@@ -56,7 +56,13 @@ export class TableroCoachComponent implements OnInit {
   }
 
   eliminarPregunta(preguntaEliminar:Pregunta){
-      alert('DELETE: ' + preguntaEliminar.id);
+    if(confirm("¿Está seguro que quiere eliminar la pregunta?")) {
+      this.preguntasService.deletePregunta(preguntaEliminar.id)
+        .subscribe(eliminar=>{alert('Se ha eliminado la pregunta con id:' + preguntaEliminar.id)
+        // window.location.reload()
+        const indice=this.preguntas.indexOf(preguntaEliminar)
+      this.preguntas.splice(indice,1)})
+    }
   }
 
   editarPregunta(preguntaEditar:Pregunta){
