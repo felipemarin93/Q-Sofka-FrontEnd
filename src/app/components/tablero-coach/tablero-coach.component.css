@@ -69,3 +69,22 @@ width: auto !important;
   width: auto;
   height: 26px;
 }
+
+.modal{
+  position: absolute;
+  top: 25%;
+  left: calc(50% - 150px);
+  background-color: white;
+  width: 350px;
+  max-height: 400px;
+  justify-self: center;
+  border: 2px solid black;
+  border-radius: 6px;
+}
+
+.close_modal_container{
+  background-color: #9DC3E6;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}

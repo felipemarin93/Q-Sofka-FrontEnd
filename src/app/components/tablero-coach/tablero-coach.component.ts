@@ -16,6 +16,7 @@ export class TableroCoachComponent implements OnInit {
   pagina: number = 1;
   title:string = "Bienvenido/a Coach";
   preguntaDetalle?:Pregunta;
+  displayModal ="none";
 
   constructor(
     private preguntasService: PreguntasService,
@@ -31,12 +32,16 @@ export class TableroCoachComponent implements OnInit {
 
 
   mostrarDetalle(preguntaActual:Pregunta){
-    alert(preguntaActual.pregunta);
+    this.preguntaDetalle = preguntaActual;
+    this.displayModal= "block";
   }
 
+  cerrarDetalle(){
+    this.displayModal = "none";
+  }
 
   cerrarSesion(){
-    var sesion= window.confirm("¿seguro que deseas salir?")
+    let sesion= window.confirm("¿seguro que deseas salir?")
     if(sesion==true){
       this.router.navigate(['inicio']);
     }

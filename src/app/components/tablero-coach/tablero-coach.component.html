@@ -11,6 +11,15 @@
     Cerrar Sesión
   </div>
 </nav>
+<section class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':displayModal}">
+  <div class="close_modal_container">
+    <button type="button" class="close" aria-label="Close" (click)="cerrarDetalle()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <app-pregunta-detalle [pregunta]="preguntaDetalle" ></app-pregunta-detalle>
+</section>
+
 
 <div class="tablero">
   <div class="table_container">
@@ -51,5 +60,5 @@
   </div>
 </div>
 
-<app-footer-component></app-footer-component>
+<app-footer-component ></app-footer-component>
 
