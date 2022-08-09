@@ -32,7 +32,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   opciones: string[] = [];
   opcion: string = '';
   tipoPregunta?: string;
-  areaConocimientoNombre: string = "";
+  areaConocimientoNombre: string = '';
   areaConocimiento: AreaConocimiento;
   descriptor: string = 'Seleccione una opcion';
   pregunta?: string;
@@ -68,10 +68,12 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     }
     if (this.cookieService.get('areaConocimientoForm') !== '') {
       setTimeout(() => {
-        this.areaConocimientoNombre = this.cookieService.get('areaConocimientoForm');
+        this.areaConocimientoNombre = this.cookieService.get(
+          'areaConocimientoForm'
+        );
         console.log(this.cookieService.get('areaConocimientoForm'));
         // this.preguntaForm.controls['areaConocimientoForm'].setValue(this.cookieService.get('areaConocimientoForm'))
-      }, 1000)
+      }, 1000);
     }
     if (this.cookieService.get('descriptorForm') !== '') {
       this.descriptor = this.cookieService.get('descriptorForm');
@@ -150,7 +152,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-      'validarPreguntaVerdaderoFalso'
+        'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -203,18 +205,16 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   obtenerRequerimiento(): void {
     if (!this.tieneOpcionesMultiples) {
-      this.preguntaForm.controls['preguntaFormulario']
-        .setValidators([
-          Validators.required,
-          this.validarPreguntaVerdaderoFalso,
-        ])
+      this.preguntaForm.controls['preguntaFormulario'].setValidators([
+        Validators.required,
+        this.validarPreguntaVerdaderoFalso,
+      ]);
     } else {
-      this.preguntaForm.controls['preguntaFormulario']
-        .setValidators([
-          Validators.required,
-          this.validarPregunta,
-          this.validarPreguntaCaracterFinal,
-        ])
+      this.preguntaForm.controls['preguntaFormulario'].setValidators([
+        Validators.required,
+        this.validarPregunta,
+        this.validarPreguntaCaracterFinal,
+      ]);
     }
   }
 
@@ -223,11 +223,16 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------
 
   persistirOpcion(namekey: string) {
-    let value = ''
-    if (namekey === 'areaConocimientoForm') value = this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento
-    if (namekey === 'tipoPreguntaForm') value = this.preguntaForm.value.tipoPreguntaForm
-    if (namekey === 'descriptorForm') value = this.preguntaForm.value.descriptorForm
-    if (namekey === 'preguntaFormulario') value = this.preguntaForm.value.preguntaFormulario
+    let value = '';
+    if (namekey === 'areaConocimientoForm')
+      value =
+        this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+    if (namekey === 'tipoPreguntaForm')
+      value = this.preguntaForm.value.tipoPreguntaForm;
+    if (namekey === 'descriptorForm')
+      value = this.preguntaForm.value.descriptorForm;
+    if (namekey === 'preguntaFormulario')
+      value = this.preguntaForm.value.preguntaFormulario;
 
     this.cookieService.set(
       namekey,
@@ -243,9 +248,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   validarOpcion(): void {
     // console.log(this.preguntaForm.value.opcionForm);
     if (this.preguntaForm.value.opcionForm) {
-      this.botonAgregarOpcionDisable = false
+      this.botonAgregarOpcionDisable = false;
     } else {
-      this.botonAgregarOpcionDisable = true
+      this.botonAgregarOpcionDisable = true;
     }
   }
 
@@ -287,7 +292,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-        opciones == 4
+      opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
