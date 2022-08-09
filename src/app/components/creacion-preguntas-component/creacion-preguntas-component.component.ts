@@ -224,6 +224,5 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   guardarPregunta() {
     this.cookieService.deleteAll('/');
     localStorage.removeItem('opciones');
-    console.log('envio del formulario');
   }
 }
