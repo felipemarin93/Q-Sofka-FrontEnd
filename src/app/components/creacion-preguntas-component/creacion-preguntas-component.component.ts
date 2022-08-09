@@ -32,12 +32,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   opciones: string[] = [];
   opcion: string = '';
   tipoPregunta?: string;
-  areaConocimiento: string = 'Seleccione una opcion';
+  areaConocimientoNombre: string = "";
+  areaConocimiento: AreaConocimiento;
   descriptor: string = 'Seleccione una opcion';
   pregunta?: string;
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
-  botonAgregarOpcionDisable: boolean = false;
+  botonAgregarOpcionDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
 
   constructor(
@@ -55,7 +56,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
           Validators.required,
           this.validarPregunta,
           this.validarPreguntaCaracterFinal,
-          this.validarPreguntaVerdaderoFalso,
         ],
       ],
       opcionForm: [''],
@@ -63,20 +63,24 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.obtenerAreasConocimiento();
-    if (this.cookieService.get('tipoPregunta') !== '') {
-      this.tipoPregunta = this.cookieService.get('tipoPregunta');
+    if (this.cookieService.get('tipoPreguntaForm') !== '') {
+      this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
-    if (this.cookieService.get('areaConocimiento') !== '') {
-      this.areaConocimiento = this.cookieService.get('areaConocimiento');
+    if (this.cookieService.get('areaConocimientoForm') !== '') {
+      setTimeout(() => {
+        this.areaConocimientoNombre = this.cookieService.get('areaConocimientoForm');
+        console.log(this.cookieService.get('areaConocimientoForm'));
+        // this.preguntaForm.controls['areaConocimientoForm'].setValue(this.cookieService.get('areaConocimientoForm'))
+      }, 1000)
     }
-    if (this.cookieService.get('descriptor') !== '') {
-      this.descriptor = this.cookieService.get('descriptor');
+    if (this.cookieService.get('descriptorForm') !== '') {
+      this.descriptor = this.cookieService.get('descriptorForm');
     }
     if (JSON.parse(localStorage.getItem('opciones')!)) {
       this.opciones = JSON.parse(localStorage.getItem('opciones')!);
     }
-    this.pregunta = this.cookieService.get('pregunta');
+    this.pregunta = this.cookieService.get('preguntaFormulario');
+    this.obtenerAreasConocimiento();
   }
 
   // -------------------------------------------------------------------------------
@@ -146,7 +150,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-        'validarPreguntaVerdaderoFalso'
+      'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -198,26 +202,33 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   obtenerRequerimiento(): void {
-    if (this.tieneOpcionesMultiples) {
-      this.requerimientosPregunta = [
-        Validators.required,
-        this.validarPregunta,
-        this.validarPreguntaCaracterFinal,
-      ];
+    if (!this.tieneOpcionesMultiples) {
+      this.preguntaForm.controls['preguntaFormulario']
+        .setValidators([
+          Validators.required,
+          this.validarPreguntaVerdaderoFalso,
+        ])
     } else {
-      this.requerimientosPregunta = [
-        Validators.required,
-        this.validarPreguntaVerdaderoFalso,
-      ];
+      this.preguntaForm.controls['preguntaFormulario']
+        .setValidators([
+          Validators.required,
+          this.validarPregunta,
+          this.validarPreguntaCaracterFinal,
+        ])
     }
-    // this.preguntaForm.
   }
 
   // -------------------------------------------------------------------------------
   // Opcion
   // -------------------------------------------------------------------------------
 
-  persistirOpcion(namekey: string, value: string) {
+  persistirOpcion(namekey: string) {
+    let value = ''
+    if (namekey === 'areaConocimientoForm') value = this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento
+    if (namekey === 'tipoPreguntaForm') value = this.preguntaForm.value.tipoPreguntaForm
+    if (namekey === 'descriptorForm') value = this.preguntaForm.value.descriptorForm
+    if (namekey === 'preguntaFormulario') value = this.preguntaForm.value.preguntaFormulario
+
     this.cookieService.set(
       namekey,
       value,
@@ -227,6 +238,15 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   obtenerLimiteCookie(fecha: Date): Date {
     return new Date(Date.parse(fecha.toString()) + 1200000);
+  }
+
+  validarOpcion(): void {
+    // console.log(this.preguntaForm.value.opcionForm);
+    if (this.preguntaForm.value.opcionForm) {
+      this.botonAgregarOpcionDisable = false
+    } else {
+      this.botonAgregarOpcionDisable = true
+    }
   }
 
   agregarEditarOpcion() {
@@ -267,7 +287,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-      opciones == 4
+        opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
