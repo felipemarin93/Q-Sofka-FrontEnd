@@ -15,7 +15,7 @@ export class TableroCoachComponent implements OnInit {
 
   usuario?: any ={id:'', nombre:''};
   pagina: number = 1;
-  title:string = "Bienvenido/a";
+  title:string = "Bienvenido/a ";
   preguntaDetalle?:Pregunta;
   displayModal ="none";
 
@@ -30,7 +30,8 @@ export class TableroCoachComponent implements OnInit {
   }
   getUsuario() {
     if(localStorage.getItem('usuario')){
-      this.usuario = localStorage.getItem('usuario');
+      this.usuario = JSON.parse(localStorage.getItem('usuario')!);
+      alert(this.usuario)
       this.title = this.title + this.usuario.nombre;
     }
   }
