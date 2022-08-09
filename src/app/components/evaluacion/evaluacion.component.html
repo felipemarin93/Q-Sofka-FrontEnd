@@ -5,11 +5,11 @@
   </div>
 </nav>
 
+<button (click)="imprimir()">imprimir</button>
+
 <div class="container mt-3">
   
   <form [formGroup]="forma" (ngSubmit)="enviarEvaluacion()">
-    
-    <!-- <div *ngFor="let pregunta of preguntas"> -->
 
     <div [ngSwitch]="preguntaMostrada.tipoPregutna">
 
@@ -152,20 +152,6 @@
       <div *ngSwitchDefault class="form-group row">
         <h2>Fin del examen</h2>
       </div>
-    <!-- </div> -->
-
-    <!-- <br />
-    <div class="col-md-8">
-      <button
-        class="btn btn-primary"
-        type="submit"
-        (click)="siguientePregunta()"
-        [disabled]="preguntaNoValida"
-      >
-        <span *ngIf="preguntaNoValida"> Seleccione una opción</span>
-        <span *ngIf="!preguntaNoValida"> Continuar</span>
-      </button>
-    </div> -->
 
   </div>
 
