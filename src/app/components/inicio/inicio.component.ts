@@ -41,6 +41,11 @@ export class InicioComponent implements OnInit {
           .obtenerUsuarioPorNombreUsuario(nombreUsuario)
           .subscribe(
             (usuario1) => {
+              if (usuario1 == null) {
+                alert(
+                  'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
+                );
+              }
               if (usuario1.contrasena === contrasena) {
                 localStorage.setItem(
                   'usuario',
@@ -50,18 +55,9 @@ export class InicioComponent implements OnInit {
               } else {
                 alert('La contraseña es incorrecta');
               }
-            },
-            (error) => {
-              alert(
-                'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
-              );
             }
           );
-      } else {
-        alert('El nombre de usuario no es válido');
       }
-    } else {
-      alert('El usuario y la contraseña no pueden estar vacíos');
     }
   }
 
