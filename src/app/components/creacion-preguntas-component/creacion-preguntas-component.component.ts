@@ -12,6 +12,7 @@ import {
 } from '@angular/forms';
 import { Descriptor } from 'src/app/models/descriptor';
 import Swal from 'sweetalert2';
+import { Opcion } from 'src/app/models/opcion';
 
 
 @Component({
@@ -43,12 +44,19 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   tieneOpcionesMultiples: boolean | null = null;
   botonAgregarOpcionDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
+  //id traido por la url
+  id: string;
+  //validar si se guarda o se actualiza
+  actualizar: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private cookieService: CookieService,
-    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
-  ) {
+
+    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService
+  ) { }
+
+  ngOnInit(): void {
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['', Validators.required],
       areaConocimientoForm: ['', Validators.required],
@@ -63,9 +71,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       ],
       opcionForm: [''],
     });
-  }
 
-  ngOnInit(): void {
     if (this.cookieService.get('tipoPreguntaForm') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
@@ -266,6 +272,12 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.validarPreguntaVF()
     }
   }
+  // Mis cambios
+  opcionesPrueba: Opcion = {
+    nombre: '',
+    esCorrecto: true,
+  };
+  pruebaOpciones: Opcion[] = [];
 
   validarPreguntaOpcionMultiple(): void {
     if (this.opciones.length >= 4) this.botonAgregarOpcionDisable = true;
@@ -275,23 +287,25 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     if (this.opciones.length >= 2) this.botonAgregarOpcionDisable = true;
   }
 
-  agregarEditarOpcion(): void {
-    let indice = this.cookieService.get('opcionEditar');
-    if (indice) {
-      this.opciones[parseInt(indice!)] = this.opcion;
-      localStorage.setItem('opciones', JSON.stringify(this.opciones));
-      this.opcion = '';
-    } else {
-      this.opciones.push(this.opcion!);
-      localStorage.setItem('opciones', JSON.stringify(this.opciones));
-      this.opcion = '';
-    }
-    // let opcionesNew: [] = ['juan:', 'true'];
-    // localStorage.setItem('ffff', JSON.stringify());
-    // this.cookieService.delete('opcionEditar');
-  }
+  agregarEditarOpcion() {
+    // let indice = this.cookieService.get('opcionEditar');
+    // if (indice) {
+    //   this.opciones[parseInt(indice!)] = this.opcion;
+    //   localStorage.setItem('opciones', JSON.stringify(this.opciones));
+    //   this.opcion = '';
+    // } else {
+    //   this.opciones.push(this.opcion!);
+    //   localStorage.setItem('opciones', JSON.stringify(this.opciones));
+    //   this.opcion = '';
+    // }
+    this.cookieService.delete('opcionEditar');
 
-  esCorrectoOpcio() { }
+    //Mis cambios
+    this.opcionesPrueba.nombre = this.opcion;
+    this.pruebaOpciones.push(this.opcionesPrueba!);
+    localStorage.setItem('opciones', JSON.stringify(this.pruebaOpciones));
+    this.opcion = '';
+  }
 
   eliminarOpcion(opcion: string) {
     Swal.fire({
