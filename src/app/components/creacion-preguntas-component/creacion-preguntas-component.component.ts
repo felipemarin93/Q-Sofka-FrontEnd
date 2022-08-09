@@ -37,6 +37,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   pregunta?: string;
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
+  botonAgregarOpcionDisable: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -77,12 +78,20 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     this.pregunta = this.cookieService.get('pregunta');
   }
 
-  get preguntaNoValida() {
+  // -------------------------------------------------------------------------------
+  // Tipo de Pregunta
+  // -------------------------------------------------------------------------------
+
+  get tipopreguntaNoValida() {
     return (
       this.preguntaForm.get('tipoPreguntaForm')?.hasError('required') &&
       this.preguntaForm.get('tipoPreguntaForm')?.touched
     );
   }
+
+  // -------------------------------------------------------------------------------
+  // Area de Conocimiento
+  // -------------------------------------------------------------------------------
 
   get areaConocimientoNoValida() {
     return (
@@ -91,12 +100,40 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     );
   }
 
+  obtenerAreasConocimiento(): void {
+    this.servicioHttpAreaConocimiento
+      .listarAreaConocimiento()
+      .subscribe((areas) => {
+        this.opcionesAreaConocimiento = areas;
+      });
+  }
+
+  obtenerAreaConocimientoForm(idAreaconocimiento: string) {
+    console.log(idAreaconocimiento);
+  }
+
+  // -------------------------------------------------------------------------------
+  // Descriptor
+  // -------------------------------------------------------------------------------
+
   get descriptorNoValida() {
     return (
       this.preguntaForm.get('descriptorForm')?.hasError('required') &&
       this.preguntaForm.get('descriptorForm')?.touched
     );
   }
+
+  obtenerDescriptor(id: string): void {
+    this.servicioHttpAreaConocimiento
+      .listarDescriptor(id)
+      .subscribe((descriptores) => {
+        this.opcionesDescriptores = descriptores;
+      });
+  }
+
+  // -------------------------------------------------------------------------------
+  // Pregunta
+  // -------------------------------------------------------------------------------
 
   get preguntaFormNoValida() {
     return (
@@ -108,7 +145,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-        'validarPreguntaVerdaderoFalso'
+      'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -158,25 +195,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     }
   }
 
-  obtenerAreasConocimiento(): void {
-    this.servicioHttpAreaConocimiento
-      .listarAreaConocimiento()
-      .subscribe((areas) => {
-        this.opcionesAreaConocimiento = areas;
-      });
-  }
-
-  obtenerAreaConocimientoForm(idAreaconocimiento: string) {
-    console.log(idAreaconocimiento);
-  }
-
-  obtenerDescriptor(id: string): void {
-    this.servicioHttpAreaConocimiento
-      .listarDescriptor(id)
-      .subscribe((descriptores) => {
-        this.opcionesDescriptores = descriptores;
-      });
-  }
+  // -------------------------------------------------------------------------------
+  // Opcion
+  // -------------------------------------------------------------------------------
 
   persistirOpcion(namekey: string, value: string) {
     this.cookieService.set(
@@ -192,7 +213,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   agregarEditarOpcion() {
     let indice = this.cookieService.get('opcionEditar');
-    console.log(' cookie', this.cookieService.get('opcionEditar'));
     if (indice) {
       this.opciones[parseInt(indice!)] = this.opcion;
       localStorage.setItem('opciones', JSON.stringify(this.opciones));
@@ -220,6 +240,10 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.obtenerLimiteCookie(new Date())
     );
   }
+
+  // -------------------------------------------------------------------------------
+  // Botones guardar y Regresar
+  // -------------------------------------------------------------------------------
 
   guardarPregunta() {
     this.cookieService.deleteAll('/');
