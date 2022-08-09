@@ -54,7 +54,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
           Validators.required,
           this.validarPregunta,
           this.validarPreguntaCaracterFinal,
-          this.validarPreguntaVerdaderoFalso,
+          //this.validarPreguntaVerdaderoFalso,
         ],
       ],
       opcionForm: [''],
@@ -145,7 +145,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-      'validarPreguntaVerdaderoFalso'
+        'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -244,9 +244,26 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   // -------------------------------------------------------------------------------
   // Botones guardar y Regresar
   // -------------------------------------------------------------------------------
+  validarGuardarPregunta(opciones: number) {
+    if (opciones < 4) {
+      alert('para guardar la pregunta se necesita cuatro opciones');
+    }
+  }
 
   guardarPregunta() {
-    this.cookieService.deleteAll('/');
-    localStorage.removeItem('opciones');
+    //this.cookieService.deleteAll('/');
+    //localStorage.removeItem('opciones');
+    const tipoPreguntaValue = this.preguntaForm.value.tipoPreguntaForm;
+    const areaConocimientoValue = this.preguntaForm.value.areaConocimientoForm;
+    const descriptorValue = this.preguntaForm.value.descriptorForm;
+    const preguntaFormularioValue = this.preguntaForm.value.preguntaFormulario;
+    let opciones = this.opciones.length;
+    console.log(opciones);
+    if (
+      tipoPreguntaValue == 'Opción múltiple' ||
+      tipoPreguntaValue == 'Única opción'
+    ) {
+      this.validarGuardarPregunta(opciones);
+    }
   }
 }
