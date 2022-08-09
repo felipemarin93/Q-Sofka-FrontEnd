@@ -46,4 +46,15 @@ export class InicioComponent implements OnInit {
     }
   }
  
+  recuperarContrasena(nombreUsuario: string){
+    if(nombreUsuario !== ''){
+      this.autenticacionInicioSesion
+          .obtenerUsuarioPorNombreUsuario(nombreUsuario)
+          .subscribe(usuario=>{
+            console.log(usuario)
+            this.autenticacionInicioSesion.getSendEmail(usuario.id)
+            .subscribe(email=>alert('Una nueva contraseña ha sido generada y enviada al correo registrado'))
+          })
+    }
+  }
 }
