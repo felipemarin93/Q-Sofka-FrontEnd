@@ -13,8 +13,9 @@ export class TableroCoachComponent implements OnInit {
 
   preguntas: Pregunta[] = [];
 
+  usuario?: any ={id:'', nombre:''};
   pagina: number = 1;
-  title:string = "Bienvenido/a Coach";
+  title:string = "Bienvenido/a";
   preguntaDetalle?:Pregunta;
   displayModal ="none";
 
@@ -25,12 +26,19 @@ export class TableroCoachComponent implements OnInit {
 
   ngOnInit(): void {
       this.getPreguntas();
+      this.getUsuario();
   }
+  getUsuario() {
+    if(localStorage.getItem('usuario')){
+      this.usuario = localStorage.getItem('usuario');
+      this.title = this.title + this.usuario.nombre;
+    }
+  }
+
   getPreguntas(): void {
-    this.preguntasService.getPreguntas()
+    this.preguntasService.getPreguntasCoach(this.usuario.id)
     .subscribe(preguntas => {
       this.preguntas = preguntas;
-      console.log(preguntas);
     });
   }
 
