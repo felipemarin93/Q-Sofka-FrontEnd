@@ -30,13 +30,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   opcionesAreaConocimiento?: AreaConocimiento[];
   opcionesDescriptores?: Descriptor[];
   opciones: string[] = [];
-  tipoPregunta: string = 'Seleccione una opcion';
+  opcion: string = '';
+  tipoPregunta?: string;
   areaConocimiento: string = 'Seleccione una opcion';
   descriptor: string = 'Seleccione una opcion';
   pregunta?: string;
-  opcion: string = '';
-
   preguntaForm: FormGroup;
+  tieneOpcionesMultiples: boolean | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -53,6 +53,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
           Validators.required,
           this.validarPregunta,
           this.validarPreguntaCaracterFinal,
+          this.validarPreguntaVerdaderoFalso,
         ],
       ],
       opcionForm: [''],
@@ -61,7 +62,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   ngOnInit(): void {
     this.obtenerAreasConocimiento();
-
     if (this.cookieService.get('tipoPregunta') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPregunta');
     }
@@ -105,6 +105,22 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     );
   }
 
+  get verdaderoFalsoValido() {
+    return (
+      this.preguntaForm.get('preguntaFormulario')?.errors?.[
+        'validarPreguntaVerdaderoFalso'
+      ] && this.preguntaForm.get('preguntaFormulario')?.touched
+    );
+  }
+
+  mostrarRequerimientoPregunta(opcion: string): void {
+    if (opcion === 'Verdadero o falso') {
+      this.tieneOpcionesMultiples = false;
+    } else {
+      this.tieneOpcionesMultiples = true;
+    }
+  }
+
   private validarPregunta(control: AbstractControl): ValidationErrors | null {
     let pregunta = control.value;
     if (
@@ -115,6 +131,17 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       !pregunta.startsWith('¿Es')
     ) {
       return { validarPregunta: true };
+    } else {
+      return null;
+    }
+  }
+
+  private validarPreguntaVerdaderoFalso(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    let pregunta = control.value;
+    if (!pregunta.startsWith('Verdadero') && !pregunta.startsWith('Falso')) {
+      return { validarPreguntaVerdaderoFalso: true };
     } else {
       return null;
     }

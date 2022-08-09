@@ -18,7 +18,8 @@
                 formControlName="tipoPreguntaForm"
                 [(ngModel)]="tipoPregunta"
                 class="form-select"
-                (blur)="persistirOpcion('tipoPregunta', tipoPregunta)"
+                (blur)="persistirOpcion('tipoPregunta', tipoPregunta!)"
+                (ngModelChange)="mostrarRequerimientoPregunta($event)"
               >
                 <option selected></option>
                 <option
@@ -109,33 +110,40 @@
                 placeholder="Escriba su pregunta"
                 type="text"
               />
-              <span *ngIf="preguntaFormNoValida" class="text-danger errorLabel">
-                La <strong>pregunta</strong> es requerido
-              </span>
-              <span
-                *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPregunta'] &&
+              <!-- contenedor mensaje error opcion multiple y unica opcion -->
+              <div *ngIf="tieneOpcionesMultiples">
+                <div
+                  *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPregunta'] &&
+                  preguntaForm.get('preguntaFormulario')?.touched"
+                  class="text-danger errorLabel"
+                  style="width: 416.22px"
+                >
+                  La pregunta tiene que comenzar con
+                  <strong>(¿)</strong> seguido de
+                  <strong>(Qué, Cómo, Dónde, Cuál, Es)</strong>
+                </div>
+                <div
+                  *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPreguntaCaracterFinal'] &&
                 preguntaForm.get('preguntaFormulario')?.touched"
-                class="text-danger errorLabel"
-              >
-                <p>
-                  La pregunta tiene que comenzar con <strong>¿</strong
-                  ><br />seguido de <strong>Qué, Cómo, Dónde, Cuál, Es</strong>
-                </p>
-              </span>
-              <span
-                *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPreguntaCaracterFinal'] &&
-                preguntaForm.get('preguntaFormulario')?.touched"
-                class="text-danger errorLabel"
-              >
-                <p>La pregunta tiene que terminar con <strong>?</strong></p>
-              </span>
-              <span
-                *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPreguntaVerdaderoFalso'] &&
-                preguntaForm.get('preguntaFormulario')?.touched"
-                class="text-danger errorLabel"
-              >
-                <p>Vedadero<strong>?</strong></p>
-              </span>
+                  class="text-danger errorLabel"
+                  style="width: 416.22px"
+                >
+                  <p>La pregunta tiene que terminar con <strong>?</strong></p>
+                </div>
+              </div>
+
+              <!-- contenedor mensaje error Verdadero o falso-->
+              <div *ngIf="!tieneOpcionesMultiples">
+                <div
+                  *ngIf="verdaderoFalsoValido"
+                  class="text-danger errorLabel"
+                  style="width: 416.22px"
+                >
+                  <p>
+                    La pregunta tiene que iniciar con <b>Verdadero o Falso</b>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
           <!-- pregunta 5 -->
