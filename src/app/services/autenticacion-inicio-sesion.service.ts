@@ -26,6 +26,7 @@ export class AutenticacionInicioSesionService {
 
   /** GET send email with password. Will 404 if id not found */
   getSendEmail(userId: string | null): Observable<Usuario> {
+    console.log(userId)
     const url = `${PathRest.getApiUsuario}/contrasena/${userId}`;
     return this.httpClient.get<Usuario>(url).pipe(
       tap(_ => console.log(`fetched user userId=${userId}`)),
