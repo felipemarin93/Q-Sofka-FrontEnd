@@ -123,9 +123,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     );
   }
 
-  obtenerDescriptor(id: string): void {
+  obtenerDescriptor(areaConocimiento: AreaConocimiento): void {
     this.servicioHttpAreaConocimiento
-      .listarDescriptor(id)
+      .listarDescriptor(areaConocimiento.id)
       .subscribe((descriptores) => {
         this.opcionesDescriptores = descriptores;
       });
@@ -258,12 +258,21 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   // -------------------------------------------------------------------------------
-  // Botones guardar y Regresar
+  // Botones guardar, validarGuardarPregunta y Regresar
   // -------------------------------------------------------------------------------
-  validarGuardarPregunta(opciones: number) {
-    if (opciones < 4) {
-      alert('para guardar la pregunta se necesita cuatro opciones');
-    }
+  validarGuardarPregunta(opciones: number, tipoPregunta: string) {
+    let mensajeMultipleUnicaOpcion;
+    let mensajeVerdaderoFalso;
+    mensajeMultipleUnicaOpcion =
+      (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
+      opciones == 4
+        ? true
+        : false;
+    mensajeVerdaderoFalso =
+      tipoPregunta == 'Verdadero o falso' && opciones == 2 ? true : false;
+    return tipoPregunta == 'Verdadero o falso'
+      ? mensajeVerdaderoFalso
+      : mensajeMultipleUnicaOpcion;
   }
 
   guardarPregunta() {
@@ -271,15 +280,15 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     //localStorage.removeItem('opciones');
     const tipoPreguntaValue = this.preguntaForm.value.tipoPreguntaForm;
     const areaConocimientoValue = this.preguntaForm.value.areaConocimientoForm;
+    //console.log(areaConocimientoValue.nombreAreaConocimiento);
     const descriptorValue = this.preguntaForm.value.descriptorForm;
     const preguntaFormularioValue = this.preguntaForm.value.preguntaFormulario;
     let opciones = this.opciones.length;
-    console.log(opciones);
-    if (
-      tipoPreguntaValue == 'Opción múltiple' ||
-      tipoPreguntaValue == 'Única opción'
-    ) {
-      this.validarGuardarPregunta(opciones);
+    let mensaje = this.validarGuardarPregunta(opciones, tipoPreguntaValue);
+    if (mensaje) {
+      console.log('desde guardar pregunta es valido');
+    } else {
+      console.log('desde guardar pregunta es invalido');
     }
   }
 }
