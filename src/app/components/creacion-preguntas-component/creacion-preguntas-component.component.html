@@ -113,15 +113,10 @@
                 type="text"
               />
               <span
-                *ngIf="
-                  preguntaForm
-                    .get('preguntaFormulario')
-                    ?.hasError('required') &&
-                  preguntaForm.get('preguntaFormulario')?.touched
-                "
-                class="text-danger errorLabel"
+                *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPregunta'] &&
+                preguntaForm.get('preguntaFormulario')?.touched"
               >
-                la <strong>pregunta</strong> es requerido
+                La pregunta tiene que iniciar con ¿ Qué, Cómo
               </span>
             </div>
           </div>
@@ -142,21 +137,11 @@
                 placeholder="Escriba una opción"
                 type="text"
               />
-              <span
-                *ngIf="
-                  preguntaForm.get('opcionForm')?.hasError('required') &&
-                  preguntaForm.get('opcionForm')?.touched
-                "
-                class="text-danger errorLabel"
-              >
-                la <strong>opción</strong> es requerido
-              </span>
             </div>
             <div style="margin-inline: 10px">
-              <button
+              <a
                 class="btn btn-link"
                 (click)="agregarEditarOpcion()"
-                [disabled]="preguntaForm.invalid"
                 style="text-decoration: none"
               >
                 <svg
@@ -174,7 +159,7 @@
                     d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
                   />
                 </svg>
-              </button>
+              </a>
             </div>
           </div>
           <!-- checkbox es correcta -->

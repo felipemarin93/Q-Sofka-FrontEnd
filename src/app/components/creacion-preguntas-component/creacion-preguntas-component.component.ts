@@ -8,6 +8,7 @@ import {
   FormBuilder,
   Validators,
   AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
 import { Descriptor } from 'src/app/models/descriptor';
 
@@ -46,8 +47,8 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       tipoPreguntaForm: ['', Validators.required],
       areaConocimientoForm: ['', Validators.required],
       descriptorForm: ['', Validators.required],
-      preguntaFormulario: ['', Validators.required],
-      opcionForm: ['', Validators.required],
+      preguntaFormulario: ['', this.validarPregunta],
+      opcionForm: [''],
     });
   }
 
@@ -74,6 +75,15 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.preguntaForm.get('tipoPreguntaForm')?.hasError('required') &&
       this.preguntaForm.get('tipoPreguntaForm')?.touched
     );
+  }
+
+  private validarPregunta(control: AbstractControl): ValidationErrors | null {
+    let pregunta = control.value;
+    if (!pregunta.includes('Perez')) {
+      return { validarPregunta: true };
+    } else {
+      return null;
+    }
   }
 
   obtenerAreasConocimiento(): void {
@@ -142,6 +152,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   guardarPregunta() {
     this.cookieService.deleteAll('/');
     localStorage.removeItem('opciones');
-    console.log('entra');
+    console.log('envio del formulario');
   }
 }
