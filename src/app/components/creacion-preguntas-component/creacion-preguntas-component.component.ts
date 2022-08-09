@@ -37,7 +37,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   pregunta?: string;
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
-  botonAgregarOpcionDisable: boolean = false;
+  botonAgregarOpcionDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
 
   constructor(
@@ -55,7 +55,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
           Validators.required,
           this.validarPregunta,
           this.validarPreguntaCaracterFinal,
-          this.validarPreguntaVerdaderoFalso,
         ],
       ],
       opcionForm: [''],
@@ -146,7 +145,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-        'validarPreguntaVerdaderoFalso'
+      'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -198,19 +197,20 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   obtenerRequerimiento(): void {
-    if (this.tieneOpcionesMultiples) {
-      this.requerimientosPregunta = [
-        Validators.required,
-        this.validarPregunta,
-        this.validarPreguntaCaracterFinal,
-      ];
+    if (!this.tieneOpcionesMultiples) {
+      this.preguntaForm.controls['preguntaFormulario']
+        .setValidators([
+          Validators.required,
+          this.validarPreguntaVerdaderoFalso,
+        ])
     } else {
-      this.requerimientosPregunta = [
-        Validators.required,
-        this.validarPreguntaVerdaderoFalso,
-      ];
+      this.preguntaForm.controls['preguntaFormulario']
+        .setValidators([
+          Validators.required,
+          this.validarPregunta,
+          this.validarPreguntaCaracterFinal,
+        ])
     }
-    // this.preguntaForm.
   }
 
   // -------------------------------------------------------------------------------
@@ -227,6 +227,15 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   obtenerLimiteCookie(fecha: Date): Date {
     return new Date(Date.parse(fecha.toString()) + 1200000);
+  }
+
+  validarOpcion(): void {
+    // console.log(this.preguntaForm.value.opcionForm);
+    if (this.preguntaForm.value.opcionForm) {
+      this.botonAgregarOpcionDisable = false
+    } else {
+      this.botonAgregarOpcionDisable = true
+    }
   }
 
   agregarEditarOpcion() {
@@ -267,7 +276,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-      opciones == 4
+        opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
