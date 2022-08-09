@@ -280,7 +280,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     //localStorage.removeItem('opciones');
     const tipoPreguntaValue = this.preguntaForm.value.tipoPreguntaForm;
     const areaConocimientoValue = this.preguntaForm.value.areaConocimientoForm;
-    //console.log(areaConocimientoValue.nombreAreaConocimiento);
+
     const descriptorValue = this.preguntaForm.value.descriptorForm;
     const preguntaFormularioValue = this.preguntaForm.value.preguntaFormulario;
     let opciones = this.opciones.length;
