@@ -84,6 +84,20 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     );
   }
 
+  get areaConocimientoNoValida() {
+    return (
+      this.preguntaForm.get('areaConocimientoForm')?.hasError('required') &&
+      this.preguntaForm.get('areaConocimientoForm')?.touched
+    );
+  }
+
+  get descriptorNoValida() {
+    return (
+      this.preguntaForm.get('descriptorForm')?.hasError('required') &&
+      this.preguntaForm.get('descriptorForm')?.touched
+    );
+  }
+
   private validarPregunta(control: AbstractControl): ValidationErrors | null {
     let pregunta = control.value;
     if (

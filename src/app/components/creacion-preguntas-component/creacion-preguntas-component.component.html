@@ -56,7 +56,10 @@
                   {{ opcion.nombreAreaConocimiento }}
                 </option>
               </select>
-              <span *ngIf="preguntaNoValida" class="text-danger errorLabel">
+              <span
+                *ngIf="areaConocimientoNoValida"
+                class="text-danger errorLabel"
+              >
                 El <strong>área de conocimiento</strong> es requerido
               </span>
             </div>
@@ -83,13 +86,7 @@
                   {{ descriptor.nombre }}
                 </option>
               </select>
-              <span
-                *ngIf="
-                  preguntaForm.get('descriptorForm')?.hasError('required') &&
-                  preguntaForm.get('descriptorForm')?.touched
-                "
-                class="text-danger errorLabel"
-              >
+              <span *ngIf="descriptorNoValida" class="text-danger errorLabel">
                 El <strong>descriptor</strong> es requerido
               </span>
             </div>
