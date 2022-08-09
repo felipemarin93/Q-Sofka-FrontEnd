@@ -98,6 +98,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     );
   }
 
+  get preguntaFormNoValida() {
+    return (
+      this.preguntaForm.get('preguntaFormulario')?.hasError('required') &&
+      this.preguntaForm.get('preguntaFormulario')?.touched
+    );
+  }
+
   private validarPregunta(control: AbstractControl): ValidationErrors | null {
     let pregunta = control.value;
     if (

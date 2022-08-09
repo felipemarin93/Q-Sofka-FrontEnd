@@ -109,6 +109,9 @@
                 placeholder="Escriba su pregunta"
                 type="text"
               />
+              <span *ngIf="preguntaFormNoValida" class="text-danger errorLabel">
+                La <strong>pregunta</strong> es requerido
+              </span>
               <span
                 *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPregunta'] &&
                 preguntaForm.get('preguntaFormulario')?.touched"
@@ -125,6 +128,13 @@
                 class="text-danger errorLabel"
               >
                 <p>La pregunta tiene que terminar con <strong>?</strong></p>
+              </span>
+              <span
+                *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPreguntaVerdaderoFalso'] &&
+                preguntaForm.get('preguntaFormulario')?.touched"
+                class="text-danger errorLabel"
+              >
+                <p>Vedadero<strong>?</strong></p>
               </span>
             </div>
           </div>
