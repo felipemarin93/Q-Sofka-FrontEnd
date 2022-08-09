@@ -28,7 +28,7 @@ export class InicioComponent implements OnInit {
             if (usuario1 != null) {
               if (usuario1.contrasena === contrasena) {
                 this.router.navigate(['coach-dashboard']);
-                localStorage.setItem("user", nombreUsuario)
+                localStorage.setItem("usuario",JSON.stringify({id:usuario1.id, nombre: usuario1.nombre}))
               } else {
                 alert('La contraseña es incorrecta');
               }
