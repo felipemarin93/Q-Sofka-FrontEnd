@@ -37,7 +37,7 @@
         <tr *ngFor="let pregunta of preguntas | paginate: { itemsPerPage: 10, currentPage: pagina, id: 'pagination1'}">
           <td>{{pregunta.pregunta}}</td>
           <td>{{pregunta.areaConocimiento}}</td>
-          <td>{{pregunta.fecha  | date:'yyy-MM-dd'}}</td>
+          <td>{{pregunta.fechaActualizacion  | date:'yyy-MM-dd'}}</td>
           <td class="celda_opciones">
             <button class="tablero-coach-btn" (click)="(editarPregunta(pregunta))"><img src="../../assets/icons8-edit-64.png" alt=""></button>
 
