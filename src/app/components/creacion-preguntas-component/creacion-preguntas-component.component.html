@@ -115,8 +115,19 @@
               <span
                 *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPregunta'] &&
                 preguntaForm.get('preguntaFormulario')?.touched"
+                class="text-danger errorLabel"
               >
-                La pregunta tiene que iniciar con ¿ Qué, Cómo
+                <p>
+                  La pregunta tiene que comenzar con <strong>¿</strong> seguido
+                  de <strong>Qué, Cómo, Dónde, Cuál, Es</strong>
+                </p>
+              </span>
+              <span
+                *ngIf="this.preguntaForm.get('preguntaFormulario')?.errors?.['validarPreguntaCaracterFinal'] &&
+                preguntaForm.get('preguntaFormulario')?.touched"
+                class="text-danger errorLabel"
+              >
+                <p>La pregunta tiene que terminar con <strong>?</strong></p>
               </span>
             </div>
           </div>

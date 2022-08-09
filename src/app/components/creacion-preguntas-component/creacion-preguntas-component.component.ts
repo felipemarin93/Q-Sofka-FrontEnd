@@ -47,7 +47,14 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       tipoPreguntaForm: ['', Validators.required],
       areaConocimientoForm: ['', Validators.required],
       descriptorForm: ['', Validators.required],
-      preguntaFormulario: ['', this.validarPregunta],
+      preguntaFormulario: [
+        '',
+        [
+          Validators.required,
+          this.validarPregunta,
+          this.validarPreguntaCaracterFinal,
+        ],
+      ],
       opcionForm: [''],
     });
   }
@@ -79,8 +86,25 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   private validarPregunta(control: AbstractControl): ValidationErrors | null {
     let pregunta = control.value;
-    if (!pregunta.includes('Perez')) {
+    if (
+      !pregunta.startsWith('¿Qué') &&
+      !pregunta.startsWith('¿Cómo') &&
+      !pregunta.startsWith('¿Dónde') &&
+      !pregunta.startsWith('¿Cuál') &&
+      !pregunta.startsWith('¿Es')
+    ) {
       return { validarPregunta: true };
+    } else {
+      return null;
+    }
+  }
+
+  private validarPreguntaCaracterFinal(
+    control: AbstractControl
+  ): ValidationErrors | null {
+    let pregunta = control.value;
+    if (!pregunta.endsWith('?')) {
+      return { validarPreguntaCaracterFinal: true };
     } else {
       return null;
     }
