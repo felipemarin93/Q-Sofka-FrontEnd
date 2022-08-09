@@ -12,5 +12,13 @@ export class ModuloAspiranteComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  submitted: boolean = true;
+  codigoAcertado: boolean = true;
+  codigoIncorrecto: boolean = false;
+
+
+  verificarCodigo(){
+    console.log("Se ha verificado el codigo")
+    this.codigoAcertado = true;
+    this.codigoIncorrecto = false;
+  }
 }
