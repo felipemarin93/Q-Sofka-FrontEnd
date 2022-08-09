@@ -13,20 +13,20 @@ export class AutenticacionInicioSesionService {
 
   constructor(private httpClient: HttpClient, private router: Router) {}
 
-  // httpOptions = {
-  //   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-  // };
-
-  // obtenerUsuarioPorNombreUsuario(nombreUsuario: string): Observable<Usuario> {
-  //   return this.httpClient.get<Usuario>(
-  //     `${this.usuarioUrl}/${nombreUsuario}`,
-  //     this.httpOptions
-  //   );
-  // }
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  };
 
   obtenerUsuarioPorNombreUsuario(nombreUsuario: string): Observable<Usuario> {
-    return this.httpClient
-      .get<Usuario>(`${this.usuarioUrl}/${nombreUsuario}`)
-      .pipe(tap((_) => console.log('fetched usuario')));
+    return this.httpClient.get<Usuario>(
+      `${this.usuarioUrl}/${nombreUsuario}`,
+      this.httpOptions
+    );
   }
+
+  // obtenerUsuarioPorNombreUsuario(nombreUsuario: string): Observable<Usuario> {
+  //   return this.httpClient
+  //     .get<Usuario>(`${this.usuarioUrl}/${nombreUsuario}`)
+  //     .pipe(tap((_) => console.log('fetched usuario')));
+  // }
 }

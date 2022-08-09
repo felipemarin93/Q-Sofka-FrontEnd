@@ -16,22 +16,29 @@ export class InicioComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  verificarCredenciales(nombreUsuario: string) {
-    console.log("verificar")
-    this.autenticacionInicioSesion
-      .obtenerUsuarioPorNombreUsuario(nombreUsuario)
-      .subscribe((usuario: Usuario) => {
-        if (usuario.nombre !== null) {
-          if (usuario.nombre.includes('.')) {
-            this.router.navigate(['coach-dashboard']);
-          } else {
-            alert('El nombre de usuario no es válido');
-          }
-        } else {
-          alert(
-            'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
-          );
-        }
-      });
+  verificarCredenciales(nombreUsuario: string, contrasena: string) {
+    if (nombreUsuario !== '' && contrasena !== '') {
+      if (nombreUsuario.includes('.')) {
+        this.autenticacionInicioSesion
+          .obtenerUsuarioPorNombreUsuario(nombreUsuario)
+          .subscribe((usuario1) => {
+            if (usuario1 != null) {
+              if (usuario1.contrasena === contrasena) {
+                this.router.navigate(['coach-dashboard']);
+              } else {
+                alert('La contraseña es incorrecta');
+              }
+            } else {
+              alert(
+                'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
+              );
+            }
+          });
+      } else {
+        alert('El nombre de usuario no es válido');
+      }
+    } else {
+      alert('El usuario y la contraseña no pueden estar vacíos');
+    }
   }
 }
