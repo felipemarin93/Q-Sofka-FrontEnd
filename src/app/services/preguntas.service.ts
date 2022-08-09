@@ -29,6 +29,11 @@ export class PreguntasService {
     );
   }
 
+  /**Traer la pregunta con el id */
+  getPreguntaId(id: string): Observable<Pregunta[]> {
+    return this.http.get<Pregunta[]>(`${PathRest.getApiPregunta}/listar/${id}`);
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
       // TODO: send the error to remote logging infrastructure

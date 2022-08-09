@@ -12,6 +12,8 @@ import {
 } from '@angular/forms';
 import { Descriptor } from 'src/app/models/descriptor';
 import { Opcion } from 'src/app/models/opcion';
+import { Pregunta } from 'src/app/models/pregunta';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -45,12 +47,20 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   id: string;
   //validar si se guarda o se actualiza
   actualizar: boolean = false;
+  //pregunta traida con id
+  preguntaConId: Pregunta[];
 
   constructor(
     private fb: FormBuilder,
     private cookieService: CookieService,
-    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService
-  ) {}
+    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
+    private activateRoute: ActivatedRoute
+  ) {
+    this.preguntaConId = activateRoute.snapshot.params['id'];
+    if (this.preguntaConId) {
+      this.actualizar = true;
+    }
+  }
 
   ngOnInit(): void {
     this.preguntaForm = this.fb.group({
