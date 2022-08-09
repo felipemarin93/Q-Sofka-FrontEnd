@@ -291,7 +291,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     // this.cookieService.delete('opcionEditar');
   }
 
-  esCorrectoOpcio() {}
+  esCorrectoOpcio() { }
 
   eliminarOpcion(opcion: string) {
     let item = this.opciones.findIndex((element) => element == opcion);
@@ -329,7 +329,12 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let mensaje = this.validarGuardarPregunta(opciones, tipoPreguntaValue);
     if (mensaje) {
 
-
+      Swal.fire({
+        text: '¿Desea Guardar la pregunta?',
+        confirmButtonText: 'Guardar Pregunta',
+        icon: 'success',
+        confirmButtonColor: '#3085d6'
+      })
       // --------------------------------------------------------------------------------
       // Ejemplo Alert con Sweetalert2
       // --------------------------------------------------------------------------------
@@ -350,6 +355,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     } else {
       Swal.fire({
         text: 'Ingrese las opciones correctamente',
+        confirmButtonText: 'Salir',
         icon: 'error',
         confirmButtonColor: '#dc3545'
       }
