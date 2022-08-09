@@ -71,8 +71,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         this.areaConocimientoNombre = this.cookieService.get(
           'areaConocimientoForm'
         );
-        console.log(this.cookieService.get('areaConocimientoForm'));
-        // this.preguntaForm.controls['areaConocimientoForm'].setValue(this.cookieService.get('areaConocimientoForm'))
       }, 1000);
     }
     if (this.cookieService.get('descriptorForm') !== '') {
@@ -246,10 +244,12 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   validarOpcion(): void {
-    // console.log(this.preguntaForm.value.opcionForm);
     if (this.preguntaForm.value.opcionForm) {
       this.botonAgregarOpcionDisable = false;
     } else {
+      this.botonAgregarOpcionDisable = true;
+    }
+    if (this.opciones.length >= 4) {
       this.botonAgregarOpcionDisable = true;
     }
   }
@@ -276,6 +276,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   editarOpcion(indice: number) {
+    this.botonAgregarOpcionDisable = false;
     this.opcion = this.opciones[indice];
     this.cookieService.set(
       'opcionEditar',
@@ -303,8 +304,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   guardarPregunta() {
-    //this.cookieService.deleteAll('/');
-    //localStorage.removeItem('opciones');
     const tipoPreguntaValue = this.preguntaForm.value.tipoPreguntaForm;
     const areaConocimientoValue = this.preguntaForm.value.areaConocimientoForm;
     const descriptorValue = this.preguntaForm.value.descriptorForm;
