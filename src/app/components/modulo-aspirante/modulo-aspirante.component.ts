@@ -1,24 +1,36 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-modulo-aspirante',
   templateUrl: './modulo-aspirante.component.html',
   styleUrls: ['./modulo-aspirante.component.css']
 })
+
 export class ModuloAspiranteComponent implements OnInit {
 
-  constructor() { }
+  forma: FormGroup | any ;
+  
+  constructor( private fb: FormBuilder ) {
+    this.crearFormulario();
+    }
 
   ngOnInit(): void {
+    
   }
 
-  codigoAcertado: boolean = true;
-  codigoIncorrecto: boolean = false;
+  crearFormulario(){
+    
+    this.forma = this.fb.group({
+      nombre: ['',]
+    })
 
-
-  verificarCodigo(){
-    console.log("Se ha verificado el codigo")
-    this.codigoAcertado = true;
-    this.codigoIncorrecto = false;
   }
+
+  comenzar(){
+    console.log("el test ha comenzado");
+    console.log(this.forma);
+    
+  }
+
 }

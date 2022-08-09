@@ -32,6 +32,10 @@
   font-size: 25px;
 }
 
+.texto-simple{
+  font-weight: bold;
+}
+
 .span-nombre-y-apellido{
   font-weight: bold;
 }

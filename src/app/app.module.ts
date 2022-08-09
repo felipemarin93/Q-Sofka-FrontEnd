@@ -17,6 +17,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { HttpClientModule } from '@angular/common/http';
 import { PreguntaDetalleComponent } from './components/pregunta-detalle/pregunta-detalle.component';
+import { AspiranteComponent } from './components/aspirante/aspirante.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { PreguntaDetalleComponent } from './components/pregunta-detalle/pregunta
     CreacionPreguntasComponentComponent,
     HeaderComponentComponent,
     FooterComponentComponent,
-    PreguntaDetalleComponent
+    PreguntaDetalleComponent,
+    AspiranteComponent
   ],
 
   imports: [
