@@ -17,7 +17,6 @@ export class TableroCoachComponent implements OnInit {
   preguntaDetalle?:Pregunta;
   displayModal ="none";
 
-
   constructor(
     private preguntasService: PreguntasService,
     private router: Router
