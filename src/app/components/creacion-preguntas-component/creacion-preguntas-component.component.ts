@@ -15,6 +15,7 @@ import Swal from 'sweetalert2';
 import { Opcion } from 'src/app/models/opcion';
 import { Pregunta } from 'src/app/models/pregunta';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PreguntasService } from 'src/app/services/preguntas.service';
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -60,9 +61,10 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     private cookieService: CookieService,
     private router: Router,
     private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private preguntasService: PreguntasService
   ) {
-    this.preguntaConId = activateRoute.snapshot.params['id'];
+    this.preguntaConId = this.activateRoute.snapshot.params['id'];
     if (this.preguntaConId) {
       this.actualizar = true;
     }
