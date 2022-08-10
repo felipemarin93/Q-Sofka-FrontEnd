@@ -204,11 +204,8 @@
             <div class="custom-control custom-checkbox">
               <input
                 type="checkbox"
-                class="custom-control-input"
-                id="respuesta_correcta"
                 formControlName="opcionCorrectaForm"
-                (change)="obtenerCheck()"
-                [disabled]="true"
+                (ngModelChange)="obtenerCheck()"
               />
               <label
                 class="custom-control-label fw-bold"

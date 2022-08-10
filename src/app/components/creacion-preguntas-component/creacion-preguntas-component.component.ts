@@ -57,12 +57,8 @@ export class CreacionPreguntasComponentComponent
   checkboxEscorrectoDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
   opcionCorrecta: boolean = false;
-
-  //id traido por la url
   idPregunta: string;
-  //validar si se guarda o se actualiza
   actualizar: boolean = false;
-  //pregunta traida con id
   preguntaAModificar: Pregunta;
 
   constructor(
@@ -231,7 +227,22 @@ export class CreacionPreguntasComponentComponent
     );
   }
 
+  vaciarCamposPregunta(): void {
+    this.cookieService.deleteAll();
+    localStorage.removeItem('opciones');
+    this.preguntaForm.controls['tipoPreguntaForm'].setValue('');
+    this.preguntaForm.controls['areaConocimientoForm'].setValue('');
+    this.preguntaForm.controls['descriptorForm'].setValue('');
+    this.preguntaForm.controls['preguntaFormulario'].setValue('');
+    this.opciones = [];
+    this.checkboxEscorrectoDisable = true;
+  }
+
   mostrarRequerimientoPregunta(opcion: string): void {
+    if (this.cookieService.get('tipoPreguntaForm') !== '') {
+      if (this.cookieService.get('tipoPreguntaForm') !== opcion)
+        this.vaciarCamposPregunta();
+    }
     if (opcion === 'Verdadero o falso') {
       this.tieneOpcionesMultiples = false;
     } else {
@@ -297,12 +308,12 @@ export class CreacionPreguntasComponentComponent
   // -------------------------------------------------------------------------------
   persistirOpcion(namekey: string) {
     let value = '';
+
     if (namekey === 'areaConocimientoForm')
       value =
         this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
-    if (namekey === 'tipoPreguntaForm') {
+    if (namekey === 'tipoPreguntaForm')
       value = this.preguntaForm.value.tipoPreguntaForm;
-    }
     if (namekey === 'descriptorForm')
       value = this.preguntaForm.value.descriptorForm;
     if (namekey === 'preguntaFormulario')
@@ -352,6 +363,8 @@ export class CreacionPreguntasComponentComponent
     this.opcionCorrecta = this.preguntaForm.value.opcionCorrectaForm;
   }
 
+  validacionOpcionesCorrecta(): void {}
+
   agregarEditarOpcion() {
     let indice = this.cookieService.get('opcionEditar');
     if (indice) {
@@ -373,7 +386,10 @@ export class CreacionPreguntasComponentComponent
     }
     this.cookieService.delete('opcionEditar');
     console.log(this.opciones, this.opcionCorrecta, this.tipoPregunta);
-    if (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) {
+    if (
+      (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) ||
+      (this.tipoPregunta === 'Verdadero o falso' && this.opcionCorrecta)
+    ) {
       this.cookieService.set(
         'checkRespuesta',
         'false',
@@ -382,6 +398,8 @@ export class CreacionPreguntasComponentComponent
       this.checkboxEscorrectoDisable = false;
       this.opcionCorrecta = false;
     }
+    this.preguntaForm.controls['opcionCorrectaForm'].setValue(false);
+    this.validacionOpcionesCorrecta();
   }
 
   eliminarOpcion(opcion: string, esCorrecta: boolean) {
@@ -449,15 +467,23 @@ export class CreacionPreguntasComponentComponent
       Swal.fire({
         text: '¿Desea Guardar la pregunta?',
         confirmButtonText: 'Guardar Pregunta',
-        icon: 'success',
         confirmButtonColor: '#3085d6',
+        showCancelButton: true,
+        cancelButtonColor: '#dc3545',
+        icon: 'success',
+        allowOutsideClick: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.vaciarCamposPregunta();
+        }
       });
     } else {
       Swal.fire({
         text: 'Ingrese las opciones correctamente',
         confirmButtonText: 'Salir',
-        icon: 'error',
         confirmButtonColor: '#dc3545',
+        icon: 'error',
+        allowOutsideClick: false,
       });
     }
   }
@@ -469,9 +495,10 @@ export class CreacionPreguntasComponentComponent
       text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta. SI/NO’',
       showCancelButton: true,
       confirmButtonText: 'Aceptar',
-      cancelButtonColor: '#0d6efd',
+      cancelButtonColor: '#3085d6',
       icon: 'question',
       confirmButtonColor: '#dc3545',
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         this.router.navigate(['coach-dashboard']);
