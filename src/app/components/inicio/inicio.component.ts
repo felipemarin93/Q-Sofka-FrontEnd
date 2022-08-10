@@ -29,7 +29,7 @@ export class InicioComponent implements OnInit {
               Swal.fire({
               icon: 'error',
               title: '¡Lo Sentimos!',
-              text: 'Usuario no registrado, favor contactar al SuperAdmin para su registro.',
+              text: 'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.',
               });
             }
               if (usuario1.contrasena === contrasena) {
