@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PreguntasService } from '../../services/preguntas.service';
 import { Pregunta } from '../../models/pregunta';
 import { Router, RouterLink } from '@angular/router';
-import { CreacionPreguntasComponentComponent } from '../creacion-preguntas-component/creacion-preguntas-component.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-tablero-coach',
@@ -12,26 +12,26 @@ import { CreacionPreguntasComponentComponent } from '../creacion-preguntas-compo
 export class TableroCoachComponent implements OnInit {
   preguntas: Pregunta[] = [];
 
-  usuario?: any ={id:'', nombre:''};
+  usuario?: any = { id: '', nombre: '' };
   pagina: number = 1;
-  title:string = "Bienvenido/a ";
-  preguntaDetalle?:Pregunta;
-  displayModal ="none";
-
+  title: string = "Bienvenido/a ";
+  preguntaDetalle?: Pregunta;
+  displayModal = "none";
 
   constructor(
     private router: Router,
     private preguntasService: PreguntasService,
-    //private preguntaComponent: CreacionPreguntasComponentComponent
-  ) {}
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
-      this.getUsuario();
-      this.getPreguntas();
+    this.getUsuario();
+    this.getPreguntas();
+
 
   }
   getUsuario() {
-    if(localStorage.getItem('usuario')){
+    if (localStorage.getItem('usuario')) {
       this.usuario = JSON.parse(localStorage.getItem('usuario')!);
       this.title = this.title + this.usuario.nombre;
     }
@@ -39,9 +39,9 @@ export class TableroCoachComponent implements OnInit {
 
   getPreguntas(): void {
     this.preguntasService.getPreguntasCoach(this.usuario.id)
-    .subscribe(preguntas => {
-      this.preguntas = preguntas;
-    });
+      .subscribe(preguntas => {
+        this.preguntas = preguntas;
+      });
   }
 
   mostrarDetalle(preguntaActual: Pregunta) {
@@ -54,11 +54,24 @@ export class TableroCoachComponent implements OnInit {
   }
 
   cerrarSesion() {
-    let sesion = window.confirm('¿seguro que deseas salir?');
-    if (sesion == true) {
-      localStorage.clear();
-      this.router.navigate(['inicio']);
-    }
+    Swal.fire({
+      title: '¿seguro que deseas salir?',
+      text: "los cambios sin guardar se borrarán",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, salir!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'cerrado exitosamente!',
+        )
+        localStorage.clear();
+        this.router.navigate(['inicio']);
+      }
+    })
+
   }
 
   nuevaPregunta() {

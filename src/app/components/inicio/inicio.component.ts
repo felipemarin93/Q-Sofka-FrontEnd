@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Usuario } from 'src/app/models/usuario';
 import { AutenticacionInicioSesionService } from 'src/app/services/autenticacion-inicio-sesion.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-inicio',
@@ -9,6 +10,7 @@ import { AutenticacionInicioSesionService } from 'src/app/services/autenticacion
   styleUrls: ['./inicio.component.css'],
 })
 export class InicioComponent implements OnInit {
+  formularioIngreso?:any;
   userData: any;
   constructor(
     private autenticacionInicioSesion: AutenticacionInicioSesionService,
@@ -24,22 +26,44 @@ export class InicioComponent implements OnInit {
         this.autenticacionInicioSesion
           .obtenerUsuarioPorNombreUsuario(nombreUsuario)
           .subscribe((usuario1) => {
+            if (usuario1 == null) {
+              Swal.fire({
+              icon: 'error',
+              title: '¡Lo Sentimos!',
+              text: 'Usuario no registrado, favor contactar al SuperAdmin para su registro.',
+              });
+            }
               if (usuario1.contrasena === contrasena) {
+                Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Bienvenido ' + usuario1.nombre,
+                  showConfirmButton: false,
+                  timer: 1500
+                })
                 this.router.navigate(['coach-dashboard']);
                 localStorage.setItem("usuario",JSON.stringify({id:usuario1.id, nombre: usuario1.nombre}))
               } else {
-                alert('La contraseña es incorrecta');
+                Swal.fire({
+                  icon: 'error',
+                  title: '¡Lo Sentimos!',
+                  text: 'El nombre de usuario o la contraseña no es válida.',
+                })
               }
-          }, error => {
-            alert(
-              'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.'
-            );
           });
       } else {
-        alert('El nombre de usuario no es válido');
+        Swal.fire({
+          icon: 'error',
+          title: '¡Lo Sentimos!',
+          text: 'El nombre de usuario o la contraseña no es válida.',
+        })
       }
     } else {
-      alert('El usuario y la contraseña no pueden estar vacíos');
+      Swal.fire({
+        icon: 'error',
+        title: '¡Lo Sentimos!',
+        text: 'El usuario y la contraseña no pueden estar vacios!, intenta de nuevo',
+      })
     }
   }
 
@@ -50,7 +74,12 @@ export class InicioComponent implements OnInit {
           .subscribe(usuario=>{
             console.log(usuario)
             this.autenticacionInicioSesion.getSendEmail(usuario.id)
-            .subscribe(email=>alert('Una nueva contraseña ha sido generada y enviada al correo registrado'))
+            .subscribe(email=> Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Una nueva contraseña ha sido generada y enviada al correo registrado',
+              showConfirmButton: true,
+            }))
           })
     }
   }

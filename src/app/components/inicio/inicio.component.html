@@ -3,14 +3,15 @@
     <div class="login">
       <img src="../../../assets/sofka.png" width="500" height="200">
       <p></p>
-      <form action="#" class="signin-form">
+      <form class="signin-form">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Usuario" id="nombreUsuario" #userName required>
+          <input type="text" formControlName="usuario" class="form-control" placeholder="Usuario" id="nombreUsuario"
+            #userName required>
         </div>
         <p></p>
         <div class="form-group">
-          <input id="password-field" type="password" class="form-control" placeholder="Contraseña" #userPassword
-            required>
+          <input id="password-field" formControlName="contrasena" type="password" class="form-control"
+            placeholder="Contraseña" #userPassword required>
           <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
         </div>
         <p></p>
