@@ -122,8 +122,7 @@
           <!-- checkbox es correcta -->
           <div class="d-flex justify-content-center" *ngIf="checkboxEscorrectoDisable">
             <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="respuesta_correcta"
-                formControlName="opcionCorrectaForm" (change)="obtenerCheck()" [disabled]="true" />
+              <input type="checkbox" formControlName="opcionCorrectaForm" (ngModelChange)="obtenerCheck()" />
               <label class="custom-control-label fw-bold" style="margin-left: 10px" for="respuesta_correcta">Repuesta
                 Correcta</label>
             </div>
