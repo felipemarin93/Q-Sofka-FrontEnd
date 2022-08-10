@@ -14,7 +14,7 @@ import { Descriptor } from 'src/app/models/descriptor';
 import Swal from 'sweetalert2';
 import { Opcion } from 'src/app/models/opcion';
 import { Pregunta } from 'src/app/models/pregunta';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -57,7 +57,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private cookieService: CookieService,
-
+    private router: Router,
     private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
     private activateRoute: ActivatedRoute
   ) {
@@ -394,6 +394,22 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         confirmButtonColor: '#dc3545',
       });
     }
+  }
+
+  regresar() {
+    console.log('entra');
+    Swal.fire({
+      text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta. SI/NO’',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonColor: '#0d6efd',
+      icon: 'question',
+      confirmButtonColor: '#dc3545',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['coach-dashboard']);
+      }
+    });
   }
 }
 
