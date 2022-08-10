@@ -66,16 +66,16 @@ export class AspiranteComponent implements OnInit {
     return new Promise ((resolve, reject) =>{
       setTimeout(() =>{
         if( control.value ==='abc1234'){
-          console.log("token valido");
+          console.log("token válido");
 
           
           resolve({ existe: false})
           
         } else{
-          console.log("token no valido");
+          console.log("token inválido");
 
         }
-      }, 1000);
+      }, 1500);
     });
      
   }
