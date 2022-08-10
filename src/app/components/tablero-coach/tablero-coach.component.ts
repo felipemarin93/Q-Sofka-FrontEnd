@@ -55,13 +55,13 @@ export class TableroCoachComponent implements OnInit {
 
   cerrarSesion() {
     Swal.fire({
-      title: '¿seguro que deseas salir?',
-      text: "los cambios sin guardar se borrarán",
+      title: '¿Seguro que deseas salir?',
+      text: "los cambios sin guardar podrían perderse",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, salir!'
+      confirmButtonText: 'Si, deseo Salir!'
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire(
