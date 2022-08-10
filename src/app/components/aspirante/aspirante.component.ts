@@ -75,7 +75,7 @@ export class AspiranteComponent implements OnInit {
       nombre: this.formaDatos.get('nombre').value,
       correo: this.formaDatos.get('email').value
     } 
-    this.aspiranteService.crearAspirante(data)
+    this.aspiranteService.crearAspirante(data).subscribe()
   }
 
 
@@ -114,7 +114,7 @@ export class AspiranteComponent implements OnInit {
   }
 
   obtenerAspirante(codigoVerificacion: string){
-    return this.aspiranteService.obtenerAspirantePorCodigoVerificacion("CodigoVerificacion")
+    return this.aspiranteService.obtenerAspirantePorCodigoVerificacion("CodigoVerificacion").subscribe()
   }
 
   comenzar(){

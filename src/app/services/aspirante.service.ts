@@ -11,7 +11,7 @@ export class AspiranteService {
   constructor(private http: HttpClient) { }
 
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' }), 
   };
 
   crearAspirante(aspirante: Aspirante ){
@@ -23,7 +23,7 @@ export class AspiranteService {
     this.httpOptions);
   }
 
-  generarCoidigoVerificacion( idAspirante: string){
+  generarCodigoVerificacion( idAspirante: string){
     return this.http.get( `${PathRest.getApiAspirante}/codigo/${idAspirante}`,
     this.httpOptions);
   }
