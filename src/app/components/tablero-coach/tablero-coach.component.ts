@@ -21,7 +21,6 @@ export class TableroCoachComponent implements OnInit {
   constructor(
     private router: Router,
     private preguntasService: PreguntasService,
-    private router: Router
   ) { }
 
   ngOnInit(): void {
