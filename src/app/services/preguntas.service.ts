@@ -11,7 +11,6 @@ export class PreguntasService {
 
   preguntaUrl: string = 'http://localhost:8080/api/pregunta/listar';
 
-
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
@@ -57,4 +56,5 @@ export class PreguntasService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
 }
