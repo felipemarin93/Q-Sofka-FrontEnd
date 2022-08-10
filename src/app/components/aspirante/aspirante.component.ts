@@ -23,7 +23,7 @@ export class AspiranteComponent implements OnInit {
 
   crearFormulario(){
     this.formaDatos = this.fb.group({
-      nombre:['', [Validators.required, Validators.minLength(5)]],
+      nombre:['', [Validators.required, Validators.minLength(9)]],
       email:['', [Validators.required, Validators.pattern('[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$')]]
     })
 
