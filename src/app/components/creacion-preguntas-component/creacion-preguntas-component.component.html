@@ -22,19 +22,10 @@
                 (ngModelChange)="mostrarRequerimientoPregunta($event)"
               >
                 <option selected></option>
-                <<<<<<< HEAD
-                <option
-                  [value]="opcion"
-                  *ngFor="let opcion of opcionesTipoPregunta"
-                >
-                  =======
-                </option>
-
                 <option
                   *ngFor="let opcion of opcionesTipoPregunta; let i = index"
                   value="{{ i }}"
                 >
-                  >>>>>>> dev
                   {{ opcion }}
                 </option>
               </select>
