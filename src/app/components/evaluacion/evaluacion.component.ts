@@ -7,10 +7,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./evaluacion.component.css'],
 })
 export class EvaluacionComponent implements OnInit {
-  minutos: number;
-  segundos: number;
-  minutosMostrar: string;
-  segundosMostrar: string;
 
   forma: FormGroup | any;
 
@@ -50,32 +46,8 @@ export class EvaluacionComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.crearFormulario();
-    this.minutos = 59;
-    this.segundos = 59;
-    this.segundosMostrar = `${this.segundos}`;
-    this.minutosMostrar = `${this.minutos}`;
-    setInterval(() => this.timer(), 1000);
   }
 
-  timer(): void {
-    this.segundos--;
-    this.segundosMostrar = `${this.segundos}`;
-    if (this.segundos < 10 && this.segundos >= 0) {
-      this.segundosMostrar = `0${this.segundos}`;
-    }
-    if (this.segundos < 0) {
-      this.segundos = 59;
-      this.segundosMostrar = `${this.segundos}`;
-      this.minutos--;
-      this.minutosMostrar = `${this.minutos}`;
-    }
-    if (this.minutos < 10 && this.minutos >= 0) {
-      this.minutosMostrar = `0${this.minutos}`;
-    }
-    if (this.minutos === 0 && this.segundos === 0) {
-      this.enviarEvaluacion();
-    }
-  }
 
   ngOnInit(): void {}
 
