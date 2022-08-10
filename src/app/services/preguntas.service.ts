@@ -24,11 +24,14 @@ export class PreguntasService {
   }
 
 
-  getPreguntasCoach(id: string) {
-    return this.http.get<Pregunta[]>(this.preguntaUrl.concat('coach/'+id))
-    .pipe(
-      catchError(this.handleError<Pregunta[]>('getPreguntasCoach', []))
-    )
+  getPreguntasCoach(id: string): Observable<Pregunta[]> {
+    return this.http
+    .get<Pregunta[]>
+    (`${PathRest.getApiPregunta}/coach/${id}`)
+    // this.preguntaUrl.concat('coach/'+id)
+    // .pipe(
+    //   catchError(this.handleError<Pregunta[]>('getPreguntasCoach', []))
+    // )
   }
 
   /** DELETE: delete the question from the server */
@@ -41,8 +44,8 @@ export class PreguntasService {
   }
 
   /**Traer la pregunta con el id */
-  getPreguntaId(id: string): Observable<Pregunta[]> {
-    return this.http.get<Pregunta[]>(`${PathRest.getApiPregunta}/listar/${id}`);
+  getPreguntaId(id: string): Observable<Pregunta> {
+    return this.http.get<Pregunta>(`${PathRest.getApiPregunta}/listar/${id}`);
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

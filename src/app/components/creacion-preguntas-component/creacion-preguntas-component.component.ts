@@ -54,7 +54,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   //validar si se guarda o se actualiza
   actualizar: boolean = false;
   //pregunta traida con id
-  preguntaConId: Pregunta[];
+  preguntaAModificar: Pregunta;
 
   constructor(
     private fb: FormBuilder,
@@ -64,7 +64,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private preguntasService: PreguntasService
   ) {
-    this.traerInformacionActualizar();
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['', Validators.required],
       areaConocimientoForm: ['', Validators.required],
@@ -83,6 +82,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.traerInformacionActualizar();
     if (this.cookieService.get('checkRespuesta') !== '') {
       this.checkboxEscorrectoDisable = !Boolean(this.cookieService.get('checkRespuesta'));
     }
@@ -119,10 +119,15 @@ export class CreacionPreguntasComponentComponent implements OnInit {
 
   traerInformacionActualizar() {
     this.idPregunta = this.activateRoute.snapshot.params['id'];
-    if (this.preguntaConId) {
+    if (this.idPregunta) {
       this.preguntasService.getPreguntaId(this.idPregunta).subscribe((data) => {
-        this.preguntaConId = data;
-        console.log(this.preguntaConId);
+        this.preguntaAModificar = data;
+        console.log(this.preguntaAModificar);
+        this.preguntaForm.controls['tipoPreguntaForm'].setValue(this.preguntaAModificar.tipoPregunta)
+        this.preguntaForm.controls['areaConocimientoForm'].setValue(this.preguntaAModificar.areaConocimiento)
+        this.preguntaForm.controls['descriptorForm'].setValue(this.preguntaAModificar.descriptor)
+        this.preguntaForm.controls['preguntaFormulario'].setValue(this.preguntaAModificar.pregunta)
+        this.opciones = this.preguntaAModificar.opciones
       });
     }
   }

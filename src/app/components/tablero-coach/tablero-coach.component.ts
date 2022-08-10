@@ -11,26 +11,26 @@ import { Router, RouterLink } from '@angular/router';
 export class TableroCoachComponent implements OnInit {
   preguntas: Pregunta[] = [];
 
-  usuario?: any ={id:'', nombre:''};
+  usuario?: any = { id: '', nombre: '' };
   pagina: number = 1;
-  title:string = "Bienvenido/a ";
-  preguntaDetalle?:Pregunta;
-  displayModal ="none";
+  title: string = "Bienvenido/a ";
+  preguntaDetalle?: Pregunta;
+  displayModal = "none";
 
 
   constructor(
     private preguntasService: PreguntasService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
+    this.getUsuario();
+    this.getPreguntas();
 
-      this.getPreguntas();
-      this.getUsuario();
 
   }
   getUsuario() {
-    if(localStorage.getItem('usuario')){
+    if (localStorage.getItem('usuario')) {
       this.usuario = JSON.parse(localStorage.getItem('usuario')!);
       this.title = this.title + this.usuario.nombre;
     }
@@ -38,9 +38,9 @@ export class TableroCoachComponent implements OnInit {
 
   getPreguntas(): void {
     this.preguntasService.getPreguntasCoach(this.usuario.id)
-    .subscribe(preguntas => {
-      this.preguntas = preguntas;
-    });
+      .subscribe(preguntas => {
+        this.preguntas = preguntas;
+      });
   }
 
   mostrarDetalle(preguntaActual: Pregunta) {
