@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./resultado.component.css']
 })
 export class ResultadoComponent implements OnInit {
-
+  title = '¡Hola, futuro sofkiano!';
   constructor() { }
 
   ngOnInit(): void {
