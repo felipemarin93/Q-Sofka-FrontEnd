@@ -64,4 +64,12 @@ export class PreguntasService {
       return of(result as T);
     };
   }
+
+  guardarPregunta(value: Pregunta): Observable<Pregunta> {
+    console.log(value);
+    return this.http
+    .post<Pregunta>
+    (`${PathRest.getApiPregunta}/guardar`, value)
+  }
+
 }

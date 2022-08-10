@@ -29,8 +29,7 @@ import { PreguntasService } from 'src/app/services/preguntas.service';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 export class CreacionPreguntasComponentComponent
-  implements OnInit, AfterViewInit
-{
+  implements OnInit, AfterViewInit {
   @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
@@ -224,7 +223,7 @@ export class CreacionPreguntasComponentComponent
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-        'validarPreguntaVerdaderoFalso'
+      'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -489,7 +488,7 @@ export class CreacionPreguntasComponentComponent
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-      opciones == 4
+        opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
@@ -500,12 +499,14 @@ export class CreacionPreguntasComponentComponent
   }
 
   guardarPregunta() {
-    const tipoPreguntaValue = this.preguntaForm.value.tipoPreguntaForm;
-    const areaConocimientoValue = this.preguntaForm.value.areaConocimientoForm;
-    const descriptorValue = this.preguntaForm.value.descriptorForm;
-    const preguntaFormularioValue = this.preguntaForm.value.preguntaFormulario;
-    let opciones = this.opciones.length;
-    let mensaje = this.validarGuardarPregunta(opciones, tipoPreguntaValue);
+    const tipoPreguntaValue: string = this.preguntaForm.value.tipoPreguntaForm;
+    const areaConocimientoValue: string = this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+    const descriptorValue: string = this.preguntaForm.value.descriptorForm;
+    const preguntaFormularioValue: string = this.preguntaForm.value.preguntaFormulario;
+    let opciones: Opcion[] = this.opciones
+    let cantidadPpciones = this.opciones.length;
+    let mensaje = this.validarGuardarPregunta(cantidadPpciones, tipoPreguntaValue);
+    let coachIdEnviar: string = JSON.parse(localStorage.getItem('usuario')!).id
     if (mensaje) {
       Swal.fire({
         text: '¿Desea Guardar la pregunta?',
@@ -518,6 +519,18 @@ export class CreacionPreguntasComponentComponent
       }).then((result) => {
         if (result.isConfirmed) {
           this.vaciarCamposPregunta();
+          this.preguntasService.guardarPregunta({
+            id: null,
+            coachId: coachIdEnviar,
+            fechaActualizacion: null,
+            areaConocimiento: areaConocimientoValue,
+            descriptor: descriptorValue,
+            tipoPregunta: tipoPreguntaValue,
+            pregunta: preguntaFormularioValue,
+            opciones: opciones
+          }).subscribe(() => {
+            this.router.navigate(['coach-dashboard']);
+          })
         }
       });
     } else {
@@ -532,8 +545,6 @@ export class CreacionPreguntasComponentComponent
   }
 
   regresar() {
-    console.log(this.preguntaForm);
-    console.log('entra');
     Swal.fire({
       text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta. SI/NO’',
       showCancelButton: true,
