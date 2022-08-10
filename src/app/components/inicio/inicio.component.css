@@ -45,3 +45,11 @@ a{
   color: red;
 }
 
+.olvide_contrasena{
+  cursor: pointer;
+}
+
+.olvide_contrasena:hover{
+  font-weight: bolder;
+}
+
