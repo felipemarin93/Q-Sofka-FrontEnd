@@ -3,27 +3,15 @@
     <div class="login">
       <img src="../../../assets/sofka.png" width="500" height="200">
       <p></p>
-      <form class="signin-form" [formGroup]="formularioIngreso">
+      <form class="signin-form">
         <div class="form-group">
           <input type="text" formControlName="usuario" class="form-control" placeholder="Usuario" id="nombreUsuario"
             #userName required>
-          <span class="mensaje-error"
-            *ngIf="this.formularioIngreso.get('usuario')?.errors?.['required']">
-            (El usuario no puede estar vacío)
-          </span>
-          <span class="mensaje-error"
-            *ngIf="this.formularioIngreso.get('usuario')?.errors?.['pattern']">
-            (El usuario debe contener un punto)
-          </span>
         </div>
         <p></p>
         <div class="form-group">
           <input id="password-field" formControlName="contrasena" type="password" class="form-control"
             placeholder="Contraseña" #userPassword required>
-          <span class="mensaje-error"
-            *ngIf="this.formularioIngreso.get('contrasena')?.errors?.['required']">
-            (La contraseña no puede estar vacía)
-          </span>
           <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
         </div>
         <p></p>
@@ -33,7 +21,7 @@
             sesión</button>
         </div>
         <div class="text-center">
-          <a class="" (click)="recuperarContrasena(userName.value)">
+          <a class="olvide_contrasena" (click)="recuperarContrasena(userName.value)">
             Olvidé mi contraseña
           </a>
         </div>
