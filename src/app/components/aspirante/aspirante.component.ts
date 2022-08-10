@@ -13,8 +13,6 @@ export class AspiranteComponent implements OnInit {
   formaDatos: FormGroup | any;
   formaCodigo: FormGroup | any;
 
-  //codigoValido: boolean = false;
-
   constructor( private fb: FormBuilder) {
     this.crearFormulario();
     this.crearListeners();
@@ -63,11 +61,6 @@ export class AspiranteComponent implements OnInit {
     
   }
 
-
-  // aceptarcodigo(){
-  //   this.codigoValido = true
-  // }
-
   validarCodigo( control: FormControl ): Promise<any> | Observable<any>{
 
     return new Promise ((resolve, reject) =>{
@@ -75,14 +68,12 @@ export class AspiranteComponent implements OnInit {
         if( control.value ==='abc1234'){
           console.log("token valido");
 
-          //this.codigoValido = true;
           
           resolve({ existe: false})
           
         } else{
           console.log("token no valido");
 
-          //resolve({ existe: false})
         }
       }, 1000);
     });
