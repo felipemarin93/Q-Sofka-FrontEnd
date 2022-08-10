@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
   styleUrls: ['./inicio.component.css'],
 })
 export class InicioComponent implements OnInit {
-  formularioIngreso?:any;
+  //formularioIngreso?:any;
   userData: any;
   constructor(
     private autenticacionInicioSesion: AutenticacionInicioSesionService,
