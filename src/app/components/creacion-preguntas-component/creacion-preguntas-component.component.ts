@@ -33,6 +33,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     'Única opción',
     'Verdadero o falso',
   ];
+  opcionesAreaConocimientoQuemado: string[] = [];
   opcionesAreaConocimiento?: AreaConocimiento[];
   opcionesDescriptores?: Descriptor[];
   opciones: Opcion[] = [];
@@ -84,7 +85,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   ngOnInit(): void {
     this.traerInformacionActualizar();
     if (this.cookieService.get('checkRespuesta') !== '') {
-      this.checkboxEscorrectoDisable = !Boolean(this.cookieService.get('checkRespuesta'));
+      this.checkboxEscorrectoDisable = !Boolean(
+        this.cookieService.get('checkRespuesta')
+      );
     }
     if (this.cookieService.get('tipoPreguntaForm') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
@@ -123,11 +126,19 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.preguntasService.getPreguntaId(this.idPregunta).subscribe((data) => {
         this.preguntaAModificar = data;
         console.log(this.preguntaAModificar);
-        this.preguntaForm.controls['tipoPreguntaForm'].setValue(this.preguntaAModificar.tipoPregunta)
-        this.preguntaForm.controls['areaConocimientoForm'].setValue(this.preguntaAModificar.areaConocimiento)
-        this.preguntaForm.controls['descriptorForm'].setValue(this.preguntaAModificar.descriptor)
-        this.preguntaForm.controls['preguntaFormulario'].setValue(this.preguntaAModificar.pregunta)
-        this.opciones = this.preguntaAModificar.opciones
+        this.preguntaForm.controls['tipoPreguntaForm'].setValue(
+          this.preguntaAModificar.tipoPregunta
+        );
+        this.preguntaForm.controls['areaConocimientoForm'].setValue(
+          this.preguntaAModificar.areaConocimiento
+        );
+        this.preguntaForm.controls['descriptorForm'].setValue(
+          this.preguntaAModificar.descriptor
+        );
+        this.preguntaForm.controls['preguntaFormulario'].setValue(
+          this.preguntaAModificar.pregunta
+        );
+        this.opciones = this.preguntaAModificar.opciones;
       });
     }
   }
@@ -188,7 +199,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-      'validarPreguntaVerdaderoFalso'
+        'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -335,9 +346,13 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     }
     this.cookieService.delete('opcionEditar');
     if (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) {
-      this.cookieService.set('checkRespuesta', 'false', this.obtenerLimiteCookie(new Date))
-      this.checkboxEscorrectoDisable = false
-      this.opcionCorrecta = false
+      this.cookieService.set(
+        'checkRespuesta',
+        'false',
+        this.obtenerLimiteCookie(new Date())
+      );
+      this.checkboxEscorrectoDisable = false;
+      this.opcionCorrecta = false;
     }
   }
 
@@ -352,8 +367,8 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         if (esCorrecta) {
-          this.checkboxEscorrectoDisable = true
-          this.cookieService.delete('checkRespuesta')
+          this.checkboxEscorrectoDisable = true;
+          this.cookieService.delete('checkRespuesta');
         }
         let item = this.opciones.findIndex(
           (element) => element.nombre == opcion
@@ -386,7 +401,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-        opciones == 4
+      opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
