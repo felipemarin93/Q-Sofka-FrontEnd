@@ -88,7 +88,7 @@ export class TableroCoachComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.preguntasService.deletePregunta(preguntaEliminar.id)
+        this.preguntasService.deletePregunta(preguntaEliminar.id!)
         .subscribe((eliminar) => {
         Swal.fire(
           'Se ha eliminado la pregunta con id: ' + preguntaEliminar.id,
