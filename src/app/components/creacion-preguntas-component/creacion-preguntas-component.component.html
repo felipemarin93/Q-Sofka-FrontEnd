@@ -22,9 +22,10 @@
                 (ngModelChange)="mostrarRequerimientoPregunta($event)"
               >
                 <option selected></option>
+
                 <option
                   *ngFor="let opcion of opcionesTipoPregunta; let i = index"
-                  value="{{ i }}"
+                  value="{{ opcion }}"
                 >
                   {{ opcion }}
                 </option>
@@ -51,11 +52,11 @@
                 <option *ngIf="actualizar" selected>
                   {{ preguntaAModificar.areaConocimiento }}
                 </option>
-                <option *ngIf="areaConocimientoOpcion !== ''" selected>
-                  {{ areaConocimientoOpcion }}
+                <option *ngIf="areaConocimientoNombre !== ''" selected>
+                  {{ areaConocimientoNombre }}
                 </option>
                 <option
-                  value="{{ opcion }}"
+                  [ngValue]="opcion"
                   *ngFor="let opcion of opcionesAreaConocimiento"
                 >
                   {{ opcion.nombreAreaConocimiento }}
@@ -82,7 +83,9 @@
                 class="form-select"
                 (blur)="persistirOpcion('descriptorForm')"
               >
-                <option selected></option>
+                <option *ngIf="descriptor !== ''" selected>
+                  {{ descriptor }}
+                </option>
                 <option
                   value="{{ descriptor.nombre }}"
                   *ngFor="let descriptor of opcionesDescriptores"

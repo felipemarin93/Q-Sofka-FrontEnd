@@ -49,7 +49,7 @@ export class CreacionPreguntasComponentComponent
   tipoPregunta?: string;
   areaConocimientoNombre: string = '';
   areaConocimiento: AreaConocimiento;
-  descriptor: string = 'Seleccione una opcion';
+  descriptor: string = '';
   pregunta?: string;
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
@@ -57,7 +57,6 @@ export class CreacionPreguntasComponentComponent
   checkboxEscorrectoDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
   opcionCorrecta: boolean = false;
-  areaConocimientoOpcion: string = '';
 
   //id traido por la url
   idPregunta: string;
@@ -75,7 +74,7 @@ export class CreacionPreguntasComponentComponent
     private preguntasService: PreguntasService
   ) {
     this.preguntaForm = this.fb.group({
-      tipoPreguntaForm: ['0'],
+      tipoPreguntaForm: [''],
       areaConocimientoForm: ['', Validators.required],
       descriptorForm: ['', Validators.required],
       preguntaFormulario: [
@@ -102,7 +101,8 @@ export class CreacionPreguntasComponentComponent
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
     if (this.cookieService.get('areaConocimientoForm') !== '') {
-      this.areaConocimientoOpcion = this.cookieService.get(
+      console.log(this.cookieService.get('areaConocimientoForm'));
+      this.areaConocimientoNombre = this.cookieService.get(
         'areaConocimientoForm'
       );
     }
@@ -120,7 +120,14 @@ export class CreacionPreguntasComponentComponent
     setTimeout(() => {
       if (this.activateRoute.snapshot.params['id'])
         this.llenarFormularioActualizar();
-      console.log('ejecutarafterChecked');
+      if (this.cookieService.get('areaConocimientoForm') !== '') {
+        this.preguntaForm.controls['areaConocimientoForm'].setValue(
+          this.areaConocimientoNombre
+        );
+      }
+      if (this.cookieService.get('descriptorForm') !== '') {
+        this.preguntaForm.controls['descriptorForm'].setValue(this.descriptor);
+      }
     });
   }
 
@@ -291,9 +298,11 @@ export class CreacionPreguntasComponentComponent
   persistirOpcion(namekey: string) {
     let value = '';
     if (namekey === 'areaConocimientoForm')
-      value = this.preguntaForm.value.areaConocimientoForm;
-    if (namekey === 'tipoPreguntaForm')
+      value =
+        this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+    if (namekey === 'tipoPreguntaForm') {
       value = this.preguntaForm.value.tipoPreguntaForm;
+    }
     if (namekey === 'descriptorForm')
       value = this.preguntaForm.value.descriptorForm;
     if (namekey === 'preguntaFormulario')
@@ -344,7 +353,6 @@ export class CreacionPreguntasComponentComponent
   }
 
   agregarEditarOpcion() {
-    console.log(this.tipoPregunta);
     let indice = this.cookieService.get('opcionEditar');
     if (indice) {
       let opcionEditar = {
@@ -364,6 +372,7 @@ export class CreacionPreguntasComponentComponent
       this.opcion = '';
     }
     this.cookieService.delete('opcionEditar');
+    console.log(this.opciones, this.opcionCorrecta, this.tipoPregunta);
     if (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) {
       this.cookieService.set(
         'checkRespuesta',
@@ -394,7 +403,6 @@ export class CreacionPreguntasComponentComponent
         );
         this.opciones.splice(item, 1);
         localStorage.setItem('opciones', JSON.stringify(this.opciones));
-        console.log(item);
       }
     });
   }
