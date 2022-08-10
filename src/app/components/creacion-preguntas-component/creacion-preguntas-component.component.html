@@ -120,7 +120,7 @@
           <!-- checkbox es correcta -->
           <div class="d-flex justify-content-center">
             <div class="custom-control custom-checkbox">
-              <input type="checkbox" class="custom-control-input" id="respuesta_correcta"
+              <input [disabled]="true" type="checkbox" class="custom-control-input" id="respuesta_correcta"
                 formControlName="opcionCorrectaForm" (change)="obtenerCheck()" />
               <label class="custom-control-label fw-bold" style="margin-left: 10px" for="respuesta_correcta">Repuesta
                 Correcta</label>
