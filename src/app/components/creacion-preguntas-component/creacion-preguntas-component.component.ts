@@ -45,7 +45,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
   botonAgregarOpcionDisable: boolean = true;
-  checkboxEscorrectoDisable: boolean = false;
+  checkboxEscorrectoDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
   opcionCorrecta: boolean = false;
 
@@ -87,6 +87,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.cookieService.get('checkRespuesta') !== '') {
+      this.checkboxEscorrectoDisable = !Boolean(this.cookieService.get('checkRespuesta'));
+    }
     if (this.cookieService.get('tipoPreguntaForm') !== '') {
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
@@ -296,7 +299,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   obtenerCheck() {
-    console.log(this.checkboxEscorrectoDisable);
     this.opcionCorrecta = this.preguntaForm.value.opcionCorrectaForm;
   }
 
@@ -320,12 +322,15 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       localStorage.setItem('opciones', JSON.stringify(this.opciones));
       this.opcion = '';
     }
-    this.preguntaForm.controls['opcionCorrectaForm'].setValue(false);
     this.cookieService.delete('opcionEditar');
-    console.log(this.opciones);
+    if (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) {
+      this.cookieService.set('checkRespuesta', 'false', this.obtenerLimiteCookie(new Date))
+      this.checkboxEscorrectoDisable = false
+      this.opcionCorrecta = false
+    }
   }
 
-  eliminarOpcion(opcion: string) {
+  eliminarOpcion(opcion: string, esCorrecta: boolean) {
     Swal.fire({
       text: '¿Esta seguro de eliminar La Opcion ?',
       showCancelButton: true,
@@ -335,6 +340,10 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       confirmButtonColor: '#dc3545',
     }).then((result) => {
       if (result.isConfirmed) {
+        if (esCorrecta) {
+          this.checkboxEscorrectoDisable = true
+          this.cookieService.delete('checkRespuesta')
+        }
         let item = this.opciones.findIndex(
           (element) => element.nombre == opcion
         );
