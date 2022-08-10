@@ -59,6 +59,7 @@ export class CreacionPreguntasComponentComponent
   opcionCorrecta: boolean = false;
   idPregunta: string;
   actualizar: boolean = false;
+
   preguntaAModificar: Pregunta;
 
   constructor(
@@ -197,6 +198,7 @@ export class CreacionPreguntasComponentComponent
 
   llenarFormularioActualizar() {
     console.log(this.preguntaAModificar);
+    this.descriptor = this.preguntaAModificar.descriptor;
     this.preguntaForm.controls['tipoPreguntaForm'].setValue(
       this.preguntaAModificar.tipoPregunta
     );
