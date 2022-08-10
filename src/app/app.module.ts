@@ -18,6 +18,7 @@ import { EvaluacionComponent } from './components/evaluacion/evaluacion.componen
 import { HttpClientModule } from '@angular/common/http';
 import { PreguntaDetalleComponent } from './components/pregunta-detalle/pregunta-detalle.component';
 import { AspiranteComponent } from './components/aspirante/aspirante.component';
+import { EditarPreguntaComponent } from './components/editar-pregunta/editar-pregunta.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { AspiranteComponent } from './components/aspirante/aspirante.component';
     HeaderComponentComponent,
     FooterComponentComponent,
     PreguntaDetalleComponent,
-    AspiranteComponent
+    AspiranteComponent,
+    EditarPreguntaComponent
   ],
 
   imports: [

@@ -12,6 +12,8 @@ import {
 } from '@angular/forms';
 import { Descriptor } from 'src/app/models/descriptor';
 import Swal from 'sweetalert2';
+import { ActivatedRoute, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Pregunta } from 'src/app/models/pregunta';
 
 
 @Component({
@@ -19,7 +21,9 @@ import Swal from 'sweetalert2';
   templateUrl: './creacion-preguntas-component.component.html',
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
+
 export class CreacionPreguntasComponentComponent implements OnInit {
+
   @ViewChild("exampleModal") modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
@@ -49,8 +53,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     private cookieService: CookieService,
     private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
   ) {
+    
     this.preguntaForm = this.fb.group({
-      tipoPreguntaForm: ['', Validators.required],
+      tipoPreguntaForm: ['0'],
       areaConocimientoForm: ['', Validators.required],
       descriptorForm: ['', Validators.required],
       preguntaFormulario: [
@@ -63,7 +68,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       ],
       opcionForm: [''],
     });
+
   }
+
 
   ngOnInit(): void {
     if (this.cookieService.get('tipoPreguntaForm') !== '') {
@@ -85,6 +92,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     this.pregunta = this.cookieService.get('preguntaFormulario');
     this.obtenerAreasConocimiento();
   }
+
 
   // -------------------------------------------------------------------------------
   // Tipo de Pregunta

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PreguntasService } from '../../services/preguntas.service';
 import { Pregunta } from '../../models/pregunta';
 import { Router, RouterLink } from '@angular/router';
+import { CreacionPreguntasComponentComponent } from '../creacion-preguntas-component/creacion-preguntas-component.component';
 
 @Component({
   selector: 'app-tablero-coach',
@@ -19,14 +20,14 @@ export class TableroCoachComponent implements OnInit {
 
 
   constructor(
+    private router: Router,
     private preguntasService: PreguntasService,
-    private router: Router
+    //private preguntaComponent: CreacionPreguntasComponentComponent
   ) {}
 
   ngOnInit(): void {
-
-      this.getPreguntas();
       this.getUsuario();
+      this.getPreguntas();
 
   }
   getUsuario() {
