@@ -13,13 +13,13 @@ export class InicioComponent implements OnInit {
   //formularioIngreso?:any;
   userData: any;
   formularioIngreso: any;
+
   constructor(
     private autenticacionInicioSesion: AutenticacionInicioSesionService,
     private router: Router
-  ) {
-  }
+  ) {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
   verificarCredenciales(nombreUsuario: string, contrasena: string) {
     if (nombreUsuario !== '' && contrasena !== '') {
@@ -29,42 +29,45 @@ export class InicioComponent implements OnInit {
           .subscribe((usuario1) => {
             if (usuario1 == null) {
               Swal.fire({
-              icon: 'error',
-              title: '¡Lo Sentimos!',
-              text: 'Usuario no registrado, favor contactar al SuperAdmin para su registro.',
+                icon: 'error',
+                title: '¡Lo Sentimos!',
+                text: 'Usuario no registrado, favor contactar al SuperAdmin para su registro.',
               });
             }
-              if (usuario1.contrasena === contrasena) {
-                Swal.fire({
-                  position: 'center',
-                  icon: 'success',
-                  title: 'Bienvenido ' + usuario1.nombre,
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-                this.router.navigate(['coach-dashboard']);
-                localStorage.setItem("usuario",JSON.stringify({id:usuario1.id, nombre: usuario1.nombre}))
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: '¡Lo Sentimos!',
-                  text: 'El nombre de usuario o la contraseña no es válida.',
-                })
-              }
+            if (usuario1.contrasena === contrasena) {
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Bienvenido ' + usuario1.nombre,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.router.navigate(['coach-dashboard']);
+              localStorage.setItem(
+                'usuario',
+                JSON.stringify({ id: usuario1.id, nombre: usuario1.nombre })
+              );
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: '¡Lo Sentimos!',
+                text: 'El nombre de usuario o la contraseña no es válida.',
+              });
+            }
           });
       } else {
         Swal.fire({
           icon: 'error',
           title: '¡Lo Sentimos!',
           text: 'El nombre de usuario o la contraseña no es válida.',
-        })
+        });
       }
     } else {
       Swal.fire({
         icon: 'error',
         title: '¡Lo Sentimos!',
         text: 'El usuario y la contraseña no pueden estar vacios!, intenta de nuevo',
-      })
+      });
     }
   }
 
@@ -72,16 +75,20 @@ export class InicioComponent implements OnInit {
     if (nombreUsuario !== '') {
       this.autenticacionInicioSesion
         .obtenerUsuarioPorNombreUsuario(nombreUsuario)
-        .subscribe(usuario => {
-          console.log(usuario)
-          this.autenticacionInicioSesion.getSendEmail(usuario.id)
-            .subscribe(email => Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Una nueva contraseña ha sido generada y enviada al correo registrado',
-              showConfirmButton: true,
-            }))
-        })
+        .subscribe((usuario) => {
+          console.log(usuario);
+          this.autenticacionInicioSesion
+            .getSendEmail(usuario.id)
+            .subscribe((email) =>
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title:
+                  'Una nueva contraseña ha sido generada y enviada al correo registrado',
+                showConfirmButton: true,
+              })
+            );
+        });
     }
   }
 }
