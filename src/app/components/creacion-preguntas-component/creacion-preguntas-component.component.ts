@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { AreaConocimiento } from 'src/app/models/areaConocimiento';
 import { HttpServiceAreaConocimientoService } from 'src/app/services/http-service-area-conocimiento.service';
@@ -23,7 +23,7 @@ import { PreguntasService } from 'src/app/services/preguntas.service';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 
-export class CreacionPreguntasComponentComponent implements OnInit {
+export class CreacionPreguntasComponentComponent implements OnInit, AfterViewInit {
   @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
@@ -34,7 +34,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     'Única opción',
     'Verdadero o falso',
   ];
-  opcionesAreaConocimiento?: AreaConocimiento[];
+  opcionesAreaConocimiento: AreaConocimiento[] = [];
   opcionesDescriptores?: Descriptor[];
   opciones: Opcion[] = [];
   opcion: string = '';
@@ -49,6 +49,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   checkboxEscorrectoDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
   opcionCorrecta: boolean = false;
+  areaConocimientoOpcion: string = '';
 
   //id traido por la url
   idPregunta: string;
@@ -65,7 +66,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private preguntasService: PreguntasService
   ) {
-    
+
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['0'],
       areaConocimientoForm: ['', Validators.required],
@@ -81,12 +82,11 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       opcionForm: [''],
       opcionCorrectaForm: [''],
     });
-
+    this.obtenerAreasConocimiento();
   }
 
 
   ngOnInit(): void {
-    this.traerInformacionActualizar();
     if (this.cookieService.get('checkRespuesta') !== '') {
       this.checkboxEscorrectoDisable = !Boolean(this.cookieService.get('checkRespuesta'));
     }
@@ -94,11 +94,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
     if (this.cookieService.get('areaConocimientoForm') !== '') {
-      setTimeout(() => {
-        this.areaConocimientoNombre = this.cookieService.get(
-          'areaConocimientoForm'
-        );
-      }, 1000);
+      this.areaConocimientoOpcion = this.cookieService.get('areaConocimientoForm');
     }
     if (this.cookieService.get('descriptorForm') !== '') {
       this.descriptor = this.cookieService.get('descriptorForm');
@@ -107,7 +103,16 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.opciones = JSON.parse(localStorage.getItem('opciones')!);
     }
     this.pregunta = this.cookieService.get('preguntaFormulario');
-    this.obtenerAreasConocimiento();
+    this.traerInformacionActualizar();
+
+
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      if (this.activateRoute.snapshot.params['id']) this.llenarFormularioActualizar()
+      console.log("ejecutarafterChecked");
+    })
   }
 
 
@@ -120,21 +125,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.preguntaForm.get('tipoPreguntaForm')?.hasError('required') &&
       this.preguntaForm.get('tipoPreguntaForm')?.touched
     );
-  }
-
-  traerInformacionActualizar() {
-    this.idPregunta = this.activateRoute.snapshot.params['id'];
-    if (this.idPregunta) {
-      this.preguntasService.getPreguntaId(this.idPregunta).subscribe((data) => {
-        this.preguntaAModificar = data;
-        console.log(this.preguntaAModificar);
-        this.preguntaForm.controls['tipoPreguntaForm'].setValue(this.preguntaAModificar.tipoPregunta)
-        this.preguntaForm.controls['areaConocimientoForm'].setValue(this.preguntaAModificar.areaConocimiento)
-        this.preguntaForm.controls['descriptorForm'].setValue(this.preguntaAModificar.descriptor)
-        this.preguntaForm.controls['preguntaFormulario'].setValue(this.preguntaAModificar.pregunta)
-        this.opciones = this.preguntaAModificar.opciones
-      });
-    }
   }
 
   // -------------------------------------------------------------------------------
@@ -152,7 +142,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     this.servicioHttpAreaConocimiento
       .listarAreaConocimiento()
       .subscribe((areas) => {
-        this.opcionesAreaConocimiento = areas;
+        areas.forEach(element => {
+          this.opcionesAreaConocimiento.push(element)
+        })
       });
   }
 
@@ -172,16 +164,34 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   obtenerDescriptor(areaConocimiento: AreaConocimiento): void {
-    this.servicioHttpAreaConocimiento
-      .listarDescriptor(areaConocimiento.id)
-      .subscribe((descriptores) => {
-        this.opcionesDescriptores = descriptores;
-      });
+    let idArea = this.preguntaForm.value.areaConocimientoForm.id;
+    this.opcionesAreaConocimiento.forEach(area => {
+      if (idArea === area.id) this.opcionesDescriptores = area.descriptores
+    })
   }
 
   // -------------------------------------------------------------------------------
   // Pregunta
   // -------------------------------------------------------------------------------
+
+  traerInformacionActualizar() {
+    this.idPregunta = this.activateRoute.snapshot.params['id'];
+    if (this.idPregunta) {
+      this.actualizar = true
+      this.preguntasService.getPreguntaId(this.idPregunta).subscribe((data) => {
+        this.preguntaAModificar = data;
+      });
+    }
+  }
+
+  llenarFormularioActualizar() {
+    console.log(this.preguntaAModificar);
+    this.preguntaForm.controls['tipoPreguntaForm'].setValue(this.preguntaAModificar.tipoPregunta)
+    this.preguntaForm.controls['areaConocimientoForm'].setValue(this.preguntaAModificar.areaConocimiento)
+    this.preguntaForm.controls['descriptorForm'].setValue(this.preguntaAModificar.descriptor)
+    this.preguntaForm.controls['preguntaFormulario'].setValue(this.preguntaAModificar.pregunta)
+    this.opciones = this.preguntaAModificar.opciones
+  }
 
   get preguntaFormNoValida() {
     return (
@@ -265,8 +275,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   persistirOpcion(namekey: string) {
     let value = '';
     if (namekey === 'areaConocimientoForm')
-      value =
-        this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+      value = this.preguntaForm.value.areaConocimientoForm;
     if (namekey === 'tipoPreguntaForm')
       value = this.preguntaForm.value.tipoPreguntaForm;
     if (namekey === 'descriptorForm')
@@ -426,6 +435,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   regresar() {
+    console.log(this.preguntaForm);
     console.log('entra');
     Swal.fire({
       text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta. SI/NO’',

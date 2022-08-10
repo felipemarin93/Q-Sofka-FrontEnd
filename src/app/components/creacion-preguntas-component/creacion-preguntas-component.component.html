@@ -1,7 +1,7 @@
 <body>
   <app-header-component [title]="title"></app-header-component>
   <div class="container" style="margin-top: 5%">
-    
+
     <form [formGroup]="preguntaForm" (ngSubmit)="guardarPregunta()">
       <!-- columnas del formulario -->
       <div class="d-flex flex-row">
@@ -31,10 +31,11 @@
               <label for="area_conocimiento" class="control-label requiredField">Área de conocimiento:</label>
             </div>
             <div class="flex-fill">
-              <select formControlName="areaConocimientoForm" [(ngModel)]="areaConocimientoNombre" class="form-select"
+              <select formControlName="areaConocimientoForm" class="form-select"
                 (blur)="persistirOpcion('areaConocimientoForm')" (ngModelChange)="obtenerDescriptor($event)">
-                <option selected></option>
-                <option [ngValue]="opcion" *ngFor="let opcion of opcionesAreaConocimiento">
+                <option *ngIf="actualizar" selected>{{preguntaAModificar.areaConocimiento}}</option>
+                <option *ngIf="areaConocimientoOpcion !== ''" selected>{{areaConocimientoOpcion}}</option>
+                <option value="{{opcion}}" *ngFor="let opcion of opcionesAreaConocimiento">
                   {{ opcion.nombreAreaConocimiento }}
                 </option>
               </select>
@@ -49,10 +50,9 @@
               <label for="descriptor" class="control-label requiredField">Descriptor:</label>
             </div>
             <div class="flex-fill">
-              <select formControlName="descriptorForm" [(ngModel)]="descriptor" class="form-select"
-                (blur)="persistirOpcion('descriptorForm')">
+              <select formControlName="descriptorForm" class="form-select" (blur)="persistirOpcion('descriptorForm')">
                 <option selected></option>
-                <option [value]="descriptor.nombre" *ngFor="let descriptor of opcionesDescriptores">
+                <option value="{{descriptor.nombre}}" *ngFor="let descriptor of opcionesDescriptores">
                   {{ descriptor.nombre }}
                 </option>
               </select>
