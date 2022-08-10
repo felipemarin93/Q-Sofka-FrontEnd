@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { AreaConocimiento } from 'src/app/models/areaConocimiento';
 import { HttpServiceAreaConocimientoService } from 'src/app/services/http-service-area-conocimiento.service';
@@ -11,6 +11,11 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 import { Descriptor } from 'src/app/models/descriptor';
+import Swal from 'sweetalert2';
+import { Opcion } from 'src/app/models/opcion';
+import { Pregunta } from 'src/app/models/pregunta';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PreguntasService } from 'src/app/services/preguntas.service';
 
 @Component({
   selector: 'app-creacion-preguntas-component',
@@ -18,6 +23,7 @@ import { Descriptor } from 'src/app/models/descriptor';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 export class CreacionPreguntasComponentComponent implements OnInit {
+  @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
   areasConocimiento: string[] = [];
@@ -29,21 +35,34 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   ];
   opcionesAreaConocimiento?: AreaConocimiento[];
   opcionesDescriptores?: Descriptor[];
-  opciones: string[] = [];
+  opciones: Opcion[] = [];
   opcion: string = '';
   tipoPregunta?: string;
-  areaConocimiento: string = 'Seleccione una opcion';
+  areaConocimientoNombre: string = '';
+  areaConocimiento: AreaConocimiento;
   descriptor: string = 'Seleccione una opcion';
   pregunta?: string;
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
-  botonAgregarOpcionDisable: boolean = false;
+  botonAgregarOpcionDisable: boolean = true;
+  checkboxEscorrectoDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
+  opcionCorrecta: boolean = false;
+
+  //id traido por la url
+  idPregunta: string;
+  //validar si se guarda o se actualiza
+  actualizar: boolean = false;
+  //pregunta traida con id
+  preguntaAModificar: Pregunta;
 
   constructor(
     private fb: FormBuilder,
     private cookieService: CookieService,
-    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService
+    private router: Router,
+    private servicioHttpAreaConocimiento: HttpServiceAreaConocimientoService,
+    private activateRoute: ActivatedRoute,
+    private preguntasService: PreguntasService
   ) {
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['', Validators.required],
@@ -55,28 +74,36 @@ export class CreacionPreguntasComponentComponent implements OnInit {
           Validators.required,
           this.validarPregunta,
           this.validarPreguntaCaracterFinal,
-          this.validarPreguntaVerdaderoFalso,
         ],
       ],
       opcionForm: [''],
+      opcionCorrectaForm: [''],
     });
   }
 
   ngOnInit(): void {
-    this.obtenerAreasConocimiento();
-    if (this.cookieService.get('tipoPregunta') !== '') {
-      this.tipoPregunta = this.cookieService.get('tipoPregunta');
+    this.traerInformacionActualizar();
+    if (this.cookieService.get('checkRespuesta') !== '') {
+      this.checkboxEscorrectoDisable = !Boolean(this.cookieService.get('checkRespuesta'));
     }
-    if (this.cookieService.get('areaConocimiento') !== '') {
-      this.areaConocimiento = this.cookieService.get('areaConocimiento');
+    if (this.cookieService.get('tipoPreguntaForm') !== '') {
+      this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
-    if (this.cookieService.get('descriptor') !== '') {
-      this.descriptor = this.cookieService.get('descriptor');
+    if (this.cookieService.get('areaConocimientoForm') !== '') {
+      setTimeout(() => {
+        this.areaConocimientoNombre = this.cookieService.get(
+          'areaConocimientoForm'
+        );
+      }, 1000);
+    }
+    if (this.cookieService.get('descriptorForm') !== '') {
+      this.descriptor = this.cookieService.get('descriptorForm');
     }
     if (JSON.parse(localStorage.getItem('opciones')!)) {
       this.opciones = JSON.parse(localStorage.getItem('opciones')!);
     }
-    this.pregunta = this.cookieService.get('pregunta');
+    this.pregunta = this.cookieService.get('preguntaFormulario');
+    this.obtenerAreasConocimiento();
   }
 
   // -------------------------------------------------------------------------------
@@ -88,6 +115,21 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.preguntaForm.get('tipoPreguntaForm')?.hasError('required') &&
       this.preguntaForm.get('tipoPreguntaForm')?.touched
     );
+  }
+
+  traerInformacionActualizar() {
+    this.idPregunta = this.activateRoute.snapshot.params['id'];
+    if (this.idPregunta) {
+      this.preguntasService.getPreguntaId(this.idPregunta).subscribe((data) => {
+        this.preguntaAModificar = data;
+        console.log(this.preguntaAModificar);
+        this.preguntaForm.controls['tipoPreguntaForm'].setValue(this.preguntaAModificar.tipoPregunta)
+        this.preguntaForm.controls['areaConocimientoForm'].setValue(this.preguntaAModificar.areaConocimiento)
+        this.preguntaForm.controls['descriptorForm'].setValue(this.preguntaAModificar.descriptor)
+        this.preguntaForm.controls['preguntaFormulario'].setValue(this.preguntaAModificar.pregunta)
+        this.opciones = this.preguntaAModificar.opciones
+      });
+    }
   }
 
   // -------------------------------------------------------------------------------
@@ -198,26 +240,35 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   obtenerRequerimiento(): void {
-    if (this.tieneOpcionesMultiples) {
-      this.requerimientosPregunta = [
+    if (!this.tieneOpcionesMultiples) {
+      this.preguntaForm.controls['preguntaFormulario'].setValidators([
+        Validators.required,
+        this.validarPreguntaVerdaderoFalso,
+      ]);
+    } else {
+      this.preguntaForm.controls['preguntaFormulario'].setValidators([
         Validators.required,
         this.validarPregunta,
         this.validarPreguntaCaracterFinal,
-      ];
-    } else {
-      this.requerimientosPregunta = [
-        Validators.required,
-        this.validarPreguntaVerdaderoFalso,
-      ];
+      ]);
     }
-    // this.preguntaForm.
   }
 
   // -------------------------------------------------------------------------------
   // Opcion
   // -------------------------------------------------------------------------------
+  persistirOpcion(namekey: string) {
+    let value = '';
+    if (namekey === 'areaConocimientoForm')
+      value =
+        this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+    if (namekey === 'tipoPreguntaForm')
+      value = this.preguntaForm.value.tipoPreguntaForm;
+    if (namekey === 'descriptorForm')
+      value = this.preguntaForm.value.descriptorForm;
+    if (namekey === 'preguntaFormulario')
+      value = this.preguntaForm.value.preguntaFormulario;
 
-  persistirOpcion(namekey: string, value: string) {
     this.cookieService.set(
       namekey,
       value,
@@ -229,29 +280,97 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     return new Date(Date.parse(fecha.toString()) + 1200000);
   }
 
+  validarOpcion(): void {
+    if (this.preguntaForm.value.opcionForm) {
+      this.botonAgregarOpcionDisable = false;
+    } else {
+      this.botonAgregarOpcionDisable = true;
+    }
+    this.validarEsEditar();
+  }
+
+  validarEsEditar(): void {
+    if (this.cookieService.get('opcionEditar')) {
+      this.botonAgregarOpcionDisable = false;
+    } else {
+      if (this.tipoPregunta !== 'Verdadero o falso') {
+        this.validarPreguntaOpcionMultiple();
+      } else {
+        this.validarPreguntaVF();
+      }
+    }
+  }
+
+  validarPreguntaOpcionMultiple(): void {
+    if (this.opciones.length >= 4) this.botonAgregarOpcionDisable = true;
+  }
+
+  validarPreguntaVF(): void {
+    if (this.opciones.length >= 2) this.botonAgregarOpcionDisable = true;
+  }
+
+  obtenerCheck() {
+    this.opcionCorrecta = this.preguntaForm.value.opcionCorrectaForm;
+  }
+
   agregarEditarOpcion() {
+    console.log(this.tipoPregunta);
     let indice = this.cookieService.get('opcionEditar');
     if (indice) {
-      this.opciones[parseInt(indice!)] = this.opcion;
+      let opcionEditar = {
+        nombre: this.opcion,
+        esCorrecto: this.opcionCorrecta,
+      };
+      this.opciones[parseInt(indice!)] = opcionEditar;
       localStorage.setItem('opciones', JSON.stringify(this.opciones));
       this.opcion = '';
     } else {
-      this.opciones.push(this.opcion!);
+      let opcionEnviar = {
+        nombre: this.opcion,
+        esCorrecto: this.opcionCorrecta,
+      };
+      this.opciones.push(opcionEnviar);
       localStorage.setItem('opciones', JSON.stringify(this.opciones));
       this.opcion = '';
     }
     this.cookieService.delete('opcionEditar');
+    if (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) {
+      this.cookieService.set('checkRespuesta', 'false', this.obtenerLimiteCookie(new Date))
+      this.checkboxEscorrectoDisable = false
+      this.opcionCorrecta = false
+    }
   }
 
-  eliminarOpcion(opcion: string) {
-    let item = this.opciones.findIndex((element) => element == opcion);
-    this.opciones.splice(item, 1);
-    localStorage.setItem('opciones', JSON.stringify(this.opciones));
-    console.log(item);
+  eliminarOpcion(opcion: string, esCorrecta: boolean) {
+    Swal.fire({
+      text: '¿Esta seguro de eliminar La Opcion ?',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonColor: '#0d6efd',
+      icon: 'question',
+      confirmButtonColor: '#dc3545',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (esCorrecta) {
+          this.checkboxEscorrectoDisable = true
+          this.cookieService.delete('checkRespuesta')
+        }
+        let item = this.opciones.findIndex(
+          (element) => element.nombre == opcion
+        );
+        this.opciones.splice(item, 1);
+        localStorage.setItem('opciones', JSON.stringify(this.opciones));
+        console.log(item);
+      }
+    });
   }
 
   editarOpcion(indice: number) {
-    this.opcion = this.opciones[indice];
+    this.opcion = this.opciones[indice].nombre;
+    this.opcionCorrecta = this.opciones[indice].esCorrecto;
+    this.preguntaForm.controls['opcionCorrectaForm'].setValue(
+      this.opcionCorrecta
+    );
     this.cookieService.set(
       'opcionEditar',
       indice.toString(),
@@ -272,25 +391,66 @@ export class CreacionPreguntasComponentComponent implements OnInit {
         : false;
     mensajeVerdaderoFalso =
       tipoPregunta == 'Verdadero o falso' && opciones == 2 ? true : false;
-    return tipoPregunta == 'Verdadero o falso'
+    return tipoPregunta === 'Verdadero o falso'
       ? mensajeVerdaderoFalso
       : mensajeMultipleUnicaOpcion;
   }
 
   guardarPregunta() {
-    //this.cookieService.deleteAll('/');
-    //localStorage.removeItem('opciones');
     const tipoPreguntaValue = this.preguntaForm.value.tipoPreguntaForm;
     const areaConocimientoValue = this.preguntaForm.value.areaConocimientoForm;
-    //console.log(areaConocimientoValue.nombreAreaConocimiento);
     const descriptorValue = this.preguntaForm.value.descriptorForm;
     const preguntaFormularioValue = this.preguntaForm.value.preguntaFormulario;
     let opciones = this.opciones.length;
     let mensaje = this.validarGuardarPregunta(opciones, tipoPreguntaValue);
     if (mensaje) {
-      console.log('desde guardar pregunta es valido');
+      Swal.fire({
+        text: '¿Desea Guardar la pregunta?',
+        confirmButtonText: 'Guardar Pregunta',
+        icon: 'success',
+        confirmButtonColor: '#3085d6',
+      });
     } else {
-      console.log('desde guardar pregunta es invalido');
+      Swal.fire({
+        text: 'Ingrese las opciones correctamente',
+        confirmButtonText: 'Salir',
+        icon: 'error',
+        confirmButtonColor: '#dc3545',
+      });
     }
   }
+
+  regresar() {
+    console.log('entra');
+    Swal.fire({
+      text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta. SI/NO’',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonColor: '#0d6efd',
+      icon: 'question',
+      confirmButtonColor: '#dc3545',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.router.navigate(['coach-dashboard']);
+      }
+    });
+  }
 }
+
+// --------------------------------------------------------------------------------
+//   Ejemplo Alert con Sweetalert2
+// --------------------------------------------------------------------------------
+//   Swal.fire({
+//     text: 'desde guardar pregunta es valido',
+//     icon: 'success',
+//     confirmButtonColor: '#3085d6',
+//     cancelButtonColor: '#d33',
+//     allowOutsideClick: false
+//   }).then((result) => {
+//     if (result.isConfirmed) {
+//       console.log("hola");
+//       Swal.fire({
+//         text: 'desde guardar pregunta es valido',
+//       })
+//     }
+//   });

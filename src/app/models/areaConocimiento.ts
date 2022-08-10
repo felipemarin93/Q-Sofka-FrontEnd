@@ -1,7 +1,7 @@
 import { Descriptor } from "./descriptor";
 
-export interface AreaConocimiento{
+export interface AreaConocimiento {
     id: string;
-    nombreAreaConocimiento: String;
+    nombreAreaConocimiento: string;
     descriptores: Descriptor[];
 }
