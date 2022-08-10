@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { HttpServiceAreaConocimientoService } from 'src/app/services/http-service-area-conocimiento.service';
+import { HttpServiceAreaConocimientoService } from '../../services/http-service-area-conocimiento.service';
 import { AreaConocimiento } from '../../models/areaConocimiento';
 import { Descriptor } from '../../models/descriptor';
 
