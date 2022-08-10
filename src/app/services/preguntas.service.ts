@@ -67,9 +67,18 @@ export class PreguntasService {
 
   guardarPregunta(value: Pregunta): Observable<Pregunta> {
     console.log(value);
-    return this.http
-    .post<Pregunta>
-    (`${PathRest.getApiPregunta}/guardar`, value)
+    return this.http.post<Pregunta>(
+      `${PathRest.getApiPregunta}/guardar`,
+      value
+    );
   }
 
+  actualizarPregunta(value: Pregunta): Observable<Pregunta> {
+    let id = value.id;
+    console.log(value);
+    return this.http.put<Pregunta>(
+      `${PathRest.getApiPregunta}/actualizar/${id}`,
+      value
+    );
+  }
 }
