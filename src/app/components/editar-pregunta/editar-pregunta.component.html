@@ -26,7 +26,7 @@
                 <div class="col-sm-5">
                 <select class="form-select" aria-label="select" formControlName="area" id="area" >
                     <option selected>Seleccione una opción</option>
-                    <option *ngFor="let opcion of areas" value="{{opcion.id}}">
+                    <option *ngFor="let opcion of areas" value="{{opcion.id}}" >
                         {{opcion.nombreAreaConocimiento}}
                     </option>
                 </select>

@@ -64,15 +64,19 @@ export class EvaluacionComponent implements OnInit {
 
   // configurcion del objeto (formulario)
   crearFormulario(){
-    if(this.preguntaMostrada.tipoPregutna == "seleccion multiple"){
-      this.forma = this.fb.group({
-        multiple: ['', Validators.required]
-      });
-    } else {
-      this.forma = this.fb.group({
-        pregunta: ['', Validators.required]
-      });
-    }
+    // if(this.preguntaMostrada.tipoPregutna == "seleccion multiple"){
+    //   this.forma = this.fb.group({
+    //     multiple: ['', Validators.required]
+    //   });
+    // } else {
+    //   this.forma = this.fb.group({
+    //     pregunta: ['', Validators.required]
+    //   });
+    // }
+    this.forma = this.fb.group({
+          multiple: ['', Validators.required],
+          pregunta: ['', Validators.required]
+        });
   }
 
   siguientePregunta(){

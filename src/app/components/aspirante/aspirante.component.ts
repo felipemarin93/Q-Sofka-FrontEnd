@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { Aspirante } from 'src/app/models/aspirante';
+import { AspiranteService } from 'src/app/services/aspirante.service';
 
 @Component({
   selector: 'app-aspirante',
@@ -15,7 +17,8 @@ export class AspiranteComponent implements OnInit {
 
   //codigoValido: boolean = false;
 
-  constructor( private fb: FormBuilder) {
+  constructor( private fb: FormBuilder,
+              private aspiranteService: AspiranteService ) {
     this.crearFormulario();
     this.crearListeners();
    }
@@ -34,14 +37,7 @@ export class AspiranteComponent implements OnInit {
     })
   }
 
-  crearListeners(){
-    this.formaCodigo.valueChanges.subscribe( (valor: any) => console.log(valor)
-    )
-
-    this.formaCodigo.statusChanges.subscribe( (status: any) => console.log({status})
-    )
-  }
-
+  
   get nombreNoValido(){
     return this.formaDatos.get('nombre').invalid && this.formaDatos.get('nombre').touched;
   }
@@ -55,12 +51,31 @@ export class AspiranteComponent implements OnInit {
   }
 
 
+  crearListeners(){
+    this.formaCodigo.valueChanges.subscribe( (valor: any) => console.log(valor)
+    )
+
+    this.formaCodigo.statusChanges.subscribe( (status: any) => console.log({status})
+    )
+  }
+
   solicitarCodigo(){
     if(this.formaDatos.invalid){
       Object.values( this.formaDatos.controls ).forEach ((control: any)=> {
         control.markAsTouched();})
     }
-    
+
+    this.crearAspirante()
+
+    //this.aspiranteService.generarCoidigoVerificacion()
+  }
+
+  crearAspirante(){
+    const data: Aspirante = {
+      nombre: this.formaDatos.get('nombre').value,
+      correo: this.formaDatos.get('email').value
+    } 
+    this.aspiranteService.crearAspirante(data)
   }
 
 
@@ -70,23 +85,36 @@ export class AspiranteComponent implements OnInit {
 
   validarCodigo( control: FormControl ): Promise<any> | Observable<any>{
 
-    return new Promise ((resolve, reject) =>{
-      setTimeout(() =>{
-        if( control.value ==='abc1234'){
-          console.log("token valido");
+    const codigoVerificacion = control.value;
 
-          //this.codigoValido = true;
-          
-          resolve({ existe: false})
-          
-        } else{
-          console.log("token no valido");
+    return this.obtenerAspirante(codigoVerificacion)
+    .pipe( map(((data:any) => {
+      if(data != null) {
+        console.log("token valido")
+        return true;
+      }
+      return false;
+    })));
 
-          //resolve({ existe: false})
-        }
-      }, 1000);
-    });
+    // return new Promise ((resolve, reject) =>{
+
+    //   setTimeout(() =>{
+    //     if( control.value ==='abc1234'){
+    //       console.log("token valido");
+          
+    //       resolve({ existe: false})
+          
+    //     } else{
+    //       console.log("token no valido");
+
+    //     }
+    //   }, 1000);
+    // });
      
+  }
+
+  obtenerAspirante(codigoVerificacion: string){
+    return this.aspiranteService.obtenerAspirantePorCodigoVerificacion("CodigoVerificacion")
   }
 
   comenzar(){
