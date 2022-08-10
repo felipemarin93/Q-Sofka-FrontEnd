@@ -26,7 +26,7 @@
           <div class="row mb-3">
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
-              <input [class.is-invalid]="emailNoValido" [class.is-valid]="!emailNoValido" type="text" formControlName ="email" class="form-control" id="email">
+              <input [class.is-invalid]="emailNoValido" type="text" formControlName ="email" class="form-control" id="email">
               <span class="text-danger texto-simple" *ngIf="emailNoValido"> Debe ingresar un correo valido</span>
             </div>
           </div>
@@ -36,7 +36,7 @@
             <div class="input-group col-md-8">
               <button type="submit"
               class="btn btn-primary btn-block">
-                Solucitar código
+                Solicitar código
               </button>
             </div>
           </div>
