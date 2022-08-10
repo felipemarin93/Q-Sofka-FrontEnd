@@ -50,7 +50,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   opcionCorrecta: boolean = false;
 
   //id traido por la url
-  id: string;
+  idPregunta: string;
   //validar si se guarda o se actualiza
   actualizar: boolean = false;
   //pregunta traida con id
@@ -64,11 +64,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private preguntasService: PreguntasService
   ) {
-    this.preguntaConId = this.activateRoute.snapshot.params['id'];
-    if (this.preguntaConId) {
-      this.actualizar = true;
-    }
-
+    this.traerInformacionActualizar();
     this.preguntaForm = this.fb.group({
       tipoPreguntaForm: ['', Validators.required],
       areaConocimientoForm: ['', Validators.required],
@@ -116,6 +112,16 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       this.preguntaForm.get('tipoPreguntaForm')?.hasError('required') &&
       this.preguntaForm.get('tipoPreguntaForm')?.touched
     );
+  }
+
+  traerInformacionActualizar() {
+    this.idPregunta = this.activateRoute.snapshot.params['id'];
+    if (this.preguntaConId) {
+      this.preguntasService.getPreguntaId(this.idPregunta).subscribe((data) => {
+        this.preguntaConId = data;
+        console.log(this.preguntaConId);
+      });
+    }
   }
 
   // -------------------------------------------------------------------------------
