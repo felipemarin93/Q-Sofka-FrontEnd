@@ -53,3 +53,11 @@ a{
   font-weight: bolder;
 }
 
+.soy_aspirante{
+    cursor: pointer;
+  }
+
+.soy_aspirante:hover{
+    font-weight: bolder;
+  }
+
