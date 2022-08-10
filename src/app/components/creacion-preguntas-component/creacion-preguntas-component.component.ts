@@ -44,6 +44,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
   botonAgregarOpcionDisable: boolean = true;
+  checkboxEscorrectoDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
   opcionCorrecta: boolean = false;
 
@@ -273,7 +274,6 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   validarEsEditar(): void {
-    console.log(this.tipoPregunta);
     if (this.cookieService.get('opcionEditar')) {
       this.botonAgregarOpcionDisable = false;
     } else {
@@ -294,10 +294,12 @@ export class CreacionPreguntasComponentComponent implements OnInit {
   }
 
   obtenerCheck() {
+    console.log(this.checkboxEscorrectoDisable);
     this.opcionCorrecta = this.preguntaForm.value.opcionCorrectaForm;
   }
 
   agregarEditarOpcion() {
+    console.log(this.tipoPregunta);
     let indice = this.cookieService.get('opcionEditar');
     if (indice) {
       let opcionEditar = {
