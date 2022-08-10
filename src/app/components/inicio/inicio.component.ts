@@ -28,8 +28,8 @@ export class InicioComponent implements OnInit {
             if (usuario1 == null) {
               Swal.fire({
               icon: 'error',
-              title: 'Oops...',
-              text: 'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.',
+              title: '¡Lo Sentimos!',
+              text: 'Usuario no registrado, favor contactar al SuperAdmin para su registro.',
               });
             }
               if (usuario1.contrasena === contrasena) {
@@ -45,23 +45,23 @@ export class InicioComponent implements OnInit {
               } else {
                 Swal.fire({
                   icon: 'error',
-                  title: 'Oops...',
-                  text: 'la contraseña es incorrecta',
+                  title: '¡Lo Sentimos!',
+                  text: 'El nombre de usuario o la contraseña no es válida.',
                 })
               }
           });
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Oops...',
-          text: 'El nombre de usuario no es valido',
+          title: '¡Lo Sentimos!',
+          text: 'El nombre de usuario o la contraseña no es válida.',
         })
       }
     } else {
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
-        text: 'El usuario y la contraseña no pueden estar vacios!',
+        title: '¡Lo Sentimos!',
+        text: 'El usuario y la contraseña no pueden estar vacios!, intenta de nuevo',
       })
     }
   }
