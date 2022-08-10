@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 import { Pregunta } from '../models/pregunta';
 import { PathRest } from '../static/hostBackend';
 
@@ -28,6 +28,12 @@ export class PreguntasService {
     return this.http
     .get<Pregunta[]>
     (`${PathRest.getApiPregunta}/coach/${id}`)
+    .pipe(
+      map((preguntas)=>{
+        preguntas.forEach((p)=>p.fechaActualizacion = new Date(`${p.fechaActualizacion[0]}-${p.fechaActualizacion[1]}-${p.fechaActualizacion[2]}`));
+        return preguntas;
+      })
+  )
     // this.preguntaUrl.concat('coach/'+id)
     // .pipe(
     //   catchError(this.handleError<Pregunta[]>('getPreguntasCoach', []))
