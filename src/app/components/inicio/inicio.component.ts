@@ -25,6 +25,13 @@ export class InicioComponent implements OnInit {
         this.autenticacionInicioSesion
           .obtenerUsuarioPorNombreUsuario(nombreUsuario)
           .subscribe((usuario1) => {
+            if (usuario1 == null) {
+              Swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: 'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.',
+              });
+            }
               if (usuario1.contrasena === contrasena) {
                 Swal.fire({
                   position: 'center',
@@ -42,12 +49,6 @@ export class InicioComponent implements OnInit {
                   text: 'la contraseña es incorrecta',
                 })
               }
-          }, error => {
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.',
-            })
           });
       } else {
         Swal.fire({
