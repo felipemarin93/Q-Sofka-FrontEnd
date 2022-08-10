@@ -4,13 +4,17 @@ import { InicioComponent } from './components/inicio/inicio.component';
 import { TableroCoachComponent } from './components/tablero-coach/tablero-coach.component';
 import { CreacionPreguntasComponentComponent } from './components/creacion-preguntas-component/creacion-preguntas-component.component';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
-import { ModuloAspiranteComponent } from './components/modulo-aspirante/modulo-aspirante.component';
+import { AspiranteComponent } from './components/aspirante/aspirante.component';
 
 const routes: Routes = [
   { path: 'creacionpreguntas', component: CreacionPreguntasComponentComponent },
+  {
+    path: 'creacionpreguntas/:id',
+    component: CreacionPreguntasComponentComponent,
+  },
   { path: 'coach-dashboard', component: TableroCoachComponent },
   { path: 'inicio', component: InicioComponent },
-  { path: 'modulo-aspirante', component: ModuloAspiranteComponent },
+  { path: 'aspirante', component: AspiranteComponent  },
   { path: 'evaluacion', component: EvaluacionComponent },
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
 ];

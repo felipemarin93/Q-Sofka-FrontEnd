@@ -3,7 +3,7 @@ import { Opcion } from "./opcion";
 export interface Pregunta{
 	id?: string;
 	coachId: string;
-	fecha: Date;
+	fechaActualizacion: Date;
 	areaConocimiento: string;
 	descriptor: string;
 	tipoPregunta: string;
