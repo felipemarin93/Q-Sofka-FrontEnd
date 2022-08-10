@@ -14,7 +14,7 @@ const routes: Routes = [
   },
   { path: 'coach-dashboard', component: TableroCoachComponent },
   { path: 'inicio', component: InicioComponent },
-  { path: 'aspirante', component: AspiranteComponent  },
+  { path: 'aspirante', component: AspiranteComponent },
   { path: 'evaluacion', component: EvaluacionComponent },
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
 ];
