@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -21,10 +21,19 @@ export class AspiranteComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  private validarEspacio(control: AbstractControl){
+    var espacio = control.value;
+    var error = null;
+    if (!espacio.includes(" ")){
+      error = "Debes escribir nommbre espacio apellido";
+    }
+    return error;
+  }
+
   crearFormulario(){
     this.formaDatos = this.fb.group({
      
-      nombre:['', [Validators.required, Validators.pattern('?[azAz]?s/?[azAz]?s/?'),Validators.minLength(5)]],
+      nombre:['', [Validators.required, this.validarEspacio,Validators.minLength(9)]],
       email:['', [Validators.required, Validators.pattern('[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$')]]
     })
 
