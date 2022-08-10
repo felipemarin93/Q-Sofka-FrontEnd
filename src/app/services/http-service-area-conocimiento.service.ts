@@ -17,9 +17,9 @@ export class HttpServiceAreaConocimientoService {
     );
   }
 
-  listarDescriptor(id: string): Observable<Descriptor[]> {
+  listarDescriptor(idDescriptor: string): Observable<Descriptor[]> {
     return this.httpAreaConocimiento.get<Descriptor[]>(
-      `${PathRest.getApiAreaConocimiento}/descriptores/listar/${id}`
+      `${PathRest.getApiAreaConocimiento}/descriptores/listar/${idDescriptor}`
     );
   }
 }

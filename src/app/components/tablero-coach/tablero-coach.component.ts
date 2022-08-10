@@ -18,10 +18,9 @@ export class TableroCoachComponent implements OnInit {
   preguntaDetalle?: Pregunta;
   displayModal = "none";
 
-
   constructor(
+    private router: Router,
     private preguntasService: PreguntasService,
-    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -71,7 +70,7 @@ export class TableroCoachComponent implements OnInit {
         this.router.navigate(['inicio']);
       }
     })
-   
+
   }
 
   nuevaPregunta() {
@@ -79,17 +78,26 @@ export class TableroCoachComponent implements OnInit {
   }
 
   eliminarPregunta(preguntaEliminar: Pregunta) {
-    if (confirm('¿Está seguro que quiere eliminar la pregunta?')) {
-      this.preguntasService
-        .deletePregunta(preguntaEliminar.id)
+    Swal.fire({
+      title: '¿Está seguro que quiere eliminar la pregunta?',
+      text: "los cambios sin guardar se borrarán",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.preguntasService.deletePregunta(preguntaEliminar.id)
         .subscribe((eliminar) => {
-          alert('Se ha eliminado la pregunta con id:' + preguntaEliminar.id);
-          // window.location.reload()
-          const indice = this.preguntas.indexOf(preguntaEliminar);
-          this.preguntas.splice(indice, 1);
-        });
-    }
-  }
+        Swal.fire(
+          'Se ha eliminado la pregunta con id: ' + preguntaEliminar.id,
+        )
+        const indice = this.preguntas.indexOf(preguntaEliminar);
+        this.preguntas.splice(indice, 1);
+        
+      });
+    }})}
 
   editarPregunta(preguntaEditar: Pregunta) {
     this.router.navigate(['creacionpreguntas/' + preguntaEditar.id]);

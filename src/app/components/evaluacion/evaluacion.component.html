@@ -1,14 +1,14 @@
 <nav class="navbar navbar-light" style="background-color: #9dc3e6">
   <div class="container-fluid">
     <span class="navbar-brand" href="#">Pregunta {{ indexPregunta + 1 }}</span>
-    <span class="navbar-text"> Timer </span>
+    <span class="navbar-text" style="font-weight: bold; font-size: 20px;"> 00:{{minutosMostrar}}:{{segundosMostrar}} </span>
   </div>
 </nav>
 
 <button (click)="imprimir()">imprimir</button>
 
 <div class="container mt-3">
-  
+
   <form [formGroup]="forma" (ngSubmit)="enviarEvaluacion()">
 
     <div [ngSwitch]="preguntaMostrada.tipoPregutna">
@@ -158,7 +158,7 @@
     <div class="form-group">
       <label class="col-2 col-form-label">&nbsp;</label>
       <div class="input-group col-md-8">
-        <button type="submit" 
+        <button type="submit"
         class="btn btn-primary btn-block"
         [disabled]="preguntaNoValida">
           <span *ngIf="preguntaNoValida"> Seleccione una opción</span>

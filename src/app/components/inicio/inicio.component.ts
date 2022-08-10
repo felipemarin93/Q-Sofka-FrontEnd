@@ -10,8 +10,10 @@ import Swal from 'sweetalert2';
   styleUrls: ['./inicio.component.css'],
 })
 export class InicioComponent implements OnInit {
+  //formularioIngreso?:any;
   userData: any;
-  formularioIngreso?: any;
+  formularioIngreso: any;
+
   constructor(
     private autenticacionInicioSesion: AutenticacionInicioSesionService,
     private router: Router
@@ -24,51 +26,47 @@ export class InicioComponent implements OnInit {
       if (nombreUsuario.includes('.')) {
         this.autenticacionInicioSesion
           .obtenerUsuarioPorNombreUsuario(nombreUsuario)
-          .subscribe(
-            (usuario1) => {
-              if (usuario1.contrasena === contrasena) {
-                Swal.fire({
-                  position: 'center',
-                  icon: 'success',
-                  title: 'Bienvenido ' + usuario1.nombre,
-                  showConfirmButton: false,
-                  timer: 1500,
-                });
-                this.router.navigate(['coach-dashboard']);
-                localStorage.setItem(
-                  'usuario',
-                  JSON.stringify({ id: usuario1.id, nombre: usuario1.nombre })
-                );
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'la contraseña es incorrecta',
-                  confirmButtonColor: '#dc3545',
-                });
-              }
-            },
-            (error) => {
+          .subscribe((usuario1) => {
+            if (usuario1 == null) {
               Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                confirmButtonColor: '#dc3545',
-                text: 'Usuario no registrado, contactarse con el superadmin para el registro y entrega de sus credenciales.',
+                title: '¡Lo Sentimos!',
+                text: 'Usuario no registrado, favor contactar al SuperAdmin para su registro.',
               });
             }
-          );
+            if (usuario1.contrasena === contrasena) {
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Bienvenido ' + usuario1.nombre,
+                showConfirmButton: false,
+                timer: 1500,
+              });
+              this.router.navigate(['coach-dashboard']);
+              localStorage.setItem(
+                'usuario',
+                JSON.stringify({ id: usuario1.id, nombre: usuario1.nombre })
+              );
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: '¡Lo Sentimos!',
+                text: 'El nombre de usuario o la contraseña no es válida.',
+              });
+            }
+          });
       } else {
         Swal.fire({
           icon: 'error',
-          title: 'Oops...',
-          text: 'El nombre de usuario no es valido',
+          title: '¡Lo Sentimos!',
+          text: 'El nombre de usuario o la contraseña no es válida.',
         });
       }
     } else {
       Swal.fire({
         icon: 'error',
-        title: 'Oops...',
-        text: 'El usuario y la contraseña no pueden estar vacios!',
+        title: '¡Lo Sentimos!',
+        text: 'El usuario y la contraseña no pueden estar vacios!, intenta de nuevo',
       });
     }
   }

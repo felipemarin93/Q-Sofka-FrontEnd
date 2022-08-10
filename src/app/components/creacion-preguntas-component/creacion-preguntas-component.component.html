@@ -22,10 +22,19 @@
                 (ngModelChange)="mostrarRequerimientoPregunta($event)"
               >
                 <option selected></option>
+                <<<<<<< HEAD
                 <option
                   [value]="opcion"
                   *ngFor="let opcion of opcionesTipoPregunta"
                 >
+                  =======
+                </option>
+
+                <option
+                  *ngFor="let opcion of opcionesTipoPregunta; let i = index"
+                  value="{{ i }}"
+                >
+                  >>>>>>> dev
                   {{ opcion }}
                 </option>
               </select>
@@ -44,14 +53,18 @@
             <div class="flex-fill">
               <select
                 formControlName="areaConocimientoForm"
-                [(ngModel)]="areaConocimientoNombre"
                 class="form-select"
                 (blur)="persistirOpcion('areaConocimientoForm')"
                 (ngModelChange)="obtenerDescriptor($event)"
               >
-                <option selected></option>
+                <option *ngIf="actualizar" selected>
+                  {{ preguntaAModificar.areaConocimiento }}
+                </option>
+                <option *ngIf="areaConocimientoOpcion !== ''" selected>
+                  {{ areaConocimientoOpcion }}
+                </option>
                 <option
-                  [ngValue]="opcion"
+                  value="{{ opcion }}"
                   *ngFor="let opcion of opcionesAreaConocimiento"
                 >
                   {{ opcion.nombreAreaConocimiento }}
@@ -75,13 +88,12 @@
             <div class="flex-fill">
               <select
                 formControlName="descriptorForm"
-                [(ngModel)]="descriptor"
                 class="form-select"
                 (blur)="persistirOpcion('descriptorForm')"
               >
                 <option selected></option>
                 <option
-                  [value]="descriptor.nombre"
+                  value="{{ descriptor.nombre }}"
                   *ngFor="let descriptor of opcionesDescriptores"
                 >
                   {{ descriptor.nombre }}
