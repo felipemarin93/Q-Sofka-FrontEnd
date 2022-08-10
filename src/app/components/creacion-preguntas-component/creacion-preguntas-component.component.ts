@@ -236,6 +236,7 @@ export class CreacionPreguntasComponentComponent
     this.preguntaForm.controls['areaConocimientoForm'].setValue('');
     this.preguntaForm.controls['descriptorForm'].setValue('');
     this.preguntaForm.controls['preguntaFormulario'].setValue('');
+    this.preguntaForm.controls['opcionForm'].setValue('');
     this.opciones = [];
     this.checkboxEscorrectoDisable = true;
   }
@@ -365,7 +366,49 @@ export class CreacionPreguntasComponentComponent
     this.opcionCorrecta = this.preguntaForm.value.opcionCorrectaForm;
   }
 
-  validacionOpcionesCorrecta(): void {}
+  validacionOpcionesCorrecta(): void {
+    let correcta = false;
+    this.opciones.forEach((opcion) => {
+      if (opcion.esCorrecto) {
+        correcta = true;
+      }
+    });
+    if (this.tipoPregunta === 'Verdadero o falso') {
+      if (this.opciones.length >= 2 && !correcta) {
+        Swal.fire({
+          text: 'Hace falta agregar una opcion correcta, agreguela y continue',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#dc3545',
+          icon: 'error',
+          allowOutsideClick: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.opciones.splice(1);
+          }
+        });
+      } else {
+        localStorage.setItem('opciones', JSON.stringify(this.opciones));
+        this.opcion = '';
+      }
+    } else {
+      if (this.opciones.length >= 4 && !correcta) {
+        Swal.fire({
+          text: 'Hace falta agregar una opcion correcta, agreguela y continue',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#dc3545',
+          icon: 'error',
+          allowOutsideClick: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.opciones.splice(3);
+          }
+        });
+      } else {
+        localStorage.setItem('opciones', JSON.stringify(this.opciones));
+        this.opcion = '';
+      }
+    }
+  }
 
   agregarEditarOpcion() {
     let indice = this.cookieService.get('opcionEditar');
@@ -374,6 +417,7 @@ export class CreacionPreguntasComponentComponent
         nombre: this.opcion,
         esCorrecto: this.opcionCorrecta,
       };
+      this.validacionOpcionesCorrecta();
       this.opciones[parseInt(indice!)] = opcionEditar;
       localStorage.setItem('opciones', JSON.stringify(this.opciones));
       this.opcion = '';
@@ -383,11 +427,9 @@ export class CreacionPreguntasComponentComponent
         esCorrecto: this.opcionCorrecta,
       };
       this.opciones.push(opcionEnviar);
-      localStorage.setItem('opciones', JSON.stringify(this.opciones));
-      this.opcion = '';
+      this.validacionOpcionesCorrecta();
     }
     this.cookieService.delete('opcionEditar');
-    console.log(this.opciones, this.opcionCorrecta, this.tipoPregunta);
     if (
       (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) ||
       (this.tipoPregunta === 'Verdadero o falso' && this.opcionCorrecta)
@@ -401,7 +443,6 @@ export class CreacionPreguntasComponentComponent
       this.opcionCorrecta = false;
     }
     this.preguntaForm.controls['opcionCorrectaForm'].setValue(false);
-    this.validacionOpcionesCorrecta();
   }
 
   eliminarOpcion(opcion: string, esCorrecta: boolean) {
@@ -508,21 +549,3 @@ export class CreacionPreguntasComponentComponent
     });
   }
 }
-
-// --------------------------------------------------------------------------------
-//   Ejemplo Alert con Sweetalert2
-// --------------------------------------------------------------------------------
-//   Swal.fire({
-//     text: 'desde guardar pregunta es valido',
-//     icon: 'success',
-//     confirmButtonColor: '#3085d6',
-//     cancelButtonColor: '#d33',
-//     allowOutsideClick: false
-//   }).then((result) => {
-//     if (result.isConfirmed) {
-//       console.log("hola");
-//       Swal.fire({
-//         text: 'desde guardar pregunta es valido',
-//       })
-//     }
-//   });
