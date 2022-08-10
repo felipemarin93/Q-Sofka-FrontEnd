@@ -46,12 +46,11 @@ export class EvaluacionComponent implements OnInit {
   preguntaMostrada: any = this.preguntas[this.indexPregunta];
 
   constructor( private fb: FormBuilder ) { 
-
+    this.crearFormulario();
   }
 
   ngOnInit(): void {
-
-    this.crearFormulario();
+    
   }
 
   get preguntaNoValida(){
@@ -63,15 +62,17 @@ export class EvaluacionComponent implements OnInit {
     return this.forma.get('pregunta').invalid;
   }
 
+  // configurcion del objeto (formulario)
   crearFormulario(){
-
-    // configurcion del objeto (formulario)
-    this.forma = this.fb.group({
-      pregunta: ['', Validators.required],
-      //unica: ['', Validators.required],
-      multiple: ['', Validators.required]
-    });
-
+    if(this.preguntaMostrada.tipoPregutna == "seleccion multiple"){
+      this.forma = this.fb.group({
+        multiple: ['', Validators.required]
+      });
+    } else {
+      this.forma = this.fb.group({
+        pregunta: ['', Validators.required]
+      });
+    }
   }
 
   siguientePregunta(){
@@ -84,6 +85,13 @@ export class EvaluacionComponent implements OnInit {
 
   enviarEvaluacion(){
     this.siguientePregunta()
+    console.log(this.forma);
+    
+  }
+
+  imprimir(){
+    console.log(this.preguntaMostrada);
+    
     console.log(this.forma);
     
   }
