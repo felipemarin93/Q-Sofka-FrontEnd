@@ -11,13 +11,14 @@ import Swal from 'sweetalert2';
 })
 export class InicioComponent implements OnInit {
   userData: any;
+  formularioIngreso: any;
   constructor(
     private autenticacionInicioSesion: AutenticacionInicioSesionService,
     private router: Router
   ) {
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   verificarCredenciales(nombreUsuario: string, contrasena: string) {
     if (nombreUsuario !== '' && contrasena !== '') {
@@ -25,23 +26,23 @@ export class InicioComponent implements OnInit {
         this.autenticacionInicioSesion
           .obtenerUsuarioPorNombreUsuario(nombreUsuario)
           .subscribe((usuario1) => {
-              if (usuario1.contrasena === contrasena) {
-                Swal.fire({
-                  position: 'center',
-                  icon: 'success',
-                  title: 'Bienvenido ' + usuario1.nombre,
-                  showConfirmButton: false,
-                  timer: 1500
-                })
-                this.router.navigate(['coach-dashboard']);
-                localStorage.setItem("usuario",JSON.stringify({id:usuario1.id, nombre: usuario1.nombre}))
-              } else {
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'la contraseña es incorrecta',
-                })
-              }
+            if (usuario1.contrasena === contrasena) {
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Bienvenido ' + usuario1.nombre,
+                showConfirmButton: false,
+                timer: 1500
+              })
+              this.router.navigate(['coach-dashboard']);
+              localStorage.setItem("usuario", JSON.stringify({ id: usuario1.id, nombre: usuario1.nombre }))
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'la contraseña es incorrecta',
+              })
+            }
           }, error => {
             Swal.fire({
               icon: 'error',
@@ -65,20 +66,20 @@ export class InicioComponent implements OnInit {
     }
   }
 
-  recuperarContrasena(nombreUsuario: string){
-    if(nombreUsuario !== ''){
+  recuperarContrasena(nombreUsuario: string) {
+    if (nombreUsuario !== '') {
       this.autenticacionInicioSesion
-          .obtenerUsuarioPorNombreUsuario(nombreUsuario)
-          .subscribe(usuario=>{
-            console.log(usuario)
-            this.autenticacionInicioSesion.getSendEmail(usuario.id)
-            .subscribe(email=> Swal.fire({
+        .obtenerUsuarioPorNombreUsuario(nombreUsuario)
+        .subscribe(usuario => {
+          console.log(usuario)
+          this.autenticacionInicioSesion.getSendEmail(usuario.id)
+            .subscribe(email => Swal.fire({
               position: 'center',
               icon: 'success',
               title: 'Una nueva contraseña ha sido generada y enviada al correo registrado',
               showConfirmButton: true,
             }))
-          })
+        })
     }
   }
 }
