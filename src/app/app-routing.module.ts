@@ -5,8 +5,12 @@ import { TableroCoachComponent } from './components/tablero-coach/tablero-coach.
 import { CreacionPreguntasComponentComponent } from './components/creacion-preguntas-component/creacion-preguntas-component.component';
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { AspiranteComponent } from './components/aspirante/aspirante.component';
+import { EditarPreguntaComponent } from './components/editar-pregunta/editar-pregunta.component';
 
 const routes: Routes = [
+
+  { path: 'pregunta', component: EditarPreguntaComponent }, 
+
   { path: 'creacionpreguntas', component: CreacionPreguntasComponentComponent },
   {
     path: 'creacionpreguntas/:id',

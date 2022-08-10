@@ -18,10 +18,9 @@ export class TableroCoachComponent implements OnInit {
   preguntaDetalle?: Pregunta;
   displayModal = "none";
 
-
   constructor(
+    private router: Router,
     private preguntasService: PreguntasService,
-    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -71,7 +70,7 @@ export class TableroCoachComponent implements OnInit {
         this.router.navigate(['inicio']);
       }
     })
-   
+
   }
 
   nuevaPregunta() {

@@ -22,6 +22,7 @@ import { PreguntasService } from 'src/app/services/preguntas.service';
   templateUrl: './creacion-preguntas-component.component.html',
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
+
 export class CreacionPreguntasComponentComponent implements OnInit {
   @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
@@ -64,8 +65,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     private activateRoute: ActivatedRoute,
     private preguntasService: PreguntasService
   ) {
+    
     this.preguntaForm = this.fb.group({
-      tipoPreguntaForm: ['', Validators.required],
+      tipoPreguntaForm: ['0'],
       areaConocimientoForm: ['', Validators.required],
       descriptorForm: ['', Validators.required],
       preguntaFormulario: [
@@ -79,7 +81,9 @@ export class CreacionPreguntasComponentComponent implements OnInit {
       opcionForm: [''],
       opcionCorrectaForm: [''],
     });
+
   }
+
 
   ngOnInit(): void {
     this.traerInformacionActualizar();
@@ -105,6 +109,7 @@ export class CreacionPreguntasComponentComponent implements OnInit {
     this.pregunta = this.cookieService.get('preguntaFormulario');
     this.obtenerAreasConocimiento();
   }
+
 
   // -------------------------------------------------------------------------------
   // Tipo de Pregunta
