@@ -41,7 +41,7 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
   tipoPregunta?: string;
   areaConocimientoNombre: string = '';
   areaConocimiento: AreaConocimiento;
-  descriptor: string = 'Seleccione una opcion';
+  descriptor: string = '';
   pregunta?: string;
   preguntaForm: FormGroup;
   tieneOpcionesMultiples: boolean | null = null;
@@ -49,7 +49,6 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
   checkboxEscorrectoDisable: boolean = true;
   requerimientosPregunta: ValidationErrors[] = [];
   opcionCorrecta: boolean = false;
-  areaConocimientoOpcion: string = '';
 
   //id traido por la url
   idPregunta: string;
@@ -68,7 +67,7 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
   ) {
 
     this.preguntaForm = this.fb.group({
-      tipoPreguntaForm: ['0'],
+      tipoPreguntaForm: [''],
       areaConocimientoForm: ['', Validators.required],
       descriptorForm: ['', Validators.required],
       preguntaFormulario: [
@@ -94,7 +93,8 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
       this.tipoPregunta = this.cookieService.get('tipoPreguntaForm');
     }
     if (this.cookieService.get('areaConocimientoForm') !== '') {
-      this.areaConocimientoOpcion = this.cookieService.get('areaConocimientoForm');
+      console.log(this.cookieService.get('areaConocimientoForm'));
+      this.areaConocimientoNombre = this.cookieService.get('areaConocimientoForm')
     }
     if (this.cookieService.get('descriptorForm') !== '') {
       this.descriptor = this.cookieService.get('descriptorForm');
@@ -104,14 +104,17 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
     }
     this.pregunta = this.cookieService.get('preguntaFormulario');
     this.traerInformacionActualizar();
-
-
   }
 
   ngAfterViewInit(): void {
     setTimeout(() => {
       if (this.activateRoute.snapshot.params['id']) this.llenarFormularioActualizar()
-      console.log("ejecutarafterChecked");
+      if (this.cookieService.get('areaConocimientoForm') !== '') {
+        this.preguntaForm.controls['areaConocimientoForm'].setValue(this.areaConocimientoNombre)
+      }
+      if (this.cookieService.get('descriptorForm') !== '') {
+        this.preguntaForm.controls['descriptorForm'].setValue(this.descriptor)
+      }
     })
   }
 
@@ -275,9 +278,10 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
   persistirOpcion(namekey: string) {
     let value = '';
     if (namekey === 'areaConocimientoForm')
-      value = this.preguntaForm.value.areaConocimientoForm;
-    if (namekey === 'tipoPreguntaForm')
+      value = this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+    if (namekey === 'tipoPreguntaForm') {
       value = this.preguntaForm.value.tipoPreguntaForm;
+    }
     if (namekey === 'descriptorForm')
       value = this.preguntaForm.value.descriptorForm;
     if (namekey === 'preguntaFormulario')
@@ -328,7 +332,6 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
   }
 
   agregarEditarOpcion() {
-    console.log(this.tipoPregunta);
     let indice = this.cookieService.get('opcionEditar');
     if (indice) {
       let opcionEditar = {
@@ -348,6 +351,7 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
       this.opcion = '';
     }
     this.cookieService.delete('opcionEditar');
+    console.log(this.opciones, this.opcionCorrecta, this.tipoPregunta);
     if (this.tipoPregunta === 'Única opción' && this.opcionCorrecta) {
       this.cookieService.set('checkRespuesta', 'false', this.obtenerLimiteCookie(new Date))
       this.checkboxEscorrectoDisable = false
@@ -374,7 +378,6 @@ export class CreacionPreguntasComponentComponent implements OnInit, AfterViewIni
         );
         this.opciones.splice(item, 1);
         localStorage.setItem('opciones', JSON.stringify(this.opciones));
-        console.log(item);
       }
     });
   }

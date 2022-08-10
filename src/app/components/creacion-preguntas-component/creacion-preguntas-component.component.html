@@ -16,7 +16,7 @@
               <select formControlName="tipoPreguntaForm" [(ngModel)]="tipoPregunta" class="form-select"
                 (blur)="persistirOpcion('tipoPreguntaForm')" (ngModelChange)="mostrarRequerimientoPregunta($event)">
                 <option selected></option>
-                <option *ngFor="let opcion of opcionesTipoPregunta, let i = index" value={{i}}>
+                <option *ngFor="let opcion of opcionesTipoPregunta, let i = index" value={{opcion}}>
                   {{ opcion }}
                 </option>
               </select>
@@ -34,8 +34,8 @@
               <select formControlName="areaConocimientoForm" class="form-select"
                 (blur)="persistirOpcion('areaConocimientoForm')" (ngModelChange)="obtenerDescriptor($event)">
                 <option *ngIf="actualizar" selected>{{preguntaAModificar.areaConocimiento}}</option>
-                <option *ngIf="areaConocimientoOpcion !== ''" selected>{{areaConocimientoOpcion}}</option>
-                <option value="{{opcion}}" *ngFor="let opcion of opcionesAreaConocimiento">
+                <option *ngIf="areaConocimientoNombre !== ''" selected>{{areaConocimientoNombre}}</option>
+                <option [ngValue]="opcion" *ngFor="let opcion of opcionesAreaConocimiento">
                   {{ opcion.nombreAreaConocimiento }}
                 </option>
               </select>
@@ -51,7 +51,8 @@
             </div>
             <div class="flex-fill">
               <select formControlName="descriptorForm" class="form-select" (blur)="persistirOpcion('descriptorForm')">
-                <option selected></option>
+                <option *ngIf="descriptor !== ''" selected>{{descriptor}}
+                </option>
                 <option value="{{descriptor.nombre}}" *ngFor="let descriptor of opcionesDescriptores">
                   {{ descriptor.nombre }}
                 </option>
