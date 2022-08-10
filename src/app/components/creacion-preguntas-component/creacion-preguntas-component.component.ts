@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -29,7 +30,7 @@ import { PreguntasService } from 'src/app/services/preguntas.service';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 export class CreacionPreguntasComponentComponent
-  implements OnInit, AfterViewInit {
+  implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
@@ -125,6 +126,10 @@ export class CreacionPreguntasComponentComponent
         this.preguntaForm.controls['descriptorForm'].setValue(this.descriptor);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.vaciarCamposPregunta()
   }
 
   // -------------------------------------------------------------------------------
