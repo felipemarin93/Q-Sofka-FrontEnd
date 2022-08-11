@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { interval, Subscription } from 'rxjs';
+import { Evaluacion } from 'src/app/models/evaluacion';
+import { Pregunta } from 'src/app/models/pregunta';
+import { EvaluacionService } from 'src/app/services/evaluacion.service';
 
 @Component({
   selector: 'app-evaluacion',
@@ -21,46 +24,24 @@ export class EvaluacionComponent implements OnInit {
   minutesInAnHour: number = 60;
   SecondsInAMinute: number = 60;
 
+  puntaje : number = 0;
   forma: FormGroup | any;
 
-  preguntas: any[] = [
-    {
-      tipoPregutna: 'verdadero o falso',
-      pregunta: '¿Pregunta V o F?',
-      opciones: {
-        opcion1: 'verdadero',
-        opcion2: 'falso',
-      },
-    },
-    {
-      tipoPregutna: 'seleccion multiple',
-      pregunta: '¿Pregunta seleccion multiple?',
-      opciones: {
-        opcion1: 'respuesta1',
-        opcion2: 'respuesta2',
-        opcion3: 'respuesta3',
-        opcion4: 'respuesta4',
-      },
-    },
-    {
-      tipoPregutna: 'seleccion unica',
-      pregunta: '¿Pregunta seleccion unica?',
-      opciones: {
-        opcion1: 'respuesta1',
-        opcion2: 'respuesta2',
-        opcion3: 'respuesta3',
-        opcion4: 'respuesta4',
-      },
-    },
-  ];
+  idEvaluacion = this.activateRoute.snapshot.params['id'];
+  evaluacion: any;
+
+  preguntas: Pregunta[] = [];
 
   indexPregunta = 0;
-  preguntaMostrada: any = this.preguntas[this.indexPregunta];
+  preguntaMostrada: Pregunta;
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
               private cookieService: CookieService,
+              private evaluacionService: EvaluacionService,
               private activateRoute: ActivatedRoute) {
+
     this.crearFormulario();
+    this.obtenerEvaluacion();
   }
 
   ngOnInit(): void {
@@ -73,7 +54,7 @@ export class EvaluacionComponent implements OnInit {
       }
     });
   }
-  
+
   private getTimeDifference() {
     this.timeDifference = this.fechaFinal.getTime() - new Date().getTime();
     this.allocateTimeUnits(this.timeDifference);
@@ -90,50 +71,144 @@ export class EvaluacionComponent implements OnInit {
   }
 
   get preguntaNoValida() {
-    if (this.preguntaMostrada.tipoPregutna == 'seleccion multiple') {
+    if (this.preguntaMostrada.tipoPregunta == 'Opción múltiple') {
       return this.forma.get('multiple').invalid;
     }
     return this.forma.get('pregunta').invalid;
   }
 
-  // configurcion del objeto (formulario)
   crearFormulario(){
-    // if(this.preguntaMostrada.tipoPregutna == "seleccion multiple"){
-    //   this.forma = this.fb.group({
-    //     multiple: ['', Validators.required]
-    //   });
-    // } else {
-    //   this.forma = this.fb.group({
-    //     pregunta: ['', Validators.required]
-    //   });
-    // }
     this.forma = this.fb.group({
-          multiple: ['', Validators.required],
+          multiple: this.fb.group({
+            op0: [''],
+            op1: [''],
+            op2: [''],
+            op3: ['']
+          },  Validators.required)
+          ,
           pregunta: ['', Validators.required]
         });
+  }
+
+  obtenerEvaluacion(){
+    return this.evaluacionService.obtenerEvaluaciónPorId(this.idEvaluacion)
+    .subscribe(evaluacion => {
+      this.evaluacion = evaluacion;
+      this.cargarPreguntas();
+      this.preguntaMostrada = this.preguntas[this.indexPregunta]
+    })
+  }
+
+  cargarPreguntas(){
+    this.preguntas = this.evaluacion.preguntaList1
   }
 
   siguientePregunta() {
     this.crearFormulario();
     this.indexPregunta++;
     this.preguntaMostrada = this.preguntas[this.indexPregunta];
-
     console.log(this.preguntaMostrada);
   }
 
   enviarEvaluacion() {
+    this.verificarRespuesta();
     this.siguientePregunta();
     console.log(this.forma);
   }
 
+  verificarRespuesta() {
+    switch(this.preguntaMostrada.tipoPregunta){
+      case('Verdadero o falso'): {
+        this.verificarRespuestaVoF()
+        break;
+      }
+
+      case('Única opción'):{
+        this.verificarRespuestaUnica();
+        break;
+      }
+
+      case('Opción múltiple'):{
+          this.verificarRespuestaMultiple();
+          break;
+      }
+
+      default:{
+        console.log("Pregunta INVALIDA");
+        break;
+      }
+    }
+  }
+  verificarRespuestaVoF() {
+    if(this.forma.value.pregunta == "true"){
+      this.puntaje +=2;
+    }
+  }
+
+  verificarRespuestaMultiple() {
+    let opcionesMarcadas = this.forma.value.multiple;
+    let flag = true;
+
+    if(this.preguntaMostrada.opciones[0].esCorrecto == true){
+      if(opcionesMarcadas.op0 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op0 == true){
+        flag = false;
+      }
+    }
+
+    if(this.preguntaMostrada.opciones[1].esCorrecto == true){
+      if(opcionesMarcadas.op1 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op1 == true){
+        flag = false;
+      }
+    }
+
+    if(this.preguntaMostrada.opciones[2].esCorrecto == true){
+      if(opcionesMarcadas.op2 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op2 == true){
+        flag = false;
+      }
+    }
+
+    if(this.preguntaMostrada.opciones[3].esCorrecto == true){
+      if(opcionesMarcadas.op3 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op3 == true){
+        flag = false;
+      }
+    }
+
+    if(flag == true){
+      this.puntaje+=2;
+    }
+    alert(this.puntaje);
+
+  }
+
+  verificarRespuestaUnica() {
+    let index = parseInt(this.forma.value.pregunta);
+    let opcionSeleccionada = this.preguntaMostrada.opciones[index];
+
+    if(opcionSeleccionada.esCorrecto == true){
+      this.puntaje += 2;
+    }
+  }
+
   imprimir() {
+    console.log(this.evaluacion);
+    console.log(this.preguntas);
     console.log(this.preguntaMostrada);
-
     console.log(this.forma);
-
-    const id = this.activateRoute.snapshot.params['id'];
-
-    console.log(id);
-    
   }
 }

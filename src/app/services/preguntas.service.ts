@@ -8,7 +8,9 @@ import { PathRest } from '../static/hostBackend';
   providedIn: 'root',
 })
 export class PreguntasService {
-  preguntaUrl: string = 'http://localhost:8080/api/pregunta/listar';
+
+  preguntaUrl: string = 'http://localhost:8080/api/pregunta/coach';
+
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
