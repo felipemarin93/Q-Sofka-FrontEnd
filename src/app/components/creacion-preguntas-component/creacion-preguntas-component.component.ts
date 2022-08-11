@@ -381,7 +381,7 @@ export class CreacionPreguntasComponentComponent
     if (this.tipoPregunta === 'Verdadero o falso') {
       if (this.opciones.length >= 2 && !correcta) {
         Swal.fire({
-          text: 'Hace falta agregar una opcion correcta, agreguela y continue',
+          text: 'Hace falta agregar una opción correcta, agreguela y continue',
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#dc3545',
           icon: 'error',
@@ -398,7 +398,7 @@ export class CreacionPreguntasComponentComponent
     } else {
       if (this.opciones.length >= 4 && !correcta) {
         Swal.fire({
-          text: 'Hace falta agregar una opcion correcta, agreguela y continue',
+          text: 'Hace falta agregar una opción correcta, agreguela y continue',
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#dc3545',
           icon: 'error',
