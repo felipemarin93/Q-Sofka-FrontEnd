@@ -11,142 +11,55 @@
 
   <form [formGroup]="forma" (ngSubmit)="enviarEvaluacion()">
 
-    <div [ngSwitch]="preguntaMostrada.tipoPregutna">
+    <div [ngSwitch]="preguntaMostrada.tipoPregunta">
 
-      <div *ngSwitchCase="'verdadero o falso'" class="form-group row">
+      <div *ngSwitchCase="'Verdadero o falso'" class="form-group row">
         <h2 class="mb-3">
           {{ preguntaMostrada.pregunta }}
         </h2>
-        <div class="form-check form-check-inline">
+        <div class="form-check form-check-inline" *ngFor="let opcion of preguntaMostrada.opciones, let i= index">
           <input
             class="form-check-input"
             type="radio"
             formControlName="pregunta"
-            value="verdadero"
+            value={{opcion.esCorrecto}}
             id=""
           />
-          <label>{{ preguntaMostrada.opciones.opcion1 }}"</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input
-            class="form-check-input"
-            type="radio"
-            formControlName="pregunta"
-            value="falso"
-            id=""
-          />
-          <label>{{ preguntaMostrada.opciones.opcion2 }}"</label>
+          <label>{{ opcion.nombre }}</label>
         </div>
       </div>
 
-      <div *ngSwitchCase="'seleccion unica'" class="form-group row">
+
+      <div *ngSwitchCase="'Única opción'" class="form-group row">
         <h2 class="mb-3">{{ preguntaMostrada.pregunta }}</h2>
 
-        <div class="form-check">
+        <div class="form-check form-check-inline" *ngFor="let opcion of preguntaMostrada.opciones, let i= index">
           <input
             class="form-check-input"
             type="radio"
             formControlName="pregunta"
-            value="1"
-            id="flexRadioDefault1"
+            value={{i}}
+            id=""
           />
-          <label class="form-check-label" for="flexRadioDefault1">
-            {{ preguntaMostrada.opciones.opcion1 }}"
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            formControlName="pregunta"
-            value="2"
-            id="flexRadioDefault2"
-          />
-          <label class="form-check-label" for="flexRadioDefault2">
-            {{ preguntaMostrada.opciones.opcion2 }}"
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            formControlName="pregunta"
-            value="3"
-            id="flexRadioDefault2"
-          />
-          <label class="form-check-label" for="flexRadioDefault2">
-            {{ preguntaMostrada.opciones.opcion3 }}"
-          </label>
-        </div>
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="radio"
-            formControlName="pregunta"
-            value="4"
-            id="flexRadioDefault2"
-          />
-          <label class="form-check-label" for="flexRadioDefault2">
-            {{ preguntaMostrada.opciones.opcion4 }}"
-          </label>
+          <label>{{ opcion.nombre }}</label>
         </div>
       </div>
 
-      <div *ngSwitchCase="'seleccion multiple'" class="form-group row">
+
+      <div *ngSwitchCase="'Opción múltiple'" class="form-group row" formGroupName	= "multiple">
         <h2 class="mb-3">{{ preguntaMostrada.pregunta }}</h2>
 
-        <div class="form-check">
+        <div class="form-check" *ngFor="let opcion of preguntaMostrada.opciones, let i= index">
           <input
             class="form-check-input"
             type="checkbox"
-            value="1"
-            formControlName="multiple"
+            formControlName= "opc{{i}}"
             id="flexCheckDefault1"
           />
           <label class="form-check-label" for="flexCheckDefault1">
-            {{ preguntaMostrada.opciones.opcion1 }}"
+            {{ opcion.nombre }}
           </label>
         </div>
-
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value="2"
-            formControlName="multiple"
-            id="flexCheckDefault2"
-          />
-          <label class="form-check-label" for="flexCheckDefault2">
-            {{ preguntaMostrada.opciones.opcion2 }}"
-          </label>
-        </div>
-
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value="1"
-            formControlName="multiple"
-            id="flexCheckDefault3"
-          />
-          <label class="form-check-label" for="flexCheckDefault3">
-            {{ preguntaMostrada.opciones.opcion3 }}"
-          </label>
-        </div>
-
-        <div class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            value="2"
-            formControlName="multiple"
-            id="flexCheckDefault4"
-          />
-          <label class="form-check-label" for="flexCheckDefault4">
-            {{ preguntaMostrada.opciones.opcion4 }}"
-          </label>
-        </div>
-
       </div>
 
       <div *ngSwitchDefault class="form-group row">
@@ -161,8 +74,9 @@
         <button type="submit"
         class="btn btn-primary btn-block"
         [disabled]="preguntaNoValida">
-          <span *ngIf="preguntaNoValida"> Seleccione una opción</span>
-          <span *ngIf="!preguntaNoValida"> Continuar</span>
+          <span *ngIf="preguntaNoValida && indexPregunta != 9"> Seleccione una opción</span>
+          <span *ngIf="!preguntaNoValida && indexPregunta != 9"> Continuar</span>
+          <span *ngIf="indexPregunta == 9"> Finalizar</span>
         </button>
       </div>
     </div>

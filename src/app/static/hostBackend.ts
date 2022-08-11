@@ -5,4 +5,5 @@ export class PathRest {
   static readonly getApiPregunta = environment.HostBackend + 'pregunta';
   static readonly getApiUsuario = environment.HostBackend + 'usuario';
   static readonly getApiAspirante = environment.HostBackend + 'aspirante';
+  static readonly getApiEvaluacion = environment.HostBackend + 'evaluacion';
 }
