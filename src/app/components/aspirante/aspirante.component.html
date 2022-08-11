@@ -16,16 +16,16 @@
 
         <form [formGroup]="formaDatos" (ngSubmit)="solicitarCodigo()">
           <div class="row mb-3">
-            <label for="nombre" class="col-sm-2 col-form-label texto-simple">Nombre y apellido</label>
-            <div class="col-sm-10">
+            <label for="nombre" class="col-sm-3 col-form-label texto-simple">Nombre y apellido</label>
+            <div class="col-sm-9">
               <input [class.is-invalid]="nombreNoValido" type="text" formControlName ="nombre" class="form-control" id="nombre">
               <span class="text-danger texto-simple" *ngIf="nombreNoValido"> Debes ingresar nombre espacio apellido</span>
             </div>
           </div>
 
           <div class="row mb-3">
-            <label for="email" class="col-sm-2 col-form-label texto-simple">Email</label>
-            <div class="col-sm-10">
+            <label for="email" class="col-sm-3 col-form-label texto-simple">Email</label>
+            <div class="col-sm-9">
               <input [class.is-invalid]="emailNoValido" type="text" formControlName ="email" class="form-control" id="email">
               <span class="text-danger texto-simple" *ngIf="emailNoValido"> Debes ingresar un correo valido</span>
             </div>
@@ -50,8 +50,8 @@
 
         <form [formGroup]="formaCodigo" (ngSubmit)="comenzar()">
           <div class="row mb-3">
-            <label for="codigo" class="col-sm-2 col-form-label texto-simple">Codigo de Verificación</label>
-            <div class="col-sm-10">
+            <label for="codigo" class="col-sm-4 col-form-label texto-simple">Codigo de Verificación</label>
+            <div class="col-sm-8">
               <input [class.is-invalid]="codigoNoValido" type="text" formControlName ="codigo" class="form-control" id="codigo">
             </div>
           </div>
@@ -76,4 +76,4 @@
     </div>
 
 </div>
-<button (click)="timer()">Prueba</button>
+
