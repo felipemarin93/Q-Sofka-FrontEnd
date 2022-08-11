@@ -19,11 +19,12 @@ body {
     margin: 25px;
     
 }
-#icono1,#icono2{
+#icon1,#icon2{
     position: relative;
-    left:100%;
+    left:auto;
+    word-wrap: break-word;
 }
-.opciones{
+#opciones{
     width: 300px;
     word-wrap: break-word;
 }

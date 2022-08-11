@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AreaConocimiento } from '../models/areaConocimiento';
 import { PathRest } from '../static/hostBackend';
 import { Descriptor } from '../models/descriptor';
+import { Pregunta } from '../models/pregunta';
 
 @Injectable({
   providedIn: 'root',

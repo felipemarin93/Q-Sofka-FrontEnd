@@ -54,13 +54,14 @@ export class TableroCoachComponent implements OnInit {
 
   cerrarSesion() {
     Swal.fire({
-      title: '¿seguro que deseas salir?',
-      text: "los cambios sin guardar se borrarán",
+      title: '¿Seguro que deseas salir?',
+      text: "los cambios sin guardar podrían perderse",
       icon: 'warning',
+      cancelButtonText: "Cancelar",
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, salir!'
+      confirmButtonText: 'Si, deseo salir'
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire(
@@ -78,17 +79,26 @@ export class TableroCoachComponent implements OnInit {
   }
 
   eliminarPregunta(preguntaEliminar: Pregunta) {
-    if (confirm('¿Está seguro que quiere eliminar la pregunta?')) {
-      this.preguntasService
-        .deletePregunta(preguntaEliminar.id)
+    Swal.fire({
+      title: '¿Está seguro que quiere eliminar la pregunta?',
+      text: "los cambios sin guardar se borrarán",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Si, eliminar!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.preguntasService.deletePregunta(preguntaEliminar.id!)
         .subscribe((eliminar) => {
-          alert('Se ha eliminado la pregunta con id:' + preguntaEliminar.id);
-          // window.location.reload()
-          const indice = this.preguntas.indexOf(preguntaEliminar);
-          this.preguntas.splice(indice, 1);
-        });
-    }
-  }
+        Swal.fire(
+          'Se ha eliminado la pregunta con id: ' + preguntaEliminar.id,
+        )
+        const indice = this.preguntas.indexOf(preguntaEliminar);
+        this.preguntas.splice(indice, 1);
+        
+      });
+    }})}
 
   editarPregunta(preguntaEditar: Pregunta) {
     this.router.navigate(['creacionpreguntas/' + preguntaEditar.id]);

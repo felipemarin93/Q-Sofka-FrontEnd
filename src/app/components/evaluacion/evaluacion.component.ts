@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { CookieService } from 'ngx-cookie-service';
+import { interval, Subscription } from 'rxjs';
+import { Evaluacion } from 'src/app/models/evaluacion';
+import { Pregunta } from 'src/app/models/pregunta';
+import { EvaluacionService } from 'src/app/services/evaluacion.service';
 
 @Component({
   selector: 'app-evaluacion',
@@ -7,97 +13,94 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./evaluacion.component.css'],
 })
 export class EvaluacionComponent implements OnInit {
-  minutos: number;
-  segundos: number;
-  minutosMostrar: string;
-  segundosMostrar: string;
+
+  private subscripcion: Subscription;
+  timeDifference: number;
+  secondsToDday: number;
+  minutesToDday: number;
+  fechaActual: Date = new Date();
+  fechaFinal: Date;
+  milliSecondsInASecond: number = 1000;
+  minutesInAnHour: number = 60;
+  SecondsInAMinute: number = 60;
 
   forma: FormGroup | any;
 
-  preguntas: any[] = [
-    {
-      tipoPregutna: 'verdadero o falso',
-      pregunta: '¿Pregunta V o F?',
-      opciones: {
-        opcion1: 'verdadero',
-        opcion2: 'falso',
-      },
-    },
-    {
-      tipoPregutna: 'seleccion multiple',
-      pregunta: '¿Pregunta seleccion multiple?',
-      opciones: {
-        opcion1: 'respuesta1',
-        opcion2: 'respuesta2',
-        opcion3: 'respuesta3',
-        opcion4: 'respuesta4',
-      },
-    },
-    {
-      tipoPregutna: 'seleccion unica',
-      pregunta: '¿Pregunta seleccion unica?',
-      opciones: {
-        opcion1: 'respuesta1',
-        opcion2: 'respuesta2',
-        opcion3: 'respuesta3',
-        opcion4: 'respuesta4',
-      },
-    },
-  ];
+  idEvaluacion = this.activateRoute.snapshot.params['id'];
+  evaluacion: any;
+
+  preguntas: Pregunta[] = [];
 
   indexPregunta = 0;
-  preguntaMostrada: any = this.preguntas[this.indexPregunta];
+  preguntaMostrada: Pregunta;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private cookieService: CookieService,
+              private evaluacionService: EvaluacionService,
+              private activateRoute: ActivatedRoute) {
+
     this.crearFormulario();
-    this.minutos = 59;
-    this.segundos = 59;
-    this.segundosMostrar = `${this.segundos}`;
-    this.minutosMostrar = `${this.minutos}`;
-    setInterval(() => this.timer(), 1000);
+    this.obtenerEvaluacion();
   }
 
-  timer(): void {
-    this.segundos--;
-    this.segundosMostrar = `${this.segundos}`;
-    if (this.segundos < 10 && this.segundos >= 0) {
-      this.segundosMostrar = `0${this.segundos}`;
-    }
-    if (this.segundos < 0) {
-      this.segundos = 59;
-      this.segundosMostrar = `${this.segundos}`;
-      this.minutos--;
-      this.minutosMostrar = `${this.minutos}`;
-    }
-    if (this.minutos < 10 && this.minutos >= 0) {
-      this.minutosMostrar = `0${this.minutos}`;
-    }
-    if (this.minutos === 0 && this.segundos === 0) {
-      this.enviarEvaluacion();
-    }
+  ngOnInit(): void {
+    this.fechaFinal = new Date(parseInt(this.cookieService.get('Fecha final')));
+    alert(this.fechaActual);
+    this.subscripcion = interval(1000).subscribe((elemento) => {
+      this.getTimeDifference();
+      if (this.minutesToDday === 0 && this.secondsToDday === 0) {
+        this.subscripcion.unsubscribe();
+        //TODO LLamar al método que finaliza la evaluación, el del botón finalizar
+      }
+    });
   }
 
-  ngOnInit(): void {}
+  private getTimeDifference() {
+    this.timeDifference = this.fechaFinal.getTime() - new Date().getTime();
+    this.allocateTimeUnits(this.timeDifference);
+  }
+
+  private allocateTimeUnits(timeDifference: number) {
+    this.secondsToDday = Math.floor(
+      (timeDifference / this.milliSecondsInASecond) % this.SecondsInAMinute
+    );
+    this.minutesToDday = Math.floor(
+      (timeDifference / (this.milliSecondsInASecond * this.minutesInAnHour)) %
+        this.SecondsInAMinute
+    );
+  }
 
   get preguntaNoValida() {
-    if (this.preguntaMostrada.tipoPregutna == 'seleccion multiple') {
+    if (this.preguntaMostrada.tipoPregunta == 'Opción múltiple') {
       return this.forma.get('multiple').invalid;
     }
-
     return this.forma.get('pregunta').invalid;
   }
 
-  // configurcion del objeto (formulario)
-  crearFormulario() {
-    if (this.preguntaMostrada.tipoPregutna == 'seleccion multiple') {
-      this.forma = this.fb.group({
-        multiple: ['', Validators.required],
-      });
-    } else {
-      this.forma = this.fb.group({
-        pregunta: ['', Validators.required],
-      });
-    }
+  crearFormulario(){
+    this.forma = this.fb.group({
+          multiple: this.fb.group({
+            opc0: [''],
+            opc1: [''],
+            opc2: [''],
+            opc3: ['']
+          },  Validators.required)
+          ,
+          pregunta: ['', Validators.required]
+        });
+  }
+
+  obtenerEvaluacion(){
+    return this.evaluacionService.obtenerEvaluaciónPorId(this.idEvaluacion)
+    .subscribe(evaluacion => {
+      this.evaluacion = evaluacion;
+      this.cargarPreguntas();
+      this.preguntaMostrada = this.preguntas[this.indexPregunta]
+    })
+  }
+
+  cargarPreguntas(){
+    this.preguntas = this.evaluacion.preguntaList1
   }
 
   siguientePregunta() {
@@ -113,9 +116,12 @@ export class EvaluacionComponent implements OnInit {
     console.log(this.forma);
   }
 
-  imprimir() {
-    console.log(this.preguntaMostrada);
 
+
+  imprimir() {
+    console.log(this.evaluacion);
+    console.log(this.preguntas);
+    console.log(this.preguntaMostrada);
     console.log(this.forma);
   }
 }

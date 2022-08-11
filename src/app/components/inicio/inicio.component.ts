@@ -12,11 +12,12 @@ import Swal from 'sweetalert2';
 export class InicioComponent implements OnInit {
   //formularioIngreso?:any;
   userData: any;
+  formularioIngreso: any;
+
   constructor(
     private autenticacionInicioSesion: AutenticacionInicioSesionService,
     private router: Router
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {}
 
@@ -29,8 +30,8 @@ export class InicioComponent implements OnInit {
             if (usuario1 == null) {
               Swal.fire({
               icon: 'error',
-              title: '¡Lo Sentimos!',
-              text: 'Usuario no registrado, favor contactar al SuperAdmin para su registro.',
+              title: '¡Lo sentimos!',
+              text: 'Usuario no registrado, favor contactar al superadmin para su registro.',
               });
             }
               if (usuario1.contrasena === contrasena) {
@@ -46,7 +47,7 @@ export class InicioComponent implements OnInit {
               } else {
                 Swal.fire({
                   icon: 'error',
-                  title: '¡Lo Sentimos!',
+                  title: '¡Lo sentimos!',
                   text: 'El nombre de usuario o la contraseña no es válida.',
                 })
               }
@@ -54,33 +55,46 @@ export class InicioComponent implements OnInit {
       } else {
         Swal.fire({
           icon: 'error',
-          title: '¡Lo Sentimos!',
+          title: '¡Lo sentimos!',
           text: 'El nombre de usuario o la contraseña no es válida.',
-        })
+        });
       }
     } else {
       Swal.fire({
         icon: 'error',
-        title: '¡Lo Sentimos!',
-        text: 'El usuario y la contraseña no pueden estar vacios!, intenta de nuevo',
-      })
+        title: '¡Lo sentimos!',
+        text: 'El usuario y la contraseña no pueden estar vacíos, intenta de nuevo',
+      });
     }
   }
 
-  recuperarContrasena(nombreUsuario: string){
-    if(nombreUsuario !== ''){
+  recuperarContrasena(nombreUsuario: string) {
+    if (nombreUsuario !== '') {
       this.autenticacionInicioSesion
-          .obtenerUsuarioPorNombreUsuario(nombreUsuario)
-          .subscribe(usuario=>{
-            console.log(usuario)
-            this.autenticacionInicioSesion.getSendEmail(usuario.id)
-            .subscribe(email=> Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Una nueva contraseña ha sido generada y enviada al correo registrado',
-              showConfirmButton: true,
-            }))
-          })
+        .obtenerUsuarioPorNombreUsuario(nombreUsuario)
+        .subscribe((usuario) => {
+          console.log(usuario);
+          this.autenticacionInicioSesion
+            .getSendEmail(usuario.id)
+            .subscribe((email) =>
+              Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title:
+                  'Una nueva contraseña ha sido generada y enviada al correo registrado',
+                showConfirmButton: true,
+              })
+            );
+        });
+    }
+    else{
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'No ingresaste un usuario para recuperar la contraseña',
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
   }
 }
