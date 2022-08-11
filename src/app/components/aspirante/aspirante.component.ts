@@ -20,7 +20,7 @@ export class AspiranteComponent implements OnInit {
   constructor( private fb: FormBuilder,
               private aspiranteService: AspiranteService ) {
     this.crearFormulario();
-    this.crearListeners();
+    //this.crearListeners();
    }
 
   ngOnInit(): void {
@@ -33,7 +33,7 @@ export class AspiranteComponent implements OnInit {
     })
 
     this.formaCodigo = this.fb.group({
-      codigo:['', [Validators.required, Validators.minLength(5)], [this.validarCodigo]]
+      codigo:['', [Validators.required, Validators.minLength(5)],]
     })
   }
 
@@ -51,13 +51,13 @@ export class AspiranteComponent implements OnInit {
   }
 
 
-  crearListeners(){
-    this.formaCodigo.valueChanges.subscribe( (valor: any) => console.log(valor)
-    )
+  // crearListeners(){
+  //   this.formaCodigo.valueChanges.subscribe( (valor: any) => console.log(valor)
+  //   )
 
-    this.formaCodigo.statusChanges.subscribe( (status: any) => console.log({status})
-    )
-  }
+  //   this.formaCodigo.statusChanges.subscribe( (status: any) => console.log({status})
+  //   )
+  // }
 
   solicitarCodigo(){
     if(this.formaDatos.invalid){
@@ -66,8 +66,6 @@ export class AspiranteComponent implements OnInit {
     }
 
     this.crearAspirante()
-
-    //this.aspiranteService.generarCoidigoVerificacion()
   }
 
   crearAspirante(){
@@ -75,7 +73,14 @@ export class AspiranteComponent implements OnInit {
       nombre: this.formaDatos.get('nombre').value,
       correo: this.formaDatos.get('email').value
     } 
-    this.aspiranteService.crearAspirante(data).subscribe()
+
+    this.aspiranteService.crearAspirante(data).subscribe( data => console.log(data))
+  }
+
+  comenzar(){
+    const codigoVerificacion = this.formaCodigo.get('codigo').value;
+    
+    this.obtenerAspirante(codigoVerificacion).subscribe(data => console.log(data));
   }
 
 
@@ -83,42 +88,27 @@ export class AspiranteComponent implements OnInit {
   //   this.codigoValido = true
   // }
 
-  validarCodigo( control: FormControl ): Promise<any> | Observable<any>{
+  //Validacion asincrona
+  // validarCodigo( control: FormControl ): Promise<any> | Observable<any>{
 
-    const codigoVerificacion = control.value;
+  //   const codigoVerificacion = control.value;
 
-    return this.obtenerAspirante(codigoVerificacion)
-    .pipe( map(((data:any) => {
-      if(data != null) {
-        console.log("token valido")
-        return true;
-      }
-      return false;
-    })));
+  //   return this.obtenerAspirante(codigoVerificacion).pipe(map(((data:any) => {
+  //     if(data != null) {
+  //       console.log("token valido")
+  //       return true;
+  //     }
+  //     return false;
+  //   })));
+  // }
 
-    // return new Promise ((resolve, reject) =>{
-
-    //   setTimeout(() =>{
-    //     if( control.value ==='abc1234'){
-    //       console.log("token valido");
-          
-    //       resolve({ existe: false})
-          
-    //     } else{
-    //       console.log("token no valido");
-
-    //     }
-    //   }, 1000);
-    // });
-     
+  //Validacion con boton
+  validarCodigo( codigoVerificacion: string ){
+    return this.obtenerAspirante(codigoVerificacion).subscribe(data => console.log(data));
   }
 
   obtenerAspirante(codigoVerificacion: string){
-    return this.aspiranteService.obtenerAspirantePorCodigoVerificacion("CodigoVerificacion").subscribe()
-  }
-
-  comenzar(){
-    console.log(this.formaCodigo);  
+    return this.aspiranteService.obtenerAspirantePorCodigoVerificacion(codigoVerificacion)
   }
 
 }
