@@ -14,10 +14,12 @@ body {
     padding-top: 100px;
     height: calc(90vh - 58px);
 }
-h1{
+p{
     height: 50px;
     font-family: 'Roboto', sans-serif;
-    background-color: #5B9BD5;
+    color: #1E3B6C;
+    font-size: 30px;
+    font-weight: 800;
 }
 
 
