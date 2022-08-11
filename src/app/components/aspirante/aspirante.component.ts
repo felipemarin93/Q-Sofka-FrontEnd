@@ -69,8 +69,7 @@ export class AspiranteComponent implements OnInit {
     this.formaCodigo = this.fb.group({
       codigo: [
         '',
-        [Validators.required, Validators.minLength(5)],
-        [this.validarCodigo],
+        [Validators.required, Validators.minLength(5)]
       ],
     });
   }
@@ -116,7 +115,7 @@ export class AspiranteComponent implements OnInit {
       this.alertas(data);
       if(data){ 
         this.timer();
-        this.router.navigate(['/evaluacion'+ this.aspirante.evaluacionId]);
+        this.router.navigate(['/evaluacion']);
       }
     })
 
