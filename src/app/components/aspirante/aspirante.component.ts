@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-aspirante',
@@ -18,7 +19,14 @@ export class AspiranteComponent implements OnInit {
     this.crearListeners();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    Swal.fire({
+      icon: 'success',
+      title: 'Bienvenido aspirante',
+      text: 'Primero debes registrarte',
+      
+    })
+  }
 
   timer(): void {
     console.log("timer");
@@ -92,6 +100,7 @@ export class AspiranteComponent implements OnInit {
   }
 
   solicitarCodigo() {
+
     if (this.formaDatos.invalid) {
       Object.values(this.formaDatos.controls).forEach((control: any) => {
         control.markAsTouched();
@@ -112,8 +121,34 @@ export class AspiranteComponent implements OnInit {
       }, 1500);
     });
   }
+  //Codigo de prueba
+  validarCodigo2(){
+    console.log("");
+    return true;
+  }
+
 
   comenzar() {
+
+    if (this.validarCodigo2()) {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Código validado exitosamnete',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      Swal.fire('Tendrás 1 hora para rendir la evaluación,cada pregunta tiene un valor máximo de 2 puntos y con una valoración del 75% podrás pasar al siguiente nivel. No será posible regresar a una pregunta ya contestada. Tus resultados serán enviados directamente al correo electrónico que escribiste.')
+    }else{
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Código no válido, intente de nuevo.',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+    
     console.log(this.formaCodigo);
   }
 }

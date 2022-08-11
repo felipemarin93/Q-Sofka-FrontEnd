@@ -57,10 +57,11 @@ export class TableroCoachComponent implements OnInit {
       title: '¿Seguro que deseas salir?',
       text: "los cambios sin guardar podrían perderse",
       icon: 'warning',
+      cancelButtonText: "Cancelar",
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, deseo Salir!'
+      confirmButtonText: 'Si, deseo salir'
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire(

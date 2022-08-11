@@ -452,9 +452,10 @@ export class CreacionPreguntasComponentComponent
 
   eliminarOpcion(opcion: string, esCorrecta: boolean) {
     Swal.fire({
-      text: '¿Esta seguro de eliminar La Opcion ?',
+      text: '¿Esta seguro de eliminar la opción?',
       showCancelButton: true,
       confirmButtonText: 'Aceptar',
+      cancelButtonText: "Cancelar",
       cancelButtonColor: '#0d6efd',
       icon: 'question',
       confirmButtonColor: '#dc3545',
@@ -474,7 +475,17 @@ export class CreacionPreguntasComponentComponent
   }
 
   editarOpcion(indice: number) {
-    this.opcion = this.opciones[indice].nombre;
+    Swal.fire({
+      text: '¿Esta seguro de editar la opción?',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: "Cancelar",
+      cancelButtonColor: '#0d6efd',
+      icon: 'question',
+      confirmButtonColor: '#dc3545'
+    }).then((result) => {
+    if (result.isConfirmed){
+      this.opcion = this.opciones[indice].nombre;
     this.opcionCorrecta = this.opciones[indice].esCorrecto;
     this.preguntaForm.controls['opcionCorrectaForm'].setValue(
       this.opcionCorrecta
@@ -483,7 +494,9 @@ export class CreacionPreguntasComponentComponent
       'opcionEditar',
       indice.toString(),
       this.obtenerLimiteCookie(new Date())
-    );
+      )
+    }
+    })
   }
 
   // -------------------------------------------------------------------------------
@@ -532,9 +545,10 @@ export class CreacionPreguntasComponentComponent
     } else {
       if (mensaje) {
         Swal.fire({
-          text: '¿Desea Guardar la pregunta?',
-          confirmButtonText: 'Guardar Pregunta',
+          text: '¿Desea guardar la pregunta?',
+          confirmButtonText: 'Guardar pregunta',
           confirmButtonColor: '#3085d6',
+          cancelButtonText: "Cancelar",
           showCancelButton: true,
           cancelButtonColor: '#dc3545',
           icon: 'success',
@@ -586,9 +600,10 @@ export class CreacionPreguntasComponentComponent
     console.log(areaConocimientoValue);
     if (mensaje) {
       Swal.fire({
-        text: '¿Desea Actualizar la pregunta?',
-        confirmButtonText: 'Actualizar Pregunta',
+        text: '¿Desea actualizar la pregunta?',
+        confirmButtonText: 'Actualizar pregunta',
         confirmButtonColor: '#3085d6',
+        cancelButtonText: "Cancelar",
         showCancelButton: true,
         cancelButtonColor: '#dc3545',
         icon: 'success',
@@ -625,9 +640,10 @@ export class CreacionPreguntasComponentComponent
 
   regresar() {
     Swal.fire({
-      text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta. SI/NO’',
+      text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta.’',
       showCancelButton: true,
       confirmButtonText: 'Aceptar',
+      cancelButtonText: "Cancelar",
       cancelButtonColor: '#3085d6',
       icon: 'question',
       confirmButtonColor: '#dc3545',
