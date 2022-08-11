@@ -74,8 +74,9 @@
         <button type="submit"
         class="btn btn-primary btn-block"
         [disabled]="preguntaNoValida">
-          <span *ngIf="preguntaNoValida"> Seleccione una opción</span>
-          <span *ngIf="!preguntaNoValida"> Continuar</span>
+          <span *ngIf="preguntaNoValida && indexPregunta != 9"> Seleccione una opción</span>
+          <span *ngIf="!preguntaNoValida && indexPregunta != 9"> Continuar</span>
+          <span *ngIf="indexPregunta == 9"> Finalizar</span>
         </button>
       </div>
     </div>

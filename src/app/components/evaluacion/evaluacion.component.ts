@@ -41,7 +41,6 @@ export class EvaluacionComponent implements OnInit {
                 
     this.crearFormulario();
     this.obtenerEvaluacion();
-    //this.cargarPreguntas()
   }
 
   ngOnInit(): void {
@@ -84,7 +83,7 @@ export class EvaluacionComponent implements OnInit {
             opc1: [''],
             opc2: [''],
             opc3: ['']
-          }) 
+          },  Validators.required) 
           ,
           pregunta: ['', Validators.required]
         });
@@ -101,7 +100,6 @@ export class EvaluacionComponent implements OnInit {
 
   cargarPreguntas(){
     this.preguntas = this.evaluacion.preguntaList1
-    
   }
 
   siguientePregunta() {
@@ -120,8 +118,6 @@ export class EvaluacionComponent implements OnInit {
 
 
   imprimir() {    
-    //this.cargarPreguntas()
-    
     console.log(this.evaluacion);
     console.log(this.preguntas);
     console.log(this.preguntaMostrada);
