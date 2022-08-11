@@ -35,7 +35,6 @@
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
-              "src/styles.css",
               "node_modules/@popperjs/core/dist/umd/popper.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ]
@@ -113,4 +112,3 @@
   },
   "defaultProject": "Q-Sofka-FrontEnd"
 }
-
