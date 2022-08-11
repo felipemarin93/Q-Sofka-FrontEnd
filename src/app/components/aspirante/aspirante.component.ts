@@ -17,14 +17,16 @@ export class AspiranteComponent implements OnInit {
   formaDatos: FormGroup | any;
   formaCodigo: FormGroup | any;
 
-  //codigoValido: boolean = false;
+  aspirante: any;
 
   constructor( private fb: FormBuilder,
               private aspiranteService: AspiranteService,
               private cookieService: CookieService,
               private router: Router ) {
+
     this.crearFormulario();
     //this.crearListeners();
+
    }
 
   ngOnInit(): void {}
@@ -101,32 +103,26 @@ export class AspiranteComponent implements OnInit {
 
   comenzar(){
     const codigoVerificacion = this.formaCodigo.get('codigo').value;
+
+    this.validarCodigo(codigoVerificacion).then((data) => console.log(data));
+    console.log(this.aspirante);
     
-    this.obtenerAspirante(codigoVerificacion).subscribe(data => console.log(data));
+
+    //this.obtenerAspirante(codigoVerificacion).subscribe(data => console.log(data));
   }
 
-
-  // aceptarcodigo(){
-  //   this.codigoValido = true
-  // }
-
-  //Validacion asincrona
-  // validarCodigo( control: FormControl ): Promise<any> | Observable<any>{
-
-  //   const codigoVerificacion = control.value;
-
-  //   return this.obtenerAspirante(codigoVerificacion).pipe(map(((data:any) => {
-  //     if(data != null) {
-  //       console.log("token valido")
-  //       return true;
-  //     }
-  //     return false;
-  //   })));
-  // }
-
   //Validacion con boton
-  validarCodigo( codigoVerificacion: string ){
-    return this.obtenerAspirante(codigoVerificacion).subscribe(data => console.log(data));
+  validarCodigo( codigoVerificacion: string ): Promise<any>{
+    return new Promise ((resolve) => {
+      this.obtenerAspirante(codigoVerificacion).subscribe(data => {
+        this.aspirante = data;
+        if(data != null){
+          resolve (true);
+        } else {
+          resolve (false);
+        }
+      });
+    })
   }
 
   obtenerAspirante(codigoVerificacion: string){
