@@ -9,7 +9,7 @@ import { PathRest } from '../static/hostBackend';
 })
 export class PreguntasService {
 
-  preguntaUrl: string = 'http://localhost:8080/api/pregunta/listar';
+  preguntaUrl: string = 'http://localhost:8080/api/pregunta/coach';
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -27,7 +27,7 @@ export class PreguntasService {
   getPreguntasCoach(id: string): Observable<Pregunta[]> {
     return this.http
     .get<Pregunta[]>
-    (`${PathRest.getApiPregunta}/coach/${id}`)
+    (`${this.preguntaUrl}/${id}`)
     .pipe(
       map((preguntas)=>{
         preguntas.forEach((p)=>p.fechaActualizacion = new Date(`${p.fechaActualizacion[0]}-${p.fechaActualizacion[1]}-${p.fechaActualizacion[2]}`));
