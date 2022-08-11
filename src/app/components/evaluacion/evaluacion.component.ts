@@ -24,6 +24,7 @@ export class EvaluacionComponent implements OnInit {
   minutesInAnHour: number = 60;
   SecondsInAMinute: number = 60;
 
+  puntaje : number = 0;
   forma: FormGroup | any;
 
   idEvaluacion = this.activateRoute.snapshot.params['id'];
@@ -34,11 +35,11 @@ export class EvaluacionComponent implements OnInit {
   indexPregunta = 0;
   preguntaMostrada: Pregunta;
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
               private cookieService: CookieService,
               private evaluacionService: EvaluacionService,
               private activateRoute: ActivatedRoute) {
-                
+
     this.crearFormulario();
     this.obtenerEvaluacion();
   }
@@ -53,7 +54,7 @@ export class EvaluacionComponent implements OnInit {
       }
     });
   }
-  
+
   private getTimeDifference() {
     this.timeDifference = this.fechaFinal.getTime() - new Date().getTime();
     this.allocateTimeUnits(this.timeDifference);
@@ -79,11 +80,12 @@ export class EvaluacionComponent implements OnInit {
   crearFormulario(){
     this.forma = this.fb.group({
           multiple: this.fb.group({
-            opc0: [''],
-            opc1: [''],
-            opc2: [''],
-            opc3: ['']
-          }),
+            op0: [''],
+            op1: [''],
+            op2: [''],
+            op3: ['']
+          },  Validators.required)
+          ,
           pregunta: ['', Validators.required]
         });
   }
@@ -106,18 +108,18 @@ export class EvaluacionComponent implements OnInit {
     this.crearFormulario();
     this.indexPregunta++;
     this.preguntaMostrada = this.preguntas[this.indexPregunta];
-
     console.log(this.preguntaMostrada);
   }
 
   enviarEvaluacion() {
+    this.verificarRespuesta();
     this.siguientePregunta();
     console.log(this.forma);
   }
 
 
 
-  imprimir() {    
+  imprimir() {
     console.log(this.evaluacion);
     console.log(this.preguntas);
     console.log(this.preguntaMostrada);
