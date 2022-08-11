@@ -30,7 +30,8 @@ import { PreguntasService } from 'src/app/services/preguntas.service';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 export class CreacionPreguntasComponentComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+  implements OnInit, AfterViewInit, OnDestroy
+{
   @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
@@ -129,7 +130,7 @@ export class CreacionPreguntasComponentComponent
   }
 
   ngOnDestroy(): void {
-    this.vaciarCamposPregunta()
+    this.vaciarCamposPregunta();
   }
 
   // -------------------------------------------------------------------------------
@@ -228,7 +229,7 @@ export class CreacionPreguntasComponentComponent
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-      'validarPreguntaVerdaderoFalso'
+        'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -493,7 +494,7 @@ export class CreacionPreguntasComponentComponent
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-        opciones == 4
+      opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
@@ -505,17 +506,88 @@ export class CreacionPreguntasComponentComponent
 
   guardarPregunta() {
     const tipoPreguntaValue: string = this.preguntaForm.value.tipoPreguntaForm;
-    const areaConocimientoValue: string = this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
+    const areaConocimientoValue: string =
+      this.preguntaForm.value.areaConocimientoForm.nombreAreaConocimiento;
     const descriptorValue: string = this.preguntaForm.value.descriptorForm;
-    const preguntaFormularioValue: string = this.preguntaForm.value.preguntaFormulario;
-    let opciones: Opcion[] = this.opciones
+    const preguntaFormularioValue: string =
+      this.preguntaForm.value.preguntaFormulario;
+    let opciones: Opcion[] = this.opciones;
     let cantidadPpciones = this.opciones.length;
-    let mensaje = this.validarGuardarPregunta(cantidadPpciones, tipoPreguntaValue);
-    let coachIdEnviar: string = JSON.parse(localStorage.getItem('usuario')!).id
+    let mensaje = this.validarGuardarPregunta(
+      cantidadPpciones,
+      tipoPreguntaValue
+    );
+    let coachIdEnviar: string = JSON.parse(localStorage.getItem('usuario')!).id;
+    if (this.idPregunta) {
+      this.actualizarPreguntaCoach(
+        tipoPreguntaValue,
+        areaConocimientoValue,
+        descriptorValue,
+        preguntaFormularioValue,
+        opciones,
+        coachIdEnviar,
+        this.idPregunta,
+        mensaje
+      );
+    } else {
+      if (mensaje) {
+        Swal.fire({
+          text: '¿Desea Guardar la pregunta?',
+          confirmButtonText: 'Guardar Pregunta',
+          confirmButtonColor: '#3085d6',
+          showCancelButton: true,
+          cancelButtonColor: '#dc3545',
+          icon: 'success',
+          allowOutsideClick: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.vaciarCamposPregunta();
+            this.preguntasService
+              .guardarPregunta({
+                id: null,
+                coachId: coachIdEnviar,
+                fechaActualizacion: null,
+                areaConocimiento: areaConocimientoValue,
+                descriptor: descriptorValue,
+                tipoPregunta: tipoPreguntaValue,
+                pregunta: preguntaFormularioValue,
+                opciones: opciones,
+              })
+              .subscribe(() => {
+                this.router.navigate(['coach-dashboard']);
+              });
+          }
+        });
+      } else {
+        Swal.fire({
+          text: 'Ingrese las opciones correctamente',
+          confirmButtonText: 'Salir',
+          confirmButtonColor: '#dc3545',
+          icon: 'error',
+          allowOutsideClick: false,
+        });
+      }
+    }
+  }
+
+  actualizarPreguntaCoach(
+    tipoPreguntaValue: string,
+    areaConocimientoValue: string,
+    descriptorValue: string,
+    preguntaFormularioValue: string,
+    opciones: Opcion[],
+    coachIdEnviar: string,
+    idPregunta: string,
+    mensaje: boolean
+  ) {
+    areaConocimientoValue == null
+      ? (areaConocimientoValue = this.preguntaAModificar.areaConocimiento)
+      : (areaConocimientoValue = areaConocimientoValue);
+    console.log(areaConocimientoValue);
     if (mensaje) {
       Swal.fire({
-        text: '¿Desea Guardar la pregunta?',
-        confirmButtonText: 'Guardar Pregunta',
+        text: '¿Desea Actualizar la pregunta?',
+        confirmButtonText: 'Actualizar Pregunta',
         confirmButtonColor: '#3085d6',
         showCancelButton: true,
         cancelButtonColor: '#dc3545',
@@ -524,18 +596,20 @@ export class CreacionPreguntasComponentComponent
       }).then((result) => {
         if (result.isConfirmed) {
           this.vaciarCamposPregunta();
-          this.preguntasService.guardarPregunta({
-            id: null,
-            coachId: coachIdEnviar,
-            fechaActualizacion: null,
-            areaConocimiento: areaConocimientoValue,
-            descriptor: descriptorValue,
-            tipoPregunta: tipoPreguntaValue,
-            pregunta: preguntaFormularioValue,
-            opciones: opciones
-          }).subscribe(() => {
-            this.router.navigate(['coach-dashboard']);
-          })
+          this.preguntasService
+            .actualizarPregunta({
+              id: idPregunta,
+              coachId: coachIdEnviar,
+              fechaActualizacion: null,
+              areaConocimiento: areaConocimientoValue,
+              descriptor: descriptorValue,
+              tipoPregunta: tipoPreguntaValue,
+              pregunta: preguntaFormularioValue,
+              opciones: opciones,
+            })
+            .subscribe(() => {
+              this.router.navigate(['coach-dashboard']);
+            });
         }
       });
     } else {

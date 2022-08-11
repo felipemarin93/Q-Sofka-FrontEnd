@@ -19,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { PreguntaDetalleComponent } from './components/pregunta-detalle/pregunta-detalle.component';
 import { AspiranteComponent } from './components/aspirante/aspirante.component';
 import { EditarPreguntaComponent } from './components/editar-pregunta/editar-pregunta.component';
+import { ResultadoComponent } from './components/resultado/resultado.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { EditarPreguntaComponent } from './components/editar-pregunta/editar-pre
     FooterComponentComponent,
     PreguntaDetalleComponent,
     AspiranteComponent,
-    EditarPreguntaComponent
+    EditarPreguntaComponent,
+    ResultadoComponent
   ],
 
   imports: [

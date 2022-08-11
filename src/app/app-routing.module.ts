@@ -6,6 +6,7 @@ import { CreacionPreguntasComponentComponent } from './components/creacion-pregu
 import { EvaluacionComponent } from './components/evaluacion/evaluacion.component';
 import { AspiranteComponent } from './components/aspirante/aspirante.component';
 import { EditarPreguntaComponent } from './components/editar-pregunta/editar-pregunta.component';
+import { ResultadoComponent } from "./components/resultado/resultado.component"
 
 const routes: Routes = [
 
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'aspirante', component: AspiranteComponent },
   { path: 'evaluacion', component: EvaluacionComponent },
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
+  { path: 'resultado',component: ResultadoComponent }
 ];
 
 @NgModule({
