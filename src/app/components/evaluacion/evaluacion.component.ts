@@ -112,7 +112,6 @@ export class EvaluacionComponent implements OnInit {
   }
 
   enviarEvaluacion() {
-    this.verificarRespuesta();
     this.siguientePregunta();
     console.log(this.forma);
   }
