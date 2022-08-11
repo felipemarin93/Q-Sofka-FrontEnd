@@ -1,5 +1,5 @@
 export interface Mensaje {
-    nombre: string;
-    valoracion: number;
+    nombre?: string;
+    valoracion?: number;
     fase: string;
 }
