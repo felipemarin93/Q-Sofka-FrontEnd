@@ -93,6 +93,14 @@ export class AspiranteComponent implements OnInit {
       Object.values( this.formaDatos.controls ).forEach ((control: any)=> {
         control.markAsTouched();})
     } else {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Su código fue enviado al correo registrado',
+        showConfirmButton: false,
+        timer: 1500
+      })
+
       this.crearAspirante()
     }
   }
@@ -111,11 +119,14 @@ export class AspiranteComponent implements OnInit {
     this.obtenerAspirante(codigoVerificacion).subscribe(data => console.log(data));
 
     this.validarCodigo(codigoVerificacion)
-    .then(data => {
-      this.alertas(data);
+    .then(data => {      
       if(data){ 
-        this.timer();
-        this.router.navigate(['/evaluacion/'+ this.aspirante.evaluacionId]);
+        this.alertaInstrucciones()
+          .then( () => {
+            this.timer();
+            this.router.navigate(['/evaluacion/'+ this.aspirante.evaluacionId]);
+          })
+        
       }
     })
 
@@ -126,8 +137,10 @@ export class AspiranteComponent implements OnInit {
       this.obtenerAspirante(codigoVerificacion).subscribe(data => {
         this.aspirante = data;
         if(data != null){
+          this.alertaCodigoCorrecto()
           resolve (true);
         } else {
+          this.alertaCodigoIncorrecto()
           resolve (false);
         }
       });
@@ -138,27 +151,46 @@ export class AspiranteComponent implements OnInit {
     return this.aspiranteService.obtenerAspirantePorCodigoVerificacion(codigoVerificacion)
   }
 
-  alertas( condicion : boolean){
-    if (condicion) {
-      Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Código validado exitosamnete',
-        showConfirmButton: false,
-        timer: 1500
-      })
-      Swal.fire('Tendrás 1 hora para rendir la evaluación,cada pregunta tiene un valor máximo de 2 puntos y con una valoración del 75% podrás pasar al siguiente nivel. No será posible regresar a una pregunta ya contestada. Tus resultados serán enviados directamente al correo electrónico que escribiste.')
-    }else{
-      Swal.fire({
-        position: 'center',
-        icon: 'error',
-        title: 'Código no válido, intente de nuevo.',
-        showConfirmButton: false,
-        timer: 1500
-      })
-    }
+  alertaCodigoCorrecto(){
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Código validado exitosamnete',
+      showConfirmButton: false,
+      timer: 2000
+    })
   }
 
+  alertaCodigoIncorrecto(){
+    Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: 'Código no válido, intente de nuevo.',
+      showConfirmButton: false,
+      timer: 2000
+    })
+  }
+
+  async alertaInstrucciones(){
+    await Swal.fire(
+        'Instrucciones',
+        `<p>Tendrás 1 hora para rendir la evaluación.</p>
+        <p>Cada pregunta tiene un valor máximo de 2 puntos, con una valoración del 75% podrás pasar al siguiente nivel.</p>
+        <p>No será posible regresar a una pregunta ya contestada.</p>
+        <p>Tus resultados serán enviados directamente al correo electrónico que escribiste.</p>`,
+        'info'
+    ).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Puedes comenzar ahora',
+          showConfirmButton: false,
+          timer: 1500
+        })
+      }
+    })
+  }
 
 
 }
