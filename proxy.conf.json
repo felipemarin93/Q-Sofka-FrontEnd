@@ -1,7 +1,0 @@
-{
-    "/api/*":{
-        "target": "https://qsofkabackend.herokuapp.com/", 
-        "secure": false,
-        "changeOrigin": true
-    }
-}
