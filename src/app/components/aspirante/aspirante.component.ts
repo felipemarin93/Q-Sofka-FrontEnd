@@ -2,31 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
-import { Aspirante } from 'src/app/models/aspirante';
-import { AspiranteService } from 'src/app/services/aspirante.service';
 
 @Component({
   selector: 'app-aspirante',
   templateUrl: './aspirante.component.html',
-  styleUrls: ['./aspirante.component.css']
+  styleUrls: ['./aspirante.component.css'],
 })
-
 export class AspiranteComponent implements OnInit {
-
   formaDatos: FormGroup | any;
   formaCodigo: FormGroup | any;
 
-  //codigoValido: boolean = false;
-
-  constructor( private fb: FormBuilder,
-              private aspiranteService: AspiranteService,
-              private cookieService: CookieService,
-              private router: Router ) {
+  constructor(private fb: FormBuilder, private cookieService: CookieService, private router: Router) {
     this.crearFormulario();
-    //this.crearListeners();
-   }
+    this.crearListeners();
+  }
 
   ngOnInit(): void {
     Swal.fire({
@@ -71,8 +62,12 @@ export class AspiranteComponent implements OnInit {
     })
 
     this.formaCodigo = this.fb.group({
-      codigo:['', [Validators.required, Validators.minLength(5)],]
-    })
+      codigo: [
+        '',
+        [Validators.required, Validators.minLength(5)],
+        [this.validarCodigo],
+      ],
+    });
   }
 
   crearListeners() {
@@ -97,26 +92,63 @@ export class AspiranteComponent implements OnInit {
     );
   }
 
-
-  solicitarCodigo(){
-    if(this.formaDatos.invalid){
-      Object.values( this.formaDatos.controls ).forEach ((control: any)=> {
-        control.markAsTouched();})
-    }
-
-    this.crearAspirante()
+  get codigoNoValido() {
+    return (
+      this.formaCodigo.get('codigo').invalid &&
+      this.formaCodigo.get('codigo').touched
+    );
   }
 
-  crearAspirante(){
-    const data: Aspirante = {
-      nombre: this.formaDatos.get('nombre').value,
-      correo: this.formaDatos.get('email').value
-    } 
-  }  
+  solicitarCodigo() {
+
+    if (this.formaDatos.invalid) {
+      Object.values(this.formaDatos.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
+    }
+  }
+
+  validarCodigo(control: FormControl): Promise<any> | Observable<any> {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (control.value === 'abc1234') {
+          console.log('token valido');
+
+          resolve({ existe: false });
+        } else {
+          console.log('token no valido');
+        }
+      }, 1500);
+    });
+  }
+  //Codigo de prueba
+  validarCodigo2(){
+    console.log("");
+    return true;
+  }
+
 
   comenzar() {
+
+    if (this.validarCodigo2()) {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Código validado exitosamnete',
+        showConfirmButton: false,
+        timer: 1500
+      })
+      Swal.fire('Tendrás 1 hora para rendir la evaluación,cada pregunta tiene un valor máximo de 2 puntos y con una valoración del 75% podrás pasar al siguiente nivel. No será posible regresar a una pregunta ya contestada. Tus resultados serán enviados directamente al correo electrónico que escribiste.')
+    }else{
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: 'Código no válido, intente de nuevo.',
+        showConfirmButton: false,
+        timer: 1500
+      })
+    }
+    
     console.log(this.formaCodigo);
   }
-
 }
-
