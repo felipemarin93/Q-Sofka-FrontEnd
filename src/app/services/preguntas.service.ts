@@ -8,7 +8,6 @@ import { PathRest } from '../static/hostBackend';
   providedIn: 'root',
 })
 export class PreguntasService {
-
   preguntaUrl: string = 'http://localhost:8080/api/pregunta/listar';
 
   httpOptions = {
@@ -16,24 +15,26 @@ export class PreguntasService {
   };
   constructor(private http: HttpClient) {}
 
-
   getPreguntas(): Observable<Pregunta[]> {
     return this.http
       .get<Pregunta[]>(this.preguntaUrl)
       .pipe(catchError(this.handleError<Pregunta[]>('getPreguntas', [])));
   }
 
-
   getPreguntasCoach(id: string): Observable<Pregunta[]> {
     return this.http
-    .get<Pregunta[]>
-    (`${PathRest.getApiPregunta}/coach/${id}`)
-    .pipe(
-      map((preguntas)=>{
-        preguntas.forEach((p)=>p.fechaActualizacion = new Date(`${p.fechaActualizacion[0]}-${p.fechaActualizacion[1]}-${p.fechaActualizacion[2]}`));
-        return preguntas;
-      })
-  )
+      .get<Pregunta[]>(`${PathRest.getApiPregunta}/coach/${id}`)
+      .pipe(
+        map((preguntas) => {
+          preguntas.forEach(
+            (p) =>
+              (p.fechaActualizacion = new Date(
+                `${p.fechaActualizacion[0]}-${p.fechaActualizacion[1]}-${p.fechaActualizacion[2]}`
+              ))
+          );
+          return preguntas;
+        })
+      );
     // this.preguntaUrl.concat('coach/'+id)
     // .pipe(
     //   catchError(this.handleError<Pregunta[]>('getPreguntasCoach', []))
@@ -62,5 +63,22 @@ export class PreguntasService {
       // Let the app keep running by returning an empty result.
       return of(result as T);
     };
+  }
+
+  guardarPregunta(value: Pregunta): Observable<Pregunta> {
+    console.log(value);
+    return this.http.post<Pregunta>(
+      `${PathRest.getApiPregunta}/guardar`,
+      value
+    );
+  }
+
+  actualizarPregunta(value: Pregunta): Observable<Pregunta> {
+    let id = value.id;
+    console.log(value);
+    return this.http.put<Pregunta>(
+      `${PathRest.getApiPregunta}/actualizar/${id}`,
+      value
+    );
   }
 }

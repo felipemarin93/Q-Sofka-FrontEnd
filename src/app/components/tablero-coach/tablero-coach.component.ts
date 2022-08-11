@@ -54,13 +54,14 @@ export class TableroCoachComponent implements OnInit {
 
   cerrarSesion() {
     Swal.fire({
-      title: '¿seguro que deseas salir?',
-      text: "los cambios sin guardar se borrarán",
+      title: '¿Seguro que deseas salir?',
+      text: "los cambios sin guardar podrían perderse",
       icon: 'warning',
+      cancelButtonText: "Cancelar",
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Si, salir!'
+      confirmButtonText: 'Si, deseo salir'
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire(
@@ -88,7 +89,7 @@ export class TableroCoachComponent implements OnInit {
       confirmButtonText: 'Si, eliminar!'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.preguntasService.deletePregunta(preguntaEliminar.id)
+        this.preguntasService.deletePregunta(preguntaEliminar.id!)
         .subscribe((eliminar) => {
         Swal.fire(
           'Se ha eliminado la pregunta con id: ' + preguntaEliminar.id,
