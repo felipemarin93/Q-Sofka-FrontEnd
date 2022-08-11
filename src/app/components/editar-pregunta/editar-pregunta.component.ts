@@ -22,6 +22,7 @@ export class EditarPreguntaComponent implements OnInit, AfterContentChecked {
         ) { 
 
     this.crearFormulario();
+    this.crearListeners();
     this.obtenerAreas();
 
   }
@@ -31,13 +32,17 @@ export class EditarPreguntaComponent implements OnInit, AfterContentChecked {
 
   ngAfterContentChecked(){
     this.llenarFormulario()
+    console.log("ng after changes");
+    
   }
 
   crearFormulario(){
     this.forma = this.fb.group({
       tipo:['', [Validators.required]],
       area:["", [Validators.required]],
-      descriptor:['', [Validators.required]]
+      descriptor:['', [Validators.required]],
+      pregunta:[''],
+      opcion: ['']
       })
 
   }
@@ -56,7 +61,9 @@ export class EditarPreguntaComponent implements OnInit, AfterContentChecked {
     this.forma.setValue({
       tipo:"1",
       area: areaForm,
-      descriptor: "1"
+      descriptor: "1",
+      pregunta:"que",
+      opcion: ""
     })
   }
 
@@ -65,7 +72,7 @@ export class EditarPreguntaComponent implements OnInit, AfterContentChecked {
     console.log(this.forma);
     console.log(this.areas);
     
-    this.llenarFormulario();
+    //this.llenarFormulario();
     
     console.log(this.descriptores);
   }
@@ -84,6 +91,13 @@ export class EditarPreguntaComponent implements OnInit, AfterContentChecked {
         this.descriptores = area.descriptores;        
       }
       //area.descriptores.forEach(e => {this.descriptores.push(e)})
+    })
+  }
+
+  crearListeners(){
+    this.forma.get('area').valueChanges.subscribe( (valor:any) => {
+      console.log(valor);
+      this.llenarDescriptores();
     })
   }
 
