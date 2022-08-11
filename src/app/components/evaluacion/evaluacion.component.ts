@@ -3,6 +3,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { interval, Subscription } from 'rxjs';
+import { Evaluacion } from 'src/app/models/evaluacion';
+import { Pregunta } from 'src/app/models/pregunta';
+import { EvaluacionService } from 'src/app/services/evaluacion.service';
 
 @Component({
   selector: 'app-evaluacion',
@@ -23,48 +26,25 @@ export class EvaluacionComponent implements OnInit {
 
   forma: FormGroup | any;
 
-  preguntas: any[] = [
-    {
-      tipoPregutna: 'verdadero o falso',
-      pregunta: '¿Pregunta V o F?',
-      opciones: {
-        opcion1: 'verdadero',
-        opcion2: 'falso',
-      },
-    },
-    {
-      tipoPregutna: 'seleccion multiple',
-      pregunta: '¿Pregunta seleccion multiple?',
-      opciones: {
-        opcion1: 'respuesta1',
-        opcion2: 'respuesta2',
-        opcion3: 'respuesta3',
-        opcion4: 'respuesta4',
-      },
-    },
-    {
-      tipoPregutna: 'seleccion unica',
-      pregunta: '¿Pregunta seleccion unica?',
-      opciones: {
-        opcion1: 'respuesta1',
-        opcion2: 'respuesta2',
-        opcion3: 'respuesta3',
-        opcion4: 'respuesta4',
-      },
-    },
-  ];
+  idEvaluacion = this.activateRoute.snapshot.params['id'];
+  evaluacion: any;
+
+  preguntas: Pregunta[] = [];
 
   indexPregunta = 0;
-  preguntaMostrada: any = this.preguntas[this.indexPregunta];
+  preguntaMostrada: Pregunta;
 
   constructor(private fb: FormBuilder, 
               private cookieService: CookieService,
+              private evaluacionService: EvaluacionService,
               private activateRoute: ActivatedRoute) {
+                
     this.crearFormulario();
+    this.obtenerEvaluacion();
   }
 
   ngOnInit(): void {
-    this.fechaFinal = new Date(parseInt(this.cookieService.get('Fecha Final')));
+    this.fechaFinal = new Date(parseInt(this.cookieService.get('Fecha final')));
     this.subscripcion = interval(1000).subscribe((elemento) => {
       this.getTimeDifference();
       if (this.minutesToDday === 0 && this.secondsToDday === 0) {
@@ -90,27 +70,36 @@ export class EvaluacionComponent implements OnInit {
   }
 
   get preguntaNoValida() {
-    if (this.preguntaMostrada.tipoPregutna == 'seleccion multiple') {
+    if (this.preguntaMostrada.tipoPregunta == 'Opción múltiple') {
       return this.forma.get('multiple').invalid;
     }
     return this.forma.get('pregunta').invalid;
   }
 
-  // configurcion del objeto (formulario)
   crearFormulario(){
-    // if(this.preguntaMostrada.tipoPregutna == "seleccion multiple"){
-    //   this.forma = this.fb.group({
-    //     multiple: ['', Validators.required]
-    //   });
-    // } else {
-    //   this.forma = this.fb.group({
-    //     pregunta: ['', Validators.required]
-    //   });
-    // }
     this.forma = this.fb.group({
-          multiple: ['', Validators.required],
+          multiple: this.fb.group({
+            opc0: [''],
+            opc1: [''],
+            opc2: [''],
+            opc3: ['']
+          },  Validators.required) 
+          ,
           pregunta: ['', Validators.required]
         });
+  }
+
+  obtenerEvaluacion(){
+    return this.evaluacionService.obtenerEvaluaciónPorId(this.idEvaluacion)
+    .subscribe(evaluacion => {
+      this.evaluacion = evaluacion;
+      this.cargarPreguntas();
+      this.preguntaMostrada = this.preguntas[this.indexPregunta]
+    })
+  }
+
+  cargarPreguntas(){
+    this.preguntas = this.evaluacion.preguntaList1
   }
 
   siguientePregunta() {
@@ -126,14 +115,12 @@ export class EvaluacionComponent implements OnInit {
     console.log(this.forma);
   }
 
-  imprimir() {
+
+
+  imprimir() {    
+    console.log(this.evaluacion);
+    console.log(this.preguntas);
     console.log(this.preguntaMostrada);
-
     console.log(this.forma);
-
-    const id = this.activateRoute.snapshot.params['id'];
-
-    console.log(id);
-    
   }
 }
