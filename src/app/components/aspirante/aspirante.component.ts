@@ -112,20 +112,7 @@ export class AspiranteComponent implements OnInit {
       nombre: this.formaDatos.get('nombre').value,
       correo: this.formaDatos.get('email').value
     } 
-
-  validarCodigo(control: FormControl): Promise<any> | Observable<any> {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (control.value === 'abc1234') {
-          console.log('token valido');
-
-          resolve({ existe: false });
-        } else {
-          console.log('token no valido');
-        }
-      }, 1500);
-    });
-  }
+  }  
 
   comenzar() {
     console.log(this.formaCodigo);
