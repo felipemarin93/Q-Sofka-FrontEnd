@@ -34,17 +34,18 @@ export class EvaluacionComponent implements OnInit {
   indexPregunta = 0;
   preguntaMostrada: Pregunta;
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
               private cookieService: CookieService,
               private evaluacionService: EvaluacionService,
               private activateRoute: ActivatedRoute) {
-                
+
     this.crearFormulario();
     this.obtenerEvaluacion();
   }
 
   ngOnInit(): void {
     this.fechaFinal = new Date(parseInt(this.cookieService.get('Fecha final')));
+    alert(this.fechaActual);
     this.subscripcion = interval(1000).subscribe((elemento) => {
       this.getTimeDifference();
       if (this.minutesToDday === 0 && this.secondsToDday === 0) {
@@ -53,7 +54,7 @@ export class EvaluacionComponent implements OnInit {
       }
     });
   }
-  
+
   private getTimeDifference() {
     this.timeDifference = this.fechaFinal.getTime() - new Date().getTime();
     this.allocateTimeUnits(this.timeDifference);
@@ -83,7 +84,7 @@ export class EvaluacionComponent implements OnInit {
             opc1: [''],
             opc2: [''],
             opc3: ['']
-          },  Validators.required) 
+          },  Validators.required)
           ,
           pregunta: ['', Validators.required]
         });
@@ -117,7 +118,7 @@ export class EvaluacionComponent implements OnInit {
 
 
 
-  imprimir() {    
+  imprimir() {
     console.log(this.evaluacion);
     console.log(this.preguntas);
     console.log(this.preguntaMostrada);
