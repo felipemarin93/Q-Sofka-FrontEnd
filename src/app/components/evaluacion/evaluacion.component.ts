@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { interval, Subscription } from 'rxjs';
 
@@ -56,7 +57,9 @@ export class EvaluacionComponent implements OnInit {
   indexPregunta = 0;
   preguntaMostrada: any = this.preguntas[this.indexPregunta];
 
-  constructor(private fb: FormBuilder, private cookieService: CookieService) {
+  constructor(private fb: FormBuilder, 
+              private cookieService: CookieService,
+              private activateRoute: ActivatedRoute) {
     this.crearFormulario();
   }
 
@@ -90,7 +93,6 @@ export class EvaluacionComponent implements OnInit {
     if (this.preguntaMostrada.tipoPregutna == 'seleccion multiple') {
       return this.forma.get('multiple').invalid;
     }
-
     return this.forma.get('pregunta').invalid;
   }
 
@@ -128,5 +130,10 @@ export class EvaluacionComponent implements OnInit {
     console.log(this.preguntaMostrada);
 
     console.log(this.forma);
+
+    const id = this.activateRoute.snapshot.params['id'];
+
+    console.log(id);
+    
   }
 }
