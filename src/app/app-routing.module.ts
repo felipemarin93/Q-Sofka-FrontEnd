@@ -11,7 +11,6 @@ import { ResultadoComponent } from "./components/resultado/resultado.component"
 const routes: Routes = [
 
   { path: 'pregunta', component: EditarPreguntaComponent }, 
-
   { path: 'creacionpreguntas', component: CreacionPreguntasComponentComponent },
   {
     path: 'creacionpreguntas/:id',
@@ -20,9 +19,9 @@ const routes: Routes = [
   { path: 'coach-dashboard', component: TableroCoachComponent },
   { path: 'inicio', component: InicioComponent },
   { path: 'aspirante', component: AspiranteComponent },
-  { path: 'evaluacion', component: EvaluacionComponent },
-  { path: '', redirectTo: '/inicio', pathMatch: 'full' },
-  { path: 'resultado',component: ResultadoComponent }
+  { path: 'evaluacion/:id', component: EvaluacionComponent },
+  { path: 'resultado',component: ResultadoComponent },
+  { path: '', redirectTo: '/inicio', pathMatch: 'full' }
 ];
 
 @NgModule({
