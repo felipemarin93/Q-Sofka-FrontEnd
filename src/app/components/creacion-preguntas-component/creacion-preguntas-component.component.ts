@@ -381,7 +381,7 @@ export class CreacionPreguntasComponentComponent
     if (this.tipoPregunta === 'Verdadero o falso') {
       if (this.opciones.length >= 2 && !correcta) {
         Swal.fire({
-          text: 'Hace falta agregar una opcion correcta, agreguela y continue',
+          text: 'Hace falta agregar una opción correcta, agreguela y continue',
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#dc3545',
           icon: 'error',
@@ -398,7 +398,7 @@ export class CreacionPreguntasComponentComponent
     } else {
       if (this.opciones.length >= 4 && !correcta) {
         Swal.fire({
-          text: 'Hace falta agregar una opcion correcta, agreguela y continue',
+          text: 'Hace falta agregar una opción correcta, agreguela y continue',
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#dc3545',
           icon: 'error',
@@ -452,7 +452,7 @@ export class CreacionPreguntasComponentComponent
 
   eliminarOpcion(opcion: string, esCorrecta: boolean) {
     Swal.fire({
-      text: '¿Esta seguro de eliminar La Opcion ?',
+      text: '¿Está seguro de eliminar La opción?',
       showCancelButton: true,
       confirmButtonText: 'Aceptar',
       cancelButtonColor: '#0d6efd',
@@ -532,7 +532,7 @@ export class CreacionPreguntasComponentComponent
     } else {
       if (mensaje) {
         Swal.fire({
-          text: '¿Desea Guardar la pregunta?',
+          text: '¿Desea guardar la pregunta?',
           confirmButtonText: 'Guardar Pregunta',
           confirmButtonColor: '#3085d6',
           showCancelButton: true,
@@ -586,7 +586,7 @@ export class CreacionPreguntasComponentComponent
     console.log(areaConocimientoValue);
     if (mensaje) {
       Swal.fire({
-        text: '¿Desea Actualizar la pregunta?',
+        text: '¿Desea actualizar la pregunta?',
         confirmButtonText: 'Actualizar Pregunta',
         confirmButtonColor: '#3085d6',
         showCancelButton: true,
@@ -625,7 +625,7 @@ export class CreacionPreguntasComponentComponent
 
   regresar() {
     Swal.fire({
-      text: '¿Está seguro que quiere volver? Aún no ha finalizado/agregado su pregunta. SI/NO’',
+      text: '¿Está seguro que quiere volver? aún no ha finalizado/agregado su pregunta. SI/NO’',
       showCancelButton: true,
       confirmButtonText: 'Aceptar',
       cancelButtonColor: '#3085d6',
