@@ -20,7 +20,7 @@ const routes: Routes = [
   { path: 'inicio', component: InicioComponent },
   { path: 'aspirante', component: AspiranteComponent },
   { path: 'evaluacion/:id', component: EvaluacionComponent },
-  { path: 'resultado',component: ResultadoComponent },
+  { path: 'resultado/:id',component: ResultadoComponent },
   { path: '', redirectTo: '/inicio', pathMatch: 'full' }
 ];
 

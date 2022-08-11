@@ -30,8 +30,7 @@ import { PreguntasService } from 'src/app/services/preguntas.service';
   styleUrls: ['./creacion-preguntas-component.component.css'],
 })
 export class CreacionPreguntasComponentComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+  implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('exampleModal') modal: ElementRef;
   title = 'Agregar Pregunta';
   tiposPregunta: string[] = [];
@@ -229,7 +228,7 @@ export class CreacionPreguntasComponentComponent
   get verdaderoFalsoValido() {
     return (
       this.preguntaForm.get('preguntaFormulario')?.errors?.[
-        'validarPreguntaVerdaderoFalso'
+      'validarPreguntaVerdaderoFalso'
       ] && this.preguntaForm.get('preguntaFormulario')?.touched
     );
   }
@@ -484,18 +483,18 @@ export class CreacionPreguntasComponentComponent
       icon: 'question',
       confirmButtonColor: '#dc3545'
     }).then((result) => {
-    if (result.isConfirmed){
-      this.opcion = this.opciones[indice].nombre;
-    this.opcionCorrecta = this.opciones[indice].esCorrecto;
-    this.preguntaForm.controls['opcionCorrectaForm'].setValue(
-      this.opcionCorrecta
-    );
-    this.cookieService.set(
-      'opcionEditar',
-      indice.toString(),
-      this.obtenerLimiteCookie(new Date())
-      )
-    }
+      if (result.isConfirmed) {
+        this.opcion = this.opciones[indice].nombre;
+        this.opcionCorrecta = this.opciones[indice].esCorrecto;
+        this.preguntaForm.controls['opcionCorrectaForm'].setValue(
+          this.opcionCorrecta
+        );
+        this.cookieService.set(
+          'opcionEditar',
+          indice.toString(),
+          this.obtenerLimiteCookie(new Date())
+        )
+      }
     })
   }
 
@@ -507,7 +506,7 @@ export class CreacionPreguntasComponentComponent
     let mensajeVerdaderoFalso;
     mensajeMultipleUnicaOpcion =
       (tipoPregunta == 'Opción múltiple' || tipoPregunta == 'Única opción') &&
-      opciones == 4
+        opciones == 4
         ? true
         : false;
     mensajeVerdaderoFalso =
