@@ -44,7 +44,7 @@ export class EvaluacionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.fechaFinal = new Date(parseInt(this.cookieService.get('Fecha final')));
+    this.fechaFinal = new Date(parseInt(this.cookieService.get('Fecha Final')));
     this.subscripcion = interval(1000).subscribe((elemento) => {
       this.getTimeDifference();
       if (this.minutesToDday === 0 && this.secondsToDday === 0) {
@@ -83,11 +83,11 @@ export class EvaluacionComponent implements OnInit {
             opc1: [''],
             opc2: [''],
             opc3: ['']
-          },  Validators.required) 
-          ,
+          }),
           pregunta: ['', Validators.required]
         });
   }
+
 
   obtenerEvaluacion(){
     return this.evaluacionService.obtenerEvaluaciónPorId(this.idEvaluacion)
@@ -122,5 +122,6 @@ export class EvaluacionComponent implements OnInit {
     console.log(this.preguntas);
     console.log(this.preguntaMostrada);
     console.log(this.forma);
+    
   }
 }
