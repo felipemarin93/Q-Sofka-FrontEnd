@@ -49,12 +49,12 @@
         <img src="../../assets/meta.PNG" alt="imagen meta" style="margin-bottom: 30px; margin-left: 100px;">
 
         <form [formGroup]="formaCodigo" (ngSubmit)="comenzar()">
-          <div class="row mb-3">
-            <label for="codigo" class="col-sm-4 col-form-label texto-simple">Codigo de Verificación</label>
-            <div class="col-sm-8">
+          <div class="row mb-3 col-sm-10" >
+            <label for="codigo" class="col-form-label texto-modificado">Codigo de Verificación</label>
+            
               <input [class.is-invalid]="codigoNoValido" type="text" formControlName ="codigo" class="form-control" id="codigo">
             </div>
-          </div>
+        
 
           <div class="form-group">
             <label class="col-2 col-form-label">&nbsp;</label>
@@ -73,8 +73,6 @@
     </div>
     <div class="contenedor">
         <img src="../../assets/QSofkaU.PNG" style="float: right;" alt="imagen Q Sofka">
-<<<<<<< HEAD
     </div>
-
 </div>
 

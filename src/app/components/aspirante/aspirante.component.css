@@ -1,4 +1,19 @@
 
 .texto-simple{
     font-weight: bold;
+    
+}
+
+.texto-modificado{
+    margin-top: 25px;
+    font-weight: bold;
+}
+
+input{
+    width: 75%;
+}
+
+.container{
+    align-items: center;
+    min-height: 100%;
 }
