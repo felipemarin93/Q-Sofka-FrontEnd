@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { interval, Subscription } from 'rxjs';
@@ -91,6 +91,13 @@ export class EvaluacionComponent implements OnInit, AfterContentChecked {
     return this.forma.get('pregunta').invalid;
   }
 
+  validadorMultipleRespuesta(control: FormControl): any{
+    if( !(control.value.op0 || control.value.op1 || control.value.op2 || control.value.op3)){
+      return { validadorMultipleRespuesta: true }
+    }
+    return null;
+  }
+
   crearFormulario() {
     this.forma = this.fb.group({
       multiple: this.fb.group({
@@ -98,7 +105,7 @@ export class EvaluacionComponent implements OnInit, AfterContentChecked {
         op1: [''],
         op2: [''],
         op3: ['']
-      }),
+      },{validator: this.validadorMultipleRespuesta}),
       pregunta: ['', Validators.required]
     });
   }
@@ -147,12 +154,11 @@ export class EvaluacionComponent implements OnInit, AfterContentChecked {
   finalizarEvalucaion() {
     this.asignarPuntajeEvaluacion()
     this.puntaje = 0;
-    this.router.navigate(['/resultado/' + this.aspirante.evaluacionId]);
+    this.router.navigate(['/resultado/' + this.idEvaluacion]);
   }
 
   asignarPuntajeEvaluacion() {
     const data = { puntajePrueba1: this.puntaje }
-
     return this.aspiranteService.asignarPuntajeAspirante(this.idEvaluacion, data)
       .subscribe(data => console.log(data));
   }
@@ -180,6 +186,7 @@ export class EvaluacionComponent implements OnInit, AfterContentChecked {
       }
     }
   }
+
   verificarRespuestaVoF() {
     if (this.forma.value.pregunta == "true") {
       this.puntaje += 2;

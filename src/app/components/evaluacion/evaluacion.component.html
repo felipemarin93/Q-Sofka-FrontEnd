@@ -72,9 +72,9 @@
         <button type="submit"
         class="btn btn-primary btn-block"
         [disabled]="preguntaNoValida">
-          <span *ngIf="preguntaNoValida && indexPregunta != (preguntas.length-1) "> Seleccione una opción</span>
-          <span *ngIf="!preguntaNoValida && indexPregunta != (preguntas.length-1) "> Continuar</span>
-          <span *ngIf="indexPregunta == (preguntas.length-1) "> Finalizar</span>
+          <span *ngIf="preguntaNoValida && indexPregunta != (preguntas.length-1)"> Seleccione una opción</span>
+          <span *ngIf="!preguntaNoValida && indexPregunta != (preguntas.length-1)"> Continuar</span>
+          <span *ngIf="indexPregunta == (preguntas.length-1)"> Finalizar</span>
         </button>
       </div>
     </div>
