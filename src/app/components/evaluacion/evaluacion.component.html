@@ -5,11 +5,9 @@
   </div>
 </nav>
 
-<button (click)="imprimir()">imprimir</button>
-
 <div class="container mt-3">
 
-  <form [formGroup]="forma" (ngSubmit)="enviarEvaluacion()">
+  <form [formGroup]="forma" (ngSubmit)="enviarRespuesta()">
 
     <div [ngSwitch]="preguntaMostrada.tipoPregunta">
 

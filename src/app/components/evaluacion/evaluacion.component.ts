@@ -105,7 +105,11 @@ export class EvaluacionComponent implements OnInit {
   }
 
   cargarPreguntas(){
-    this.preguntas = this.evaluacion.preguntaList1
+    if(this.aspirante.puntajePrueba1 != 0 && this.aspirante.puntajePrueba1 != null){
+      this.preguntas = this.evaluacion.preguntaList2;
+    } else {
+      this.preguntas = this.evaluacion.preguntaList1;
+    }
   }
 
   siguientePregunta() {
@@ -115,7 +119,7 @@ export class EvaluacionComponent implements OnInit {
     console.log(this.preguntaMostrada);
   }
 
-  enviarEvaluacion() {
+  enviarRespuesta() {
     this.verificarRespuesta()
 
     if(this.indexPregunta == (this.preguntas.length-1)){
@@ -133,15 +137,11 @@ export class EvaluacionComponent implements OnInit {
   finalizarEvalucaion(){
     this.asignarPuntajeEvaluacion()
       this.puntaje = 0;
-      this.preguntas = this.evaluacion.preguntaList2;
       this.router.navigate(['/resultado/'+ this.aspirante.evaluacionId]);
   }
 
   asignarPuntajeEvaluacion(){
-    const idAspirante = this.aspirante.id;
     const data = { puntajePrueba1: this.puntaje }
-    console.log(idAspirante);
-    console.log(data);
     
     return this.aspiranteService.asignarPuntajeAspirante( this.idEvaluacion, data)
       .subscribe(data => console.log(data));
@@ -233,13 +233,5 @@ export class EvaluacionComponent implements OnInit {
     if(opcionSeleccionada.esCorrecto == true){
       this.puntaje += 2;
     }
-  }
-
-  imprimir() {
-    console.log(this.evaluacion);
-    console.log(this.preguntas);
-    console.log(this.preguntaMostrada);
-    console.log(this.aspirante);
-    console.log(this.forma);
   }
 }
