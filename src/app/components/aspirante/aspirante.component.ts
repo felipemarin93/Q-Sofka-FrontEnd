@@ -126,7 +126,6 @@ export class AspiranteComponent implements OnInit {
             this.timer();
             this.router.navigate(['/evaluacion/'+ this.aspirante.evaluacionId]);
           })
-        
       }
     })
 

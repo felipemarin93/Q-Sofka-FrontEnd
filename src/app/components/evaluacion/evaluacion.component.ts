@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { interval, Subscription } from 'rxjs';
+import { Aspirante } from 'src/app/models/aspirante';
 import { Evaluacion } from 'src/app/models/evaluacion';
 import { Pregunta } from 'src/app/models/pregunta';
+import { AspiranteService } from 'src/app/services/aspirante.service';
 import { EvaluacionService } from 'src/app/services/evaluacion.service';
 
 @Component({
@@ -29,6 +31,7 @@ export class EvaluacionComponent implements OnInit {
 
   idEvaluacion = this.activateRoute.snapshot.params['id'];
   evaluacion: any;
+  aspirante: Aspirante;
 
   preguntas: Pregunta[] = [];
 
@@ -38,10 +41,13 @@ export class EvaluacionComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private cookieService: CookieService,
               private evaluacionService: EvaluacionService,
+              private aspiranteService: AspiranteService,
+              private router: Router,
               private activateRoute: ActivatedRoute) {
 
     this.crearFormulario();
     this.obtenerEvaluacion();
+    this.obtenAspirantePorEvaluacion()
   }
 
   ngOnInit(): void {
@@ -50,7 +56,7 @@ export class EvaluacionComponent implements OnInit {
       this.getTimeDifference();
       if (this.minutesToDday === 0 && this.secondsToDday === 0) {
         this.subscripcion.unsubscribe();
-        //TODO LLamar al método que finaliza la evaluación, el del botón finalizar
+        this.finalizarEvalucaion();
       }
     });
   }
@@ -84,12 +90,10 @@ export class EvaluacionComponent implements OnInit {
             op1: [''],
             op2: [''],
             op3: ['']
-          },  Validators.required)
-          ,
+          }),
           pregunta: ['', Validators.required]
         });
   }
-
 
   obtenerEvaluacion(){
     return this.evaluacionService.obtenerEvaluaciónPorId(this.idEvaluacion)
@@ -112,17 +116,130 @@ export class EvaluacionComponent implements OnInit {
   }
 
   enviarEvaluacion() {
-    this.siguientePregunta();
-    console.log(this.forma);
+    this.verificarRespuesta()
+
+    if(this.indexPregunta == (this.preguntas.length-1)){
+      this.finalizarEvalucaion();
+    } else {
+      this.siguientePregunta();
+    }
   }
 
+  obtenAspirantePorEvaluacion(){
+    return this.aspiranteService.obtenerAspirantePorEvaluacion(this.idEvaluacion)
+      .subscribe( data => this.aspirante = data);
+  }
 
+  finalizarEvalucaion(){
+    this.asignarPuntajeEvaluacion()
+      this.puntaje = 0;
+      this.preguntas = this.evaluacion.preguntaList2;
+      this.router.navigate(['/resultado/'+ this.aspirante.evaluacionId]);
+  }
+
+  asignarPuntajeEvaluacion(){
+    const idAspirante = this.aspirante.id;
+    const data = { puntajePrueba1: this.puntaje }
+    console.log(idAspirante);
+    console.log(data);
+    
+    return this.aspiranteService.asignarPuntajeAspirante( this.idEvaluacion, data)
+      .subscribe(data => console.log(data));
+  }
+
+  verificarRespuesta() {
+    switch(this.preguntaMostrada.tipoPregunta){
+      case('Verdadero o falso'): {
+        this.verificarRespuestaVoF()
+        break;
+      }
+
+      case('Única opción'):{
+        this.verificarRespuestaUnica();
+        break;
+      }
+
+      case('Opción múltiple'):{
+          this.verificarRespuestaMultiple();
+          break;
+      }
+
+      default:{
+        console.log("Pregunta INVALIDA");
+        break;
+      }
+    }
+  }
+  verificarRespuestaVoF() {
+    if(this.forma.value.pregunta == "true"){
+      this.puntaje +=2;
+    }
+  }
+
+  verificarRespuestaMultiple() {
+    let opcionesMarcadas = this.forma.value.multiple;
+    let flag = true;
+
+    if(this.preguntaMostrada.opciones[0].esCorrecto == true){
+      if(opcionesMarcadas.op0 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op0 == true){
+        flag = false;
+      }
+    }
+
+    if(this.preguntaMostrada.opciones[1].esCorrecto == true){
+      if(opcionesMarcadas.op1 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op1 == true){
+        flag = false;
+      }
+    }
+
+    if(this.preguntaMostrada.opciones[2].esCorrecto == true){
+      if(opcionesMarcadas.op2 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op2 == true){
+        flag = false;
+      }
+    }
+
+    if(this.preguntaMostrada.opciones[3].esCorrecto == true){
+      if(opcionesMarcadas.op3 != true){
+        flag = false;
+      }
+    }else{
+      if(opcionesMarcadas.op3 == true){
+        flag = false;
+      }
+    }
+
+    if(flag == true){
+      this.puntaje+=2;
+    }
+
+  }
+
+  verificarRespuestaUnica() {
+    let index = parseInt(this.forma.value.pregunta);
+    let opcionSeleccionada = this.preguntaMostrada.opciones[index];
+
+    if(opcionSeleccionada.esCorrecto == true){
+      this.puntaje += 2;
+    }
+  }
 
   imprimir() {
     console.log(this.evaluacion);
     console.log(this.preguntas);
     console.log(this.preguntaMostrada);
+    console.log(this.aspirante);
     console.log(this.forma);
-    
   }
 }

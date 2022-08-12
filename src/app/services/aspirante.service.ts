@@ -36,10 +36,11 @@ export class AspiranteService {
       (`${PathRest.getApiAspirante}/evaluacion/${idEvaluacion}`)
   }
 
-  asignarPuntajeAspirante(idAspirante: string, aspirante: Aspirante): Observable<Aspirante> {
+  asignarPuntajeAspirante(idEvaluacion: string, puntaje: any): Observable<Aspirante> {
+    //console.log(`${PathRest.getApiAspirante}/evaluacion/${idEvaluacion}`);
     return this.http
       .post<Aspirante>
-      (`${PathRest.getApiAspirante}/evaluacion/${idAspirante}`, aspirante)
+      (`${PathRest.getApiAspirante}/evaluacion/${idEvaluacion}`, puntaje)
   }
 
   enviarMensajeAspirante(idAspirante: string, mensaje: Mensaje): Observable<Aspirante> {
