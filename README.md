@@ -11,31 +11,37 @@ Aplicación web de preguntas y respuestas donde se evalúan conocimientos teóri
 ## Despliegue
 
   https://qsofkafrontend.firebaseapp.com
+  
+## Autores
 
-## Project
+- [@mmaurogg](https://github.com/mmaurogg)
+- [@mateog147](https://github.com/mateog147)
+- [@millergallegof](https://github.com/millergallegof)
+- [@Juan9507](https://github.com/Juan9507)
+- [@duvanleal96](https://github.com/duvanleal96)
+- [@felipemarin93](https://github.com/felipemarin93)
+- [@OscarGabriel07](https://github.com/OscarGabriel07)
+- [@sebastianbarreram](https://github.com/sebastianbarreram)
+  
+## Configuración
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
+Configurar el proyecto utilizando npm:
 
-## Development server
+```bash
+  npm install
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Proyecto
 
-## Code scaffolding
+Este proyecto fue generado con [Angular CLI](https://github.com/angular/angular-cli) version 13.3.0.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Servidor
 
-## Build
+Para desplegar el servidor de manera local usar el siguiente comando:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+  ng serve
+```
 
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Desde el navegador de preferencia ingresar a la url `http://localhost:4200/`.
+La aplicación automáticamente se recargará si se realiza algún cambio en los archivos fuente.
