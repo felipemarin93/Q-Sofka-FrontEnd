@@ -26,8 +26,6 @@ export class TableroCoachComponent implements OnInit {
   ngOnInit(): void {
     this.getUsuario();
     this.getPreguntas();
-
-
   }
   getUsuario() {
     if (localStorage.getItem('usuario')) {
@@ -90,15 +88,17 @@ export class TableroCoachComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.preguntasService.deletePregunta(preguntaEliminar.id!)
-        .subscribe((eliminar) => {
-        Swal.fire(
-          'Se ha eliminado la pregunta con id: ' + preguntaEliminar.id,
-        )
-        const indice = this.preguntas.indexOf(preguntaEliminar);
-        this.preguntas.splice(indice, 1);
-        
-      });
-    }})}
+          .subscribe((eliminar) => {
+            Swal.fire(
+              'Se ha eliminado la pregunta con id: ' + preguntaEliminar.id,
+            )
+            const indice = this.preguntas.indexOf(preguntaEliminar);
+            this.preguntas.splice(indice, 1);
+
+          });
+      }
+    })
+  }
 
   editarPregunta(preguntaEditar: Pregunta) {
     this.router.navigate(['creacionpreguntas/' + preguntaEditar.id]);

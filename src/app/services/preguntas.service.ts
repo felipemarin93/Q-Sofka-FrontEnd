@@ -15,7 +15,7 @@ export class PreguntasService {
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   };
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getPreguntas(): Observable<Pregunta[]> {
     return this.http
@@ -26,21 +26,6 @@ export class PreguntasService {
   getPreguntasCoach(id: string): Observable<Pregunta[]> {
     return this.http
       .get<Pregunta[]>(`${PathRest.getApiPregunta}/coach/${id}`)
-      .pipe(
-        map((preguntas) => {
-          preguntas.forEach(
-            (p) =>
-              (p.fechaActualizacion = new Date(
-                `${p.fechaActualizacion[0]}-${p.fechaActualizacion[1]}-${p.fechaActualizacion[2]}`
-              ))
-          );
-          return preguntas;
-        })
-      );
-    // this.preguntaUrl.concat('coach/'+id)
-    // .pipe(
-    //   catchError(this.handleError<Pregunta[]>('getPreguntasCoach', []))
-    // )
   }
 
   /** DELETE: delete the question from the server */
