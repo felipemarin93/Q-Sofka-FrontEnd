@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  HostBackend: 'https://qsofkabackend.herokuapp.com/api/'
+  HostBackend: 'http://localhost:8080/api/'
 };
 
 /*

@@ -559,7 +559,7 @@ export class CreacionPreguntasComponentComponent
               .guardarPregunta({
                 id: null,
                 coachId: coachIdEnviar,
-                fechaActualizacion: null,
+                fechaActualizacion: new Date(),
                 areaConocimiento: areaConocimientoValue,
                 descriptor: descriptorValue,
                 tipoPregunta: tipoPreguntaValue,
@@ -614,7 +614,7 @@ export class CreacionPreguntasComponentComponent
             .actualizarPregunta({
               id: idPregunta,
               coachId: coachIdEnviar,
-              fechaActualizacion: null,
+              fechaActualizacion: new Date(),
               areaConocimiento: areaConocimientoValue,
               descriptor: descriptorValue,
               tipoPregunta: tipoPreguntaValue,
