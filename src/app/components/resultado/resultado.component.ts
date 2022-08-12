@@ -42,6 +42,8 @@ export class ResultadoComponent implements OnInit, AfterContentChecked {
     this.validarPuntos()
   }
 
+
+
   timer(): void {
     console.log("timer");
     let fechaActual = Date.parse(new Date().toString());
@@ -68,12 +70,12 @@ export class ResultadoComponent implements OnInit, AfterContentChecked {
 
   }
   validarPuntos(): void {
-
     if (this.nivel === 2) {
-      this.valoracion = (this.aspirante?.puntajePrueba2! * 30) / 10
+      this.valoracion = (this.aspirante?.puntajePrueba2! * 100) / 30
       this.mostrarNivel2()
     } else {
-      this.valoracion = (this.aspirante?.puntajePrueba1! * 30) / 10
+      console.log(this.aspirante?.puntajePrueba1!);
+      this.valoracion = (this.aspirante?.puntajePrueba1! * 100) / 30
       this.mostrarNivel1()
     }
   }
@@ -91,9 +93,10 @@ export class ResultadoComponent implements OnInit, AfterContentChecked {
       valoracion: this.valoracion,
       fase: this.fase,
     }).subscribe(data => {
-      this.router.navigate(['/inicio'])
       this.cookieService.deleteAll()
+      this.router.navigate(['/inicio'])
     })
+
   }
 
   limiteCookie(fecha: Date): Date {
@@ -123,5 +126,4 @@ export class ResultadoComponent implements OnInit, AfterContentChecked {
       this.fase = 'Canteras N2'
     }
   }
-
 }
