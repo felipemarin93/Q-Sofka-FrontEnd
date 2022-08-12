@@ -26,7 +26,7 @@ export class EvaluacionComponent implements OnInit {
   minutesInAnHour: number = 60;
   SecondsInAMinute: number = 60;
 
-  puntaje : number = 0;
+  puntaje: number = 0;
   forma: FormGroup | any;
 
   idEvaluacion = this.activateRoute.snapshot.params['id'];
@@ -39,11 +39,11 @@ export class EvaluacionComponent implements OnInit {
   preguntaMostrada: Pregunta;
 
   constructor(private fb: FormBuilder,
-              private cookieService: CookieService,
-              private evaluacionService: EvaluacionService,
-              private aspiranteService: AspiranteService,
-              private router: Router,
-              private activateRoute: ActivatedRoute) {
+    private cookieService: CookieService,
+    private evaluacionService: EvaluacionService,
+    private aspiranteService: AspiranteService,
+    private router: Router,
+    private activateRoute: ActivatedRoute) {
 
     this.crearFormulario();
     this.obtenerEvaluacion();
@@ -72,7 +72,7 @@ export class EvaluacionComponent implements OnInit {
     );
     this.minutesToDday = Math.floor(
       (timeDifference / (this.milliSecondsInASecond * this.minutesInAnHour)) %
-        this.SecondsInAMinute
+      this.SecondsInAMinute
     );
   }
 
@@ -83,29 +83,29 @@ export class EvaluacionComponent implements OnInit {
     return this.forma.get('pregunta').invalid;
   }
 
-  crearFormulario(){
+  crearFormulario() {
     this.forma = this.fb.group({
-          multiple: this.fb.group({
-            op0: [''],
-            op1: [''],
-            op2: [''],
-            op3: ['']
-          }),
-          pregunta: ['', Validators.required]
-        });
+      multiple: this.fb.group({
+        op0: [''],
+        op1: [''],
+        op2: [''],
+        op3: ['']
+      }),
+      pregunta: ['', Validators.required]
+    });
   }
 
-  obtenerEvaluacion(){
+  obtenerEvaluacion() {
     return this.evaluacionService.obtenerEvaluaciónPorId(this.idEvaluacion)
-    .subscribe(evaluacion => {
-      this.evaluacion = evaluacion;
-      this.cargarPreguntas();
-      this.preguntaMostrada = this.preguntas[this.indexPregunta]
-    })
+      .subscribe(evaluacion => {
+        this.evaluacion = evaluacion;
+        this.cargarPreguntas();
+        this.preguntaMostrada = this.preguntas[this.indexPregunta]
+      })
   }
 
-  cargarPreguntas(){
-    if(this.aspirante.puntajePrueba1 != 0 && this.aspirante.puntajePrueba1 != null){
+  cargarPreguntas() {
+    if (this.aspirante.puntajePrueba1 != 0 && this.aspirante.puntajePrueba1 != null) {
       this.preguntas = this.evaluacion.preguntaList2;
     } else {
       this.preguntas = this.evaluacion.preguntaList1;
@@ -116,63 +116,62 @@ export class EvaluacionComponent implements OnInit {
     this.crearFormulario();
     this.indexPregunta++;
     this.preguntaMostrada = this.preguntas[this.indexPregunta];
-    console.log(this.preguntaMostrada);
   }
 
   enviarRespuesta() {
     this.verificarRespuesta()
 
-    if(this.indexPregunta == (this.preguntas.length-1)){
+    if (this.indexPregunta == (this.preguntas.length - 1)) {
       this.finalizarEvalucaion();
     } else {
       this.siguientePregunta();
     }
   }
 
-  obtenAspirantePorEvaluacion(){
+  obtenAspirantePorEvaluacion() {
     return this.aspiranteService.obtenerAspirantePorEvaluacion(this.idEvaluacion)
-      .subscribe( data => this.aspirante = data);
+      .subscribe(data => this.aspirante = data);
   }
 
-  finalizarEvalucaion(){
+  finalizarEvalucaion() {
     this.asignarPuntajeEvaluacion()
-      this.puntaje = 0;
-      this.router.navigate(['/resultado/'+ this.aspirante.evaluacionId]);
+    this.puntaje = 0;
+    this.router.navigate(['/resultado/' + this.aspirante.evaluacionId]);
   }
 
-  asignarPuntajeEvaluacion(){
+  asignarPuntajeEvaluacion() {
     const data = { puntajePrueba1: this.puntaje }
-    
-    return this.aspiranteService.asignarPuntajeAspirante( this.idEvaluacion, data)
+
+    return this.aspiranteService.asignarPuntajeAspirante(this.idEvaluacion, data)
       .subscribe(data => console.log(data));
   }
 
   verificarRespuesta() {
-    switch(this.preguntaMostrada.tipoPregunta){
-      case('Verdadero o falso'): {
+    switch (this.preguntaMostrada.tipoPregunta) {
+      case ('Verdadero o falso'): {
         this.verificarRespuestaVoF()
         break;
       }
 
-      case('Única opción'):{
+      case ('Única opción'): {
         this.verificarRespuestaUnica();
         break;
       }
 
-      case('Opción múltiple'):{
-          this.verificarRespuestaMultiple();
-          break;
+      case ('Opción múltiple'): {
+        this.verificarRespuestaMultiple();
+        break;
       }
 
-      default:{
+      default: {
         console.log("Pregunta INVALIDA");
         break;
       }
     }
   }
   verificarRespuestaVoF() {
-    if(this.forma.value.pregunta == "true"){
-      this.puntaje +=2;
+    if (this.forma.value.pregunta == "true") {
+      this.puntaje += 2;
     }
   }
 
@@ -180,48 +179,48 @@ export class EvaluacionComponent implements OnInit {
     let opcionesMarcadas = this.forma.value.multiple;
     let flag = true;
 
-    if(this.preguntaMostrada.opciones[0].esCorrecto == true){
-      if(opcionesMarcadas.op0 != true){
+    if (this.preguntaMostrada.opciones[0].esCorrecto == true) {
+      if (opcionesMarcadas.op0 != true) {
         flag = false;
       }
-    }else{
-      if(opcionesMarcadas.op0 == true){
-        flag = false;
-      }
-    }
-
-    if(this.preguntaMostrada.opciones[1].esCorrecto == true){
-      if(opcionesMarcadas.op1 != true){
-        flag = false;
-      }
-    }else{
-      if(opcionesMarcadas.op1 == true){
+    } else {
+      if (opcionesMarcadas.op0 == true) {
         flag = false;
       }
     }
 
-    if(this.preguntaMostrada.opciones[2].esCorrecto == true){
-      if(opcionesMarcadas.op2 != true){
+    if (this.preguntaMostrada.opciones[1].esCorrecto == true) {
+      if (opcionesMarcadas.op1 != true) {
         flag = false;
       }
-    }else{
-      if(opcionesMarcadas.op2 == true){
-        flag = false;
-      }
-    }
-
-    if(this.preguntaMostrada.opciones[3].esCorrecto == true){
-      if(opcionesMarcadas.op3 != true){
-        flag = false;
-      }
-    }else{
-      if(opcionesMarcadas.op3 == true){
+    } else {
+      if (opcionesMarcadas.op1 == true) {
         flag = false;
       }
     }
 
-    if(flag == true){
-      this.puntaje+=2;
+    if (this.preguntaMostrada.opciones[2].esCorrecto == true) {
+      if (opcionesMarcadas.op2 != true) {
+        flag = false;
+      }
+    } else {
+      if (opcionesMarcadas.op2 == true) {
+        flag = false;
+      }
+    }
+
+    if (this.preguntaMostrada.opciones[3].esCorrecto == true) {
+      if (opcionesMarcadas.op3 != true) {
+        flag = false;
+      }
+    } else {
+      if (opcionesMarcadas.op3 == true) {
+        flag = false;
+      }
+    }
+
+    if (flag == true) {
+      this.puntaje += 2;
     }
 
   }
@@ -230,7 +229,7 @@ export class EvaluacionComponent implements OnInit {
     let index = parseInt(this.forma.value.pregunta);
     let opcionSeleccionada = this.preguntaMostrada.opciones[index];
 
-    if(opcionSeleccionada.esCorrecto == true){
+    if (opcionSeleccionada.esCorrecto == true) {
       this.puntaje += 2;
     }
   }

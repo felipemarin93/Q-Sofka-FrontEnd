@@ -39,6 +39,7 @@ export class ResultadoComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked(): void {
+    console.log("hola");
     this.validarPuntos()
   }
 
@@ -59,13 +60,17 @@ export class ResultadoComponent implements OnInit, AfterContentChecked {
   }
 
   obtenerAspirante(): void {
-    this.httpServiceAspirante.obtenerAspirantePorEvaluacion(this.idEvaluacion!)
-      .subscribe(data => {
-        this.aspirante = data
-      })
+    setTimeout(() => {
+      this.httpServiceAspirante.obtenerAspirantePorEvaluacion(this.idEvaluacion!)
+        .subscribe(data => {
+          console.log(data);
+          this.aspirante = data
+        })
+    }, 1000)
+
   }
   validarPuntos(): void {
-    this.valoracion = (this.aspirante?.puntajePrueba1! * 30) / 100
+    this.valoracion = (this.aspirante?.puntajePrueba1! * 30) / 10
     if (this.nivel === 2) {
       this.mostrarNivel2()
     } else {
