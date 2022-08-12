@@ -35,7 +35,6 @@ export class AspiranteComponent implements OnInit {
   }
 
   timer(): void {
-    console.log("timer");
     let fechaActual = Date.parse(new Date().toString());
     let fechaFinal = fechaActual + 3601000;
     this.cookieService.set(
@@ -61,16 +60,12 @@ export class AspiranteComponent implements OnInit {
 
   crearFormulario(){
     this.formaDatos = this.fb.group({
-     
       nombre:['', [Validators.required, this.validarEspacio,Validators.minLength(9)]],
       email:['', [Validators.required, Validators.pattern('[a-zA-Z0-9.!#$%&\'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$')]]
     })
 
     this.formaCodigo = this.fb.group({
-      codigo: [
-        '',
-        [Validators.required, Validators.minLength(5)]
-      ],
+      codigo: ['',[Validators.required, Validators.minLength(5)]],
     });
   }
 
@@ -128,18 +123,17 @@ export class AspiranteComponent implements OnInit {
           })
       }
     })
-
   }
 
   validarCodigo( codigoVerificacion: string ): Promise<any>{
     return new Promise ((resolve) => {
       this.obtenerAspirante(codigoVerificacion).subscribe(data => {
-        this.aspirante = data;
         if(data != null){
-          this.alertaCodigoCorrecto()
+          this.aspirante = data;
+          this.alertaCodigoCorrecto();
           resolve (true);
         } else {
-          this.alertaCodigoIncorrecto()
+          this.alertaCodigoIncorrecto();
           resolve (false);
         }
       });
