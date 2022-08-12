@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
@@ -14,7 +14,7 @@ import { EvaluacionService } from 'src/app/services/evaluacion.service';
   templateUrl: './evaluacion.component.html',
   styleUrls: ['./evaluacion.component.css'],
 })
-export class EvaluacionComponent implements OnInit {
+export class EvaluacionComponent implements OnInit, AfterContentChecked {
 
   private subscripcion: Subscription;
   timeDifference: number;
@@ -45,9 +45,7 @@ export class EvaluacionComponent implements OnInit {
     private router: Router,
     private activateRoute: ActivatedRoute) {
 
-    this.crearFormulario();
-    this.obtenerEvaluacion();
-    this.obtenAspirantePorEvaluacion()
+      this.iniciarExamen();
   }
 
   ngOnInit(): void {
@@ -59,6 +57,16 @@ export class EvaluacionComponent implements OnInit {
         this.finalizarEvalucaion();
       }
     });
+    
+  }
+
+  ngAfterContentChecked(){
+    
+  }
+
+  iniciarExamen(){
+    this.obtenAspirantePorEvaluacion();
+    this.crearFormulario();
   }
 
   private getTimeDifference() {
@@ -130,7 +138,10 @@ export class EvaluacionComponent implements OnInit {
 
   obtenAspirantePorEvaluacion() {
     return this.aspiranteService.obtenerAspirantePorEvaluacion(this.idEvaluacion)
-      .subscribe(data => this.aspirante = data);
+      .subscribe(data => {
+        this.aspirante = data
+        this.obtenerEvaluacion()
+      });
   }
 
   finalizarEvalucaion() {
